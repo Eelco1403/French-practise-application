@@ -17,9 +17,40 @@
         <!-- User Setup Screen -->
         <div id="userSetup" class="screen active">
             <div class="card">
-                <h2>Welcome! Let's Get Started</h2>
-                <p>Enter your name to begin practicing French</p>
-                <input type="text" id="userName" placeholder="Your name" class="input-field">
+                <h2 id="welcomeTitle">Welcome! Let's Get Started</h2>
+                <p id="welcomeSubtitle">Enter your name to begin practicing French</p>
+
+                <!-- Language Selector -->
+                <div class="setting-group">
+                    <label id="languageLabel" for="interfaceLanguage">Interface Language:</label>
+                    <select id="interfaceLanguage" class="select-field">
+                        <option value="en">English</option>
+                        <option value="nl">Nederlands</option>
+                        <option value="fr">Français</option>
+                        <option value="de">Deutsch</option>
+                    </select>
+                </div>
+
+                <!-- Name Input -->
+                <div class="setting-group">
+                    <label id="nameLabel" for="userName">Your Name:</label>
+                    <input type="text" id="userName" placeholder="Your name" class="input-field">
+                </div>
+
+                <!-- CEFR Level Selector -->
+                <div class="setting-group">
+                    <label id="levelLabel" for="cefrLevel">Select Your Level:</label>
+                    <select id="cefrLevel" class="select-field">
+                        <option value="A1">A1 - Beginner</option>
+                        <option value="A2">A2 - Elementary</option>
+                        <option value="B1">B1 - Intermediate</option>
+                        <option value="B2">B2 - Upper Intermediate</option>
+                        <option value="C1">C1 - Advanced</option>
+                        <option value="C2">C2 - Proficiency</option>
+                    </select>
+                    <p id="levelDescription" class="level-description">Can understand and use familiar everyday expressions</p>
+                </div>
+
                 <button id="startBtn" class="btn btn-primary">Start Learning</button>
                 <button id="resumeSessionBtn" class="btn btn-secondary" style="display: none; margin-left: 10px;">Resume Last Session</button>
             </div>
@@ -51,14 +82,18 @@
 
             <!-- Exercise Type Selector -->
             <div class="exercise-type-selector">
-                <h3>Choose Exercise Type</h3>
+                <h3 id="exerciseTypeTitle">Choose Exercise Type</h3>
                 <div class="exercise-type-buttons">
-                    <button class="exercise-type-btn active" data-type="vocabulary">📚 Vocabulary</button>
-                    <button class="exercise-type-btn" data-type="grammar">📝 Grammar</button>
-                    <button class="exercise-type-btn" data-type="conjugation">🔄 Conjugation</button>
-                    <button class="exercise-type-btn" data-type="all">🎯 All Types</button>
+                    <button class="exercise-type-btn active" data-type="vocabulary">📚 <span id="vocabLabel">Vocabulary</span></button>
+                    <button class="exercise-type-btn" data-type="grammar">📝 <span id="grammarLabel">Grammar</span></button>
+                    <button class="exercise-type-btn" data-type="conjugation">🔄 <span id="conjugationLabel">Conjugation</span></button>
+                    <button class="exercise-type-btn" data-type="all">🎯 <span id="allTypesLabel">All Types</span></button>
                 </div>
-                <button id="saveSessionBtn" class="btn btn-secondary btn-small">💾 Save Progress</button>
+                <div class="action-buttons">
+                    <button id="saveSessionBtn" class="btn btn-secondary btn-small">💾 <span id="saveProgressLabel">Save Progress</span></button>
+                    <button id="viewReportBtn" class="btn btn-info btn-small">📊 <span id="viewReportLabel">View Report</span></button>
+                    <button id="changeLevelBtn" class="btn btn-tertiary btn-small">🎯 <span id="changeLevelLabel">Change Level</span></button>
+                </div>
             </div>
 
             <!-- Question Card -->
@@ -133,13 +168,32 @@
 
             <!-- Level Progress -->
             <div class="level-progress">
-                <h3>Level Progress</h3>
+                <h3 id="levelProgressTitle">Level Progress</h3>
                 <div id="levelStatus" class="level-status">
-                    <p>Complete more exercises to advance to the next level!</p>
+                    <p id="currentLevelText">Current Level: <strong id="currentLevelValue">A1</strong></p>
+                    <p id="levelProgressDesc">Complete more exercises to advance to the next level!</p>
                     <div class="progress-bar">
                         <div id="progressBar" class="progress-bar-fill" style="width: 0%"></div>
                     </div>
-                    <p id="progressText" class="progress-text">0/30 items attempted</p>
+                    <p id="progressText" class="progress-text">0/20 items attempted</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Teacher Report Modal -->
+        <div id="reportModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="reportTitle">Student Progress Report</h2>
+                    <button id="closeReportBtn" class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body" id="reportContent">
+                    <!-- Report content will be inserted here dynamically -->
+                </div>
+                <div class="modal-footer">
+                    <button id="exportJSONBtn" class="btn btn-secondary">📄 <span id="exportJSONLabel">Download JSON</span></button>
+                    <button id="exportCSVBtn" class="btn btn-secondary">📊 <span id="exportCSVLabel">Download CSV</span></button>
+                    <button id="printReportBtn" class="btn btn-primary">🖨️ <span id="printLabel">Print</span></button>
                 </div>
             </div>
         </div>
@@ -149,6 +203,8 @@
     <script src="src/logic/utils.js"></script>
     <script src="src/logic/assessment.js"></script>
     <script src="content.js"></script>
+    <script src="i18n.js"></script>
+    <script src="reporting.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

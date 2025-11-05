@@ -7,6 +7,7 @@
 let currentUser = {
     userId: null,
     name: '',
+    cefrLevel: 'A1', // Current CEFR level
     masteryData: {},
     sessionStats: {
         correct: 0,
@@ -16,6 +17,7 @@ let currentUser = {
 
 let currentQuestion = null;
 let currentExerciseType = 'vocabulary'; // 'vocabulary', 'grammar', 'conjugation', or 'all'
+let currentReport = null; // Stores generated report for export
 
 // DOM Elements
 const userSetupScreen = document.getElementById('userSetup');
@@ -45,6 +47,10 @@ const progressText = document.getElementById('progressText');
  * Initialize the application
  */
 function init() {
+    // Initialize i18n system
+    window.I18n.initLanguage();
+    updateUILanguage();
+
     // Add event listeners
     startBtn.addEventListener('click', startPractice);
     submitBtn.addEventListener('click', checkAnswer);
@@ -71,12 +77,71 @@ function init() {
         saveSessionBtn.addEventListener('click', saveCurrentSession);
     }
 
+    // New feature event listeners
+    const interfaceLanguage = document.getElementById('interfaceLanguage');
+    const cefrLevelSelect = document.getElementById('cefrLevel');
+    const viewReportBtn = document.getElementById('viewReportBtn');
+    const changeLevelBtn = document.getElementById('changeLevelBtn');
+    const closeReportBtn = document.getElementById('closeReportBtn');
+    const exportJSONBtn = document.getElementById('exportJSONBtn');
+    const exportCSVBtn = document.getElementById('exportCSVBtn');
+    const printReportBtn = document.getElementById('printReportBtn');
+
+    if (interfaceLanguage) {
+        interfaceLanguage.addEventListener('change', handleLanguageChange);
+    }
+
+    if (cefrLevelSelect) {
+        cefrLevelSelect.addEventListener('change', handleLevelDescriptionUpdate);
+    }
+
+    if (viewReportBtn) {
+        viewReportBtn.addEventListener('click', showProgressReport);
+    }
+
+    if (changeLevelBtn) {
+        changeLevelBtn.addEventListener('click', showLevelChangeDialog);
+    }
+
+    if (closeReportBtn) {
+        closeReportBtn.addEventListener('click', closeReportModal);
+    }
+
+    if (exportJSONBtn) {
+        exportJSONBtn.addEventListener('click', () => {
+            if (currentReport) {
+                window.ReportingSystem.exportReportJSON(currentReport);
+            }
+        });
+    }
+
+    if (exportCSVBtn) {
+        exportCSVBtn.addEventListener('click', () => {
+            if (currentReport) {
+                window.ReportingSystem.exportReportCSV(currentReport);
+            }
+        });
+    }
+
+    if (printReportBtn) {
+        printReportBtn.addEventListener('click', () => {
+            window.print();
+        });
+    }
+
     // Try to load existing user from localStorage
     const savedUserId = localStorage.getItem('currentUserId');
     if (savedUserId) {
         const savedName = localStorage.getItem('currentUserName');
         if (savedName) {
             userNameInput.value = savedName;
+        }
+
+        // Load saved CEFR level
+        const savedLevel = window.ReportingSystem.loadUserLevel(savedUserId);
+        if (savedLevel && cefrLevelSelect) {
+            cefrLevelSelect.value = savedLevel;
+            handleLevelDescriptionUpdate();
         }
 
         // Check if there's a saved session
@@ -95,7 +160,7 @@ function startPractice() {
     const name = userNameInput.value.trim();
 
     if (!name) {
-        alert('Please enter your name');
+        alert(window.I18n.t('messages.errorLoading'));
         return;
     }
 
@@ -113,8 +178,19 @@ function startPractice() {
     currentUser.name = name;
     currentUser.masteryData = window.AssessmentSystem.loadProgress(userId);
 
+    // Get selected CEFR level
+    const cefrLevelSelect = document.getElementById('cefrLevel');
+    if (cefrLevelSelect) {
+        currentUser.cefrLevel = cefrLevelSelect.value;
+        window.ReportingSystem.saveUserLevel(userId, currentUser.cefrLevel);
+    }
+
     // Update UI
     displayName.textContent = name;
+    const currentLevelValue = document.getElementById('currentLevelValue');
+    if (currentLevelValue) {
+        currentLevelValue.textContent = currentUser.cefrLevel;
+    }
 
     // Switch screens
     userSetupScreen.classList.remove('active');
@@ -131,8 +207,17 @@ function startPractice() {
  * Load next question
  */
 function loadNextQuestion() {
-    // Get random question from content based on exercise type
-    currentQuestion = window.FrenchContent.getRandomQuestion(currentExerciseType);
+    // Get random question from content based on exercise type and CEFR level
+    currentQuestion = window.FrenchContent.getRandomQuestionByLevel(
+        currentExerciseType,
+        null, // Don't filter by exact level
+        currentUser.cefrLevel // Get questions up to this level
+    );
+
+    // Fallback to any question if no questions available at current level
+    if (!currentQuestion) {
+        currentQuestion = window.FrenchContent.getRandomQuestion(currentExerciseType);
+    }
 
     // Update UI based on question type
     const questionLabel = document.querySelector('.question-label');
@@ -142,19 +227,19 @@ function loadNextQuestion() {
         // Conjugation exercise
         questionLabel.textContent = 'Conjugate the verb:';
         questionText.textContent = currentQuestion.question;
-        questionTypeDisplay.textContent = 'Conjugation';
+        questionTypeDisplay.textContent = window.I18n.t('badges.conjugation');
         questionTypeDisplay.className = 'badge badge-purple';
     } else if (currentQuestion.explanation) {
         // Grammar exercise
         questionLabel.textContent = 'Complete the grammar exercise:';
         questionText.textContent = currentQuestion.question;
-        questionTypeDisplay.textContent = 'Grammar';
+        questionTypeDisplay.textContent = window.I18n.t('badges.grammar');
         questionTypeDisplay.className = 'badge badge-green';
     } else {
         // Vocabulary exercise
         questionLabel.textContent = 'Translate to French:';
         questionText.textContent = currentQuestion.english;
-        questionTypeDisplay.textContent = 'Vocabulary';
+        questionTypeDisplay.textContent = window.I18n.t('badges.vocabulary');
         questionTypeDisplay.className = 'badge badge-blue';
     }
 
@@ -311,26 +396,34 @@ function updateProgressDisplay() {
  * Update level progress bar
  */
 function updateLevelProgress() {
-    const readiness = window.AssessmentSystem.evaluateReadinessForNextLevel(currentUser.masteryData);
+    // Calculate progress for current CEFR level
+    const levelMastery = window.ReportingSystem.calculateLevelMastery(
+        currentUser.masteryData,
+        currentUser.cefrLevel
+    );
 
-    const totalItems = Object.keys(currentUser.masteryData).length;
-    const progressPercent = Math.min((totalItems / 30) * 100, 100);
+    const levelConfig = window.ReportingSystem.CEFR_LEVELS[currentUser.cefrLevel];
+    const minItems = levelConfig.minItemsAttempted;
 
-    progressBar.style.width = `${progressPercent}%`;
-    progressText.textContent = `${totalItems}/30 items attempted`;
+    // Calculate progress percentage
+    const itemProgress = Math.min((levelMastery.attemptedItems / minItems) * 100, 100);
+    const accuracyProgress = levelMastery.averageAccuracy * 100;
+    const overallProgress = (itemProgress + accuracyProgress) / 2;
+
+    progressBar.style.width = `${overallProgress}%`;
+    progressText.textContent = `${levelMastery.attemptedItems}/${minItems} items attempted | ${Math.round(levelMastery.averageAccuracy * 100)}% accuracy`;
 
     // Show readiness status
-    const levelStatus = document.getElementById('levelStatus');
-    const statusMessage = levelStatus.querySelector('p');
+    const levelProgressDesc = document.getElementById('levelProgressDesc');
 
-    if (readiness.ready) {
-        statusMessage.textContent = `🎉 ${readiness.reason} - You're ready for the next level!`;
-        statusMessage.style.color = '#10b981';
-        statusMessage.style.fontWeight = 'bold';
+    if (levelMastery.ready) {
+        levelProgressDesc.textContent = `🎉 ${window.I18n.t('messages.levelUp')}`;
+        levelProgressDesc.style.color = '#10b981';
+        levelProgressDesc.style.fontWeight = 'bold';
     } else {
-        statusMessage.textContent = readiness.reason;
-        statusMessage.style.color = '#6b7280';
-        statusMessage.style.fontWeight = 'normal';
+        levelProgressDesc.textContent = window.I18n.t('messages.keepPracticing');
+        levelProgressDesc.style.color = '#6b7280';
+        levelProgressDesc.style.fontWeight = 'normal';
     }
 }
 
@@ -412,6 +505,252 @@ function resetSession() {
     }
 }
 
+/**
+ * Handle language change
+ */
+function handleLanguageChange(event) {
+    const selectedLanguage = event.target.value;
+    window.I18n.setLanguage(selectedLanguage);
+    updateUILanguage();
+}
+
+/**
+ * Update UI language
+ */
+function updateUILanguage() {
+    const t = window.I18n.t;
+
+    // Welcome screen
+    const welcomeTitle = document.getElementById('welcomeTitle');
+    const welcomeSubtitle = document.getElementById('welcomeSubtitle');
+    const languageLabel = document.getElementById('languageLabel');
+    const nameLabel = document.getElementById('nameLabel');
+    const levelLabel = document.getElementById('levelLabel');
+    const levelDescription = document.getElementById('levelDescription');
+
+    if (welcomeTitle) welcomeTitle.textContent = t('welcome.title');
+    if (welcomeSubtitle) welcomeSubtitle.textContent = t('welcome.title');
+    if (languageLabel) languageLabel.textContent = t('welcome.languageLabel');
+    if (nameLabel) nameLabel.textContent = t('welcome.nameLabel');
+    if (levelLabel) levelLabel.textContent = t('welcome.selectLevel');
+
+    // Update level description
+    const cefrLevelSelect = document.getElementById('cefrLevel');
+    if (cefrLevelSelect && levelDescription) {
+        const selectedLevel = cefrLevelSelect.value;
+        levelDescription.textContent = t(`levelDescriptions.${selectedLevel}`);
+    }
+
+    // Update buttons
+    if (startBtn) startBtn.textContent = t('welcome.startButton');
+    const resumeSessionBtn = document.getElementById('resumeSessionBtn');
+    if (resumeSessionBtn) resumeSessionBtn.textContent = t('welcome.resumeButton');
+
+    // Practice screen labels
+    document.getElementById('vocabLabel').textContent = t('practice.vocabulary');
+    document.getElementById('grammarLabel').textContent = t('practice.grammar');
+    document.getElementById('conjugationLabel').textContent = t('practice.conjugation');
+    document.getElementById('allTypesLabel').textContent = t('practice.allTypes');
+    document.getElementById('saveProgressLabel').textContent = t('practice.saveProgress');
+    document.getElementById('viewReportLabel').textContent = t('practice.viewReport');
+    document.getElementById('changeLevelLabel').textContent = t('practice.changeLanguage');
+
+    // Progress labels
+    document.getElementById('levelProgressTitle').textContent = t('progress.levelGoal');
+
+    // Report modal
+    document.getElementById('reportTitle').textContent = t('report.title');
+    document.getElementById('exportJSONLabel').textContent = t('report.downloadPDF');
+    document.getElementById('exportCSVLabel').textContent = t('report.downloadCSV');
+    document.getElementById('printLabel').textContent = t('report.printReport');
+}
+
+/**
+ * Handle level description update
+ */
+function handleLevelDescriptionUpdate() {
+    const cefrLevelSelect = document.getElementById('cefrLevel');
+    const levelDescription = document.getElementById('levelDescription');
+
+    if (cefrLevelSelect && levelDescription) {
+        const selectedLevel = cefrLevelSelect.value;
+        levelDescription.textContent = window.I18n.t(`levelDescriptions.${selectedLevel}`);
+    }
+}
+
+/**
+ * Show progress report
+ */
+function showProgressReport() {
+    if (!currentUser.userId) return;
+
+    // Generate report
+    currentReport = window.ReportingSystem.generateProgressReport(
+        currentUser.userId,
+        currentUser.name,
+        currentUser.masteryData
+    );
+
+    // Display report in modal
+    displayReport(currentReport);
+
+    // Show modal
+    const reportModal = document.getElementById('reportModal');
+    reportModal.classList.add('active');
+}
+
+/**
+ * Display report content
+ */
+function displayReport(report) {
+    const reportContent = document.getElementById('reportContent');
+
+    let html = `
+        <div class="report-section">
+            <h3>${window.I18n.t('report.overallProgress')}</h3>
+            <div class="report-grid">
+                <div class="report-card">
+                    <div class="report-card-label">${window.I18n.t('report.currentLevel')}</div>
+                    <div class="report-card-value level-badge">${report.currentLevel}</div>
+                </div>
+                <div class="report-card">
+                    <div class="report-card-label">${window.I18n.t('report.totalAttempts')}</div>
+                    <div class="report-card-value">${report.overallStats.totalAttempts}</div>
+                </div>
+                <div class="report-card">
+                    <div class="report-card-label">${window.I18n.t('report.overallAccuracy')}</div>
+                    <div class="report-card-value">${(report.overallStats.overallAccuracy * 100).toFixed(1)}%</div>
+                </div>
+                <div class="report-card">
+                    <div class="report-card-label">${window.I18n.t('progress.itemsCount')}</div>
+                    <div class="report-card-value">${report.overallStats.attemptedItems}/${report.overallStats.totalItems}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="report-section">
+            <h3>${window.I18n.t('report.exercisesByLevel')}</h3>
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>CEFR Level</th>
+                        <th>${window.I18n.t('progress.itemsCount')}</th>
+                        <th>${window.I18n.t('report.overallAccuracy')}</th>
+                        <th>${window.I18n.t('report.readyForNextLevel')}</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+
+    for (const [level, progress] of Object.entries(report.levelProgress)) {
+        html += `
+            <tr>
+                <td><strong>${level}</strong></td>
+                <td>${progress.attemptedItems}/${progress.totalItems}</td>
+                <td>${(progress.averageAccuracy * 100).toFixed(1)}%</td>
+                <td>${progress.ready ? '✓' : '—'}</td>
+            </tr>
+        `;
+    }
+
+    html += `
+                </tbody>
+            </table>
+        </div>
+    `;
+
+    // Strengths and Weaknesses
+    if (report.strengthsWeaknesses.strengths.length > 0 || report.strengthsWeaknesses.weaknesses.length > 0) {
+        html += `<div class="report-section">
+            <h3>${window.I18n.t('report.strengthsAndWeaknesses')}</h3>`;
+
+        if (report.strengthsWeaknesses.strengths.length > 0) {
+            html += `<h4>${window.I18n.t('report.strengths')}</h4>
+                <ul class="category-list">`;
+            report.strengthsWeaknesses.strengths.forEach(s => {
+                html += `
+                    <li>
+                        <span class="category-name">${s.category}</span>
+                        <span class="category-accuracy good">${(s.accuracy * 100).toFixed(1)}%</span>
+                    </li>
+                `;
+            });
+            html += `</ul>`;
+        }
+
+        if (report.strengthsWeaknesses.weaknesses.length > 0) {
+            html += `<h4>${window.I18n.t('report.weaknesses')}</h4>
+                <ul class="category-list">`;
+            report.strengthsWeaknesses.weaknesses.forEach(w => {
+                html += `
+                    <li>
+                        <span class="category-name">${w.category}</span>
+                        <span class="category-accuracy poor">${(w.accuracy * 100).toFixed(1)}%</span>
+                    </li>
+                `;
+            });
+            html += `</ul>`;
+        }
+
+        html += `</div>`;
+    }
+
+    // Recommendations
+    if (report.recommendations.length > 0) {
+        html += `
+            <div class="report-section">
+                <h3>${window.I18n.t('report.recommendations')}</h3>
+        `;
+
+        report.recommendations.forEach(rec => {
+            html += `
+                <div class="recommendation-item priority-${rec.priority}">
+                    <strong>${rec.priority} priority:</strong> ${rec.message}
+                </div>
+            `;
+        });
+
+        html += `</div>`;
+    }
+
+    reportContent.innerHTML = html;
+}
+
+/**
+ * Close report modal
+ */
+function closeReportModal() {
+    const reportModal = document.getElementById('reportModal');
+    reportModal.classList.remove('active');
+}
+
+/**
+ * Show level change dialog
+ */
+function showLevelChangeDialog() {
+    const cefrLevel = prompt(
+        `${window.I18n.t('practice.currentLevel')}: ${currentUser.cefrLevel}\n\n` +
+        `${window.I18n.t('welcome.selectLevel')} (A1, A2, B1, B2, C1, C2):`,
+        currentUser.cefrLevel
+    );
+
+    if (cefrLevel && ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].includes(cefrLevel.toUpperCase())) {
+        currentUser.cefrLevel = cefrLevel.toUpperCase();
+        window.ReportingSystem.saveUserLevel(currentUser.userId, currentUser.cefrLevel);
+
+        // Update UI
+        const currentLevelValue = document.getElementById('currentLevelValue');
+        if (currentLevelValue) {
+            currentLevelValue.textContent = currentUser.cefrLevel;
+        }
+
+        // Update progress display
+        updateProgressDisplay();
+
+        alert(`${window.I18n.t('practice.currentLevel')}: ${currentUser.cefrLevel}`);
+    }
+}
+
 // Initialize app when DOM is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
@@ -419,5 +758,6 @@ if (document.readyState === 'loading') {
     init();
 }
 
-// Make resetSession available globally (for debugging)
+// Make functions available globally (for debugging)
 window.resetSession = resetSession;
+window.showProgressReport = showProgressReport;
