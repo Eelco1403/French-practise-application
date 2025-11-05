@@ -1726,6 +1726,416 @@ const FRENCH_CONTENT = {
                 { question: 'Citez deux méthodes modernes mentionnées.', answer: 'applications et échanges en ligne', type: 'factual', alternatives: ['applications et séries'] },
                 { question: 'Quelle est la clé du succès?', answer: 'pratiquer régulièrement', type: 'inference', alternatives: ['ne pas avoir peur des erreurs'] }
             ]
+        },
+
+        // B2 Level - Detailed texts on abstract topics (15 passages, 3 questions each = 45 questions)
+        {
+            id: 'r-38',
+            title: 'L\'intelligence artificielle',
+            passage: 'L\'intelligence artificielle transforme progressivement notre société. Des algorithmes sophistiqués sont désormais capables d\'analyser des données massives, de reconnaître des images et même de générer du contenu créatif. Si ces avancées offrent des opportunités considérables dans des domaines comme la médecine ou l\'éducation, elles soulèvent également des questions éthiques importantes concernant la vie privée, l\'emploi et la prise de décision automatisée.',
+            cefrLevel: 'B2',
+            difficulty: 4,
+            category: 'technology',
+            questions: [
+                { question: 'Que peuvent faire les algorithmes d\'IA?', answer: 'analyser données, reconnaître images, générer contenu', type: 'factual' },
+                { question: 'Dans quels domaines l\'IA offre-t-elle des opportunités?', answer: 'médecine et éducation', type: 'factual' },
+                { question: 'Quelles préoccupations éthiques sont mentionnées?', answer: 'vie privée, emploi, décision automatisée', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-39',
+            title: 'Le changement climatique',
+            passage: 'Les scientifiques s\'accordent sur l\'urgence d\'agir face au changement climatique. Les émissions de gaz à effet de serre ont entraîné une augmentation de la température mondiale, provoquant des phénomènes météorologiques extrêmes. La transition énergétique vers les sources renouvelables apparaît comme une solution incontournable, bien que sa mise en œuvre nécessite des investissements massifs et une volonté politique forte.',
+            cefrLevel: 'B2',
+            difficulty: 4,
+            category: 'environment',
+            questions: [
+                { question: 'Quelle est la cause de l\'augmentation de température?', answer: 'émissions de gaz à effet de serre', type: 'factual' },
+                { question: 'Quelle solution est proposée?', answer: 'transition énergétique vers renouvelables', type: 'factual' },
+                { question: 'Qu\'est-ce qui est nécessaire pour cette transition?', answer: 'investissements massifs et volonté politique', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-40',
+            title: 'La mondialisation culturelle',
+            passage: 'La mondialisation a facilité les échanges culturels à une échelle sans précédent. Si elle permet une diffusion plus large des arts et des idées, certains craignent une homogénéisation culturelle au détriment des traditions locales. Le défi consiste à trouver un équilibre entre ouverture au monde et préservation de la diversité culturelle, patrimoine inestimable de l\'humanité.',
+            cefrLevel: 'B2',
+            difficulty: 4,
+            category: 'culture',
+            questions: [
+                { question: 'Quel est l\'avantage de la mondialisation culturelle?', answer: 'diffusion des arts et des idées', type: 'factual' },
+                { question: 'Quelle crainte est exprimée?', answer: 'homogénéisation culturelle', type: 'factual' },
+                { question: 'Quel équilibre faut-il trouver?', answer: 'ouverture et préservation diversité', type: 'inference' }
+            ]
+        },
+        {
+            id: 'r-41',
+            title: 'L\'éthique médicale',
+            passage: 'Les progrès de la médecine soulèvent des dilemmes éthiques complexes. Les technologies comme l\'édition génétique CRISPR ouvrent des possibilités thérapeutiques révolutionnaires, mais posent la question des limites de l\'intervention humaine sur le vivant. Le consentement éclairé des patients et le respect de leur autonomie demeurent des principes fondamentaux, même face aux prouesses technologiques.',
+            cefrLevel: 'B2',
+            difficulty: 4,
+            category: 'health',
+            questions: [
+                { question: 'Quelle technologie est mentionnée?', answer: 'CRISPR', type: 'factual', alternatives: ['édition génétique'] },
+                { question: 'Quelle question éthique est soulevée?', answer: 'limites de l\'intervention sur le vivant', type: 'factual' },
+                { question: 'Quels principes restent fondamentaux?', answer: 'consentement éclairé et autonomie', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-42',
+            title: 'L\'économie collaborative',
+            passage: 'L\'économie collaborative bouleverse les modèles traditionnels de consommation. Des plateformes numériques facilitent le partage de biens et de services entre particuliers, réduisant ainsi le gaspillage. Toutefois, ce modèle soulève des questions sur la protection sociale des travailleurs indépendants et la régulation de ces nouvelles activités économiques.',
+            cefrLevel: 'B2',
+            difficulty: 4,
+            category: 'economics',
+            questions: [
+                { question: 'Que facilitent les plateformes numériques?', answer: 'partage de biens et services', type: 'factual' },
+                { question: 'Quel bénéfice est mentionné?', answer: 'réduction du gaspillage', type: 'factual' },
+                { question: 'Quelles préoccupations sont soulevées?', answer: 'protection sociale et régulation', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-43',
+            title: 'L\'urbanisation durable',
+            passage: 'Face à l\'urbanisation croissante, les villes doivent repenser leur développement. Le concept de ville durable intègre espaces verts, transports écologiques et bâtiments à faible consommation énergétique. Cette transformation nécessite une planification urbaine innovante et la participation active des citoyens aux décisions qui façonnent leur environnement quotidien.',
+            cefrLevel: 'B2',
+            difficulty: 4,
+            category: 'urban-planning',
+            questions: [
+                { question: 'Qu\'intègre le concept de ville durable?', answer: 'espaces verts, transports écologiques, bâtiments économes', type: 'factual' },
+                { question: 'Que nécessite cette transformation?', answer: 'planification innovante et participation citoyenne', type: 'factual' },
+                { question: 'Pourquoi les villes doivent-elles se transformer?', answer: 'urbanisation croissante', type: 'inference' }
+            ]
+        },
+        {
+            id: 'r-44',
+            title: 'La démocratie participative',
+            passage: 'La démocratie représentative traditionnelle fait face à une crise de confiance. De nombreux citoyens aspirent à une participation plus directe aux décisions politiques. Les budgets participatifs, les consultations publiques et les plateformes de débat en ligne constituent des outils pour revitaliser l\'engagement démocratique, bien que leur efficacité dépende de la volonté des élus de tenir compte des avis exprimés.',
+            cefrLevel: 'B2',
+            difficulty: 4,
+            category: 'politics',
+            questions: [
+                { question: 'À quel problème fait face la démocratie représentative?', answer: 'crise de confiance', type: 'factual' },
+                { question: 'Citez deux outils de participation mentionnés.', answer: 'budgets participatifs et consultations publiques', type: 'factual', alternatives: ['consultations et plateformes en ligne'] },
+                { question: 'De quoi dépend l\'efficacité de ces outils?', answer: 'volonté des élus', type: 'inference' }
+            ]
+        },
+        {
+            id: 'r-45',
+            title: 'L\'éducation numérique',
+            passage: 'L\'intégration du numérique dans l\'éducation transforme les méthodes pédagogiques. Les ressources en ligne offrent un accès sans précédent au savoir, tandis que les outils collaboratifs favorisent l\'apprentissage actif. Néanmoins, cette révolution numérique accentue les inégalités entre élèves selon leur équipement et leur maîtrise des outils technologiques, nécessitant des politiques d\'inclusion numérique.',
+            cefrLevel: 'B2',
+            difficulty: 4,
+            category: 'education',
+            questions: [
+                { question: 'Quels avantages offre le numérique en éducation?', answer: 'accès au savoir et apprentissage actif', type: 'factual' },
+                { question: 'Quel problème est soulevé?', answer: 'accentuation des inégalités', type: 'factual' },
+                { question: 'Que faut-il pour résoudre ce problème?', answer: 'politiques d\'inclusion numérique', type: 'inference' }
+            ]
+        },
+        {
+            id: 'r-46',
+            title: 'Le patrimoine immatériel',
+            passage: 'Au-delà des monuments et des œuvres d\'art, le patrimoine culturel comprend des traditions, des savoir-faire et des expressions orales. L\'UNESCO reconnaît l\'importance de ce patrimoine immatériel en l\'inscrivant sur des listes protectrices. Sa transmission aux jeunes générations constitue un enjeu majeur dans un monde en mutation rapide où ces pratiques risquent de disparaître.',
+            cefrLevel: 'B2',
+            difficulty: 4,
+            category: 'culture',
+            questions: [
+                { question: 'Que comprend le patrimoine immatériel?', answer: 'traditions, savoir-faire, expressions orales', type: 'factual' },
+                { question: 'Comment l\'UNESCO protège-t-elle ce patrimoine?', answer: 'inscription sur listes protectrices', type: 'factual' },
+                { question: 'Quel est l\'enjeu majeur mentionné?', answer: 'transmission aux jeunes générations', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-47',
+            title: 'La sécurité alimentaire',
+            passage: 'Nourrir une population mondiale croissante tout en préservant l\'environnement représente un défi considérable. L\'agriculture intensive a permis d\'augmenter les rendements, mais au prix d\'une dégradation des sols et de la biodiversité. Les approches agroécologiques proposent une alternative durable, combinant productivité et respect de l\'écosystème, bien que leur généralisation nécessite un changement profond des pratiques agricoles.',
+            cefrLevel: 'B2',
+            difficulty: 4,
+            category: 'agriculture',
+            questions: [
+                { question: 'Quel est le défi mentionné?', answer: 'nourrir population en préservant environnement', type: 'factual' },
+                { question: 'Quels problèmes cause l\'agriculture intensive?', answer: 'dégradation sols et biodiversité', type: 'factual' },
+                { question: 'Que proposent les approches agroécologiques?', answer: 'productivité et respect écosystème', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-48',
+            title: 'La migration internationale',
+            passage: 'Les flux migratoires contemporains résultent de facteurs multiples: conflits armés, changements climatiques, recherche de meilleures opportunités économiques. L\'intégration des migrants pose des défis aux sociétés d\'accueil en termes d\'emploi, de logement et de cohésion sociale. Une approche équilibrée doit concilier l\'accueil humanitaire et la gestion des capacités d\'intégration.',
+            cefrLevel: 'B2',
+            difficulty: 4,
+            category: 'social',
+            questions: [
+                { question: 'Quelles sont les causes des migrations?', answer: 'conflits, climat, opportunités économiques', type: 'factual' },
+                { question: 'Quels défis d\'intégration sont mentionnés?', answer: 'emploi, logement, cohésion sociale', type: 'factual' },
+                { question: 'Que doit concilier une approche équilibrée?', answer: 'accueil humanitaire et capacités d\'intégration', type: 'inference' }
+            ]
+        },
+        {
+            id: 'r-49',
+            title: 'L\'obsolescence programmée',
+            passage: 'L\'obsolescence programmée désigne la stratégie consistant à réduire délibérément la durée de vie d\'un produit pour stimuler la consommation. Cette pratique, critiquée pour son impact environnemental, génère des quantités massives de déchets électroniques. Face à ce constat, des initiatives législatives émergent pour garantir le droit à la réparation et encourager une économie plus durable.',
+            cefrLevel: 'B2',
+            difficulty: 4,
+            category: 'economics',
+            questions: [
+                { question: 'Qu\'est-ce que l\'obsolescence programmée?', answer: 'réduire durée de vie pour stimuler consommation', type: 'factual' },
+                { question: 'Quel est son impact?', answer: 'déchets électroniques massifs', type: 'factual', alternatives: ['impact environnemental'] },
+                { question: 'Quelles initiatives émergent?', answer: 'droit à la réparation', type: 'factual', alternatives: ['législation pour économie durable'] }
+            ]
+        },
+        {
+            id: 'r-50',
+            title: 'La recherche scientifique',
+            passage: 'Le financement de la recherche fondamentale suscite des débats. Contrairement à la recherche appliquée qui vise des applications concrètes, la recherche fondamentale explore des questions théoriques sans retombées immédiates. Pourtant, l\'histoire montre que les découvertes fondamentales d\'aujourd\'hui constituent souvent les innovations de demain, justifiant ainsi l\'investissement public dans ce domaine.',
+            cefrLevel: 'B2',
+            difficulty: 4,
+            category: 'science',
+            questions: [
+                { question: 'Quelle est la différence entre recherche fondamentale et appliquée?', answer: 'fondamentale explore théorie, appliquée vise applications', type: 'factual' },
+                { question: 'Pourquoi faut-il financer la recherche fondamentale?', answer: 'découvertes deviennent innovations futures', type: 'inference' },
+                { question: 'Qui devrait investir dans ce domaine?', answer: 'investissement public', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-51',
+            title: 'Le bien-être au travail',
+            passage: 'Les entreprises prennent progressivement conscience de l\'importance du bien-être des employés. La qualité de vie au travail influence non seulement la satisfaction personnelle mais aussi la productivité. Des aménagements comme le télétravail flexible, les espaces de détente et les programmes de formation contribuent à créer un environnement professionnel plus épanouissant, bénéfique tant pour les individus que pour les organisations.',
+            cefrLevel: 'B2',
+            difficulty: 4,
+            category: 'work',
+            questions: [
+                { question: 'Qu\'influence la qualité de vie au travail?', answer: 'satisfaction et productivité', type: 'factual' },
+                { question: 'Citez deux aménagements mentionnés.', answer: 'télétravail flexible et espaces de détente', type: 'factual', alternatives: ['espaces détente et programmes formation'] },
+                { question: 'À qui profite un bon environnement professionnel?', answer: 'individus et organisations', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-52',
+            title: 'La bioéthique',
+            passage: 'Les avancées biotechnologiques posent des questions bioéthiques inédites. Le clonage thérapeutique, la gestation pour autrui ou l\'eugénisme génétique divisent les opinions. Les comités d\'éthique jouent un rôle crucial en établissant des cadres réglementaires qui tentent de concilier progrès scientifique et respect des valeurs humanistes fondamentales.',
+            cefrLevel: 'B2',
+            difficulty: 4,
+            category: 'ethics',
+            questions: [
+                { question: 'Citez deux questions bioéthiques mentionnées.', answer: 'clonage thérapeutique et gestation pour autrui', type: 'factual', alternatives: ['GPA et eugénisme'] },
+                { question: 'Quel est le rôle des comités d\'éthique?', answer: 'établir cadres réglementaires', type: 'factual' },
+                { question: 'Que doivent concilier ces cadres?', answer: 'progrès scientifique et valeurs humanistes', type: 'factual' }
+            ]
+        },
+
+        // C1 Level - Complex argumentative texts (10 passages, 3-4 questions = 35 questions)
+        {
+            id: 'r-53',
+            title: 'La post-vérité',
+            passage: 'Le concept de post-vérité caractérise une ère où les faits objectifs exercent moins d\'influence sur l\'opinion publique que les appels à l\'émotion et aux croyances personnelles. Les réseaux sociaux amplifient ce phénomène en créant des bulles informationnelles où chacun ne consomme que des contenus confirmant ses opinions préexistantes. Cette fragmentation du débat public menace les fondements démocratiques en rendant impossible l\'établissement d\'un socle factuel commun, préalable indispensable à toute délibération collective.',
+            cefrLevel: 'C1',
+            difficulty: 5,
+            category: 'society',
+            questions: [
+                { question: 'Comment se définit la post-vérité?', answer: 'émotion et croyances priment sur faits objectifs', type: 'factual' },
+                { question: 'Quel rôle jouent les réseaux sociaux?', answer: 'créent bulles informationnelles', type: 'factual' },
+                { question: 'Pourquoi ce phénomène menace-t-il la démocratie?', answer: 'impossible d\'établir socle factuel commun', type: 'inference' },
+                { question: 'Quel préalable est nécessaire à la délibération?', answer: 'socle factuel commun', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-54',
+            title: 'L\'anthropocène',
+            passage: 'Les géologues débattent de la pertinence de définir une nouvelle ère géologique: l\'anthropocène, marquée par l\'impact prépondérant de l\'activité humaine sur les écosystèmes terrestres. Cette conceptualisation, au-delà de son intérêt scientifique, revêt une dimension philosophique en interrogeant la responsabilité de l\'espèce humaine face aux bouleversements qu\'elle engendre. Elle soulève la question cruciale de savoir si nous saurons développer une conscience écologique à la hauteur de notre puissance technologique.',
+            cefrLevel: 'C1',
+            difficulty: 5,
+            category: 'environment',
+            questions: [
+                { question: 'Qu\'est-ce qui caractérise l\'anthropocène?', answer: 'impact humain prépondérant sur écosystèmes', type: 'factual' },
+                { question: 'Quelle dimension dépasse l\'intérêt scientifique?', answer: 'dimension philosophique', type: 'factual' },
+                { question: 'Quelle responsabilité est interrogée?', answer: 'responsabilité face aux bouleversements', type: 'factual' },
+                { question: 'Quelle question cruciale est soulevée?', answer: 'conscience écologique vs puissance technologique', type: 'inference' }
+            ]
+        },
+        {
+            id: 'r-55',
+            title: 'Le relativisme culturel',
+            passage: 'Le relativisme culturel postule qu\'aucune culture ne peut être jugée selon les critères d\'une autre, chaque système de valeurs étant légitime dans son contexte propre. Si cette approche favorise la tolérance et combat l\'ethnocentrisme, elle soulève néanmoins une interrogation fondamentale: existe-t-il des valeurs universelles transcendant les particularismes culturels? Le débat oppose ceux qui défendent l\'universalité des droits humains et ceux qui y voient une forme d\'impérialisme culturel occidental.',
+            cefrLevel: 'C1',
+            difficulty: 5,
+            category: 'philosophy',
+            questions: [
+                { question: 'Que postule le relativisme culturel?', answer: 'aucune culture ne peut juger une autre', type: 'factual' },
+                { question: 'Quels sont les avantages de cette approche?', answer: 'tolérance et combat contre ethnocentrisme', type: 'factual' },
+                { question: 'Quelle interrogation fondamentale est soulevée?', answer: 'existence de valeurs universelles', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-56',
+            title: 'La disruption technologique',
+            passage: 'La notion de disruption désigne les innovations qui bouleversent radicalement des secteurs économiques établis. Si ces ruptures génèrent de la croissance et des opportunités, elles provoquent également des destructions d\'emplois et des déséquilibres sociaux. La capacité d\'une société à gérer ces transitions détermine sa résilience: formation continue, filets de sécurité sociale et dialogue social apparaissent comme des leviers essentiels pour que le progrès technologique profite au plus grand nombre plutôt qu\'à une élite.',
+            cefrLevel: 'C1',
+            difficulty: 5,
+            category: 'economics',
+            questions: [
+                { question: 'Que désigne la disruption?', answer: 'innovations bouleversant secteurs établis', type: 'factual' },
+                { question: 'Quels effets négatifs provoque-t-elle?', answer: 'destruction emplois et déséquilibres sociaux', type: 'factual' },
+                { question: 'Citez deux leviers pour gérer ces transitions.', answer: 'formation continue et sécurité sociale', type: 'factual', alternatives: ['sécurité sociale et dialogue social'] },
+                { question: 'Quel objectif doivent servir ces leviers?', answer: 'progrès profite au plus grand nombre', type: 'inference' }
+            ]
+        },
+        {
+            id: 'r-57',
+            title: 'L\'art contemporain',
+            passage: 'L\'art contemporain déconcerte souvent le public en remettant en question les critères esthétiques traditionnels. En privilégiant le concept sur la technique, les artistes contemporains interrogent la nature même de l\'œuvre d\'art et le rôle de l\'artiste dans la société. Cette démarche intellectuelle, bien que déroutante, invite à une réflexion critique sur les conventions artistiques et élargit considérablement le champ des possibles créatifs, même si elle entretient parfois un élitisme qui éloigne le grand public.',
+            cefrLevel: 'C1',
+            difficulty: 5,
+            category: 'art',
+            questions: [
+                { question: 'Que remet en question l\'art contemporain?', answer: 'critères esthétiques traditionnels', type: 'factual' },
+                { question: 'Que privilégient les artistes contemporains?', answer: 'concept sur technique', type: 'factual' },
+                { question: 'Qu\'interrogent-ils?', answer: 'nature de l\'œuvre et rôle de l\'artiste', type: 'factual' },
+                { question: 'Quel problème potentiel est mentionné?', answer: 'élitisme qui éloigne le public', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-58',
+            title: 'La géopolitique de l\'eau',
+            passage: 'L\'eau douce, ressource vitale inégalement répartie, devient un enjeu géopolitique majeur. Les bassins fluviaux transfrontaliers génèrent des tensions entre États riverains, chacun cherchant à sécuriser ses approvisionnements. Le changement climatique exacerbe ces conflits potentiels en modifiant les régimes hydrologiques. La gouvernance internationale de l\'eau nécessite des mécanismes de coopération innovants, capables de concilier souveraineté nationale et gestion collective d\'un bien commun essentiel à la survie humaine.',
+            cefrLevel: 'C1',
+            difficulty: 5,
+            category: 'politics',
+            questions: [
+                { question: 'Pourquoi l\'eau devient-elle un enjeu géopolitique?', answer: 'ressource vitale inégalement répartie', type: 'factual' },
+                { question: 'Que génèrent les bassins transfrontaliers?', answer: 'tensions entre États riverains', type: 'factual' },
+                { question: 'Comment le climat aggrave-t-il la situation?', answer: 'modifie régimes hydrologiques', type: 'factual' },
+                { question: 'Que doit concilier la gouvernance internationale?', answer: 'souveraineté et gestion collective', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-59',
+            title: 'La médecine personnalisée',
+            passage: 'La médecine personnalisée, rendue possible par le séquençage génomique, promet des traitements adaptés au profil génétique de chaque patient. Cette approche pourrait révolutionner la prise en charge de maladies complexes comme le cancer. Toutefois, elle soulève des préoccupations majeures concernant la confidentialité des données génétiques et le risque de discrimination par les assureurs ou les employeurs. L\'encadrement juridique de ces technologies doit évoluer pour protéger les individus sans entraver l\'innovation médicale.',
+            cefrLevel: 'C1',
+            difficulty: 5,
+            category: 'medicine',
+            questions: [
+                { question: 'Qu\'est-ce que la médecine personnalisée?', answer: 'traitements adaptés au profil génétique', type: 'factual' },
+                { question: 'Quelles préoccupations soulève-t-elle?', answer: 'confidentialité et discrimination', type: 'factual' },
+                { question: 'Qui pourrait discriminer selon les données génétiques?', answer: 'assureurs et employeurs', type: 'factual' },
+                { question: 'Que doit faire l\'encadrement juridique?', answer: 'protéger sans entraver innovation', type: 'inference' }
+            ]
+        },
+        {
+            id: 'r-60',
+            title: 'L\'effondrement de la biodiversité',
+            passage: 'Les scientifiques parlent désormais de sixième extinction de masse, provoquée non par un cataclysme naturel mais par l\'activité humaine. La disparition accélérée d\'espèces déstabilise les écosystèmes dont dépend notre propre survie. Au-delà des arguments écologiques, la préservation de la biodiversité répond à un impératif éthique: quelle légitimité avons-nous à condamner à l\'extinction des espèces ayant évolué pendant des millions d\'années? Cette question interpelle notre responsabilité envers les générations futures et les autres formes de vie.',
+            cefrLevel: 'C1',
+            difficulty: 5,
+            category: 'environment',
+            questions: [
+                { question: 'Qu\'est-ce qui caractérise la sixième extinction?', answer: 'provoquée par activité humaine', type: 'factual' },
+                { question: 'Pourquoi la biodiversité est-elle importante pour nous?', answer: 'écosystèmes dont dépend notre survie', type: 'factual' },
+                { question: 'Quelle question éthique est posée?', answer: 'légitimité de condamner espèces à extinction', type: 'factual' },
+                { question: 'Envers qui avons-nous une responsabilité?', answer: 'générations futures et autres formes de vie', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-61',
+            title: 'Le transhumanisme',
+            passage: 'Le transhumanisme envisage l\'amélioration des capacités humaines par la technologie, jusqu\'à transcender les limites biologiques. Prothèses augmentées, interfaces cerveau-machine, modification génétique: ces perspectives fascinent autant qu\'elles inquiètent. Les critiques dénoncent une fuite en avant technologique négligeant les questions fondamentales sur ce qui définit l\'humain. Le risque d\'une société à deux vitesses, entre "augmentés" et "naturels", pose un défi majeur d\'équité sociale que les tenants du transhumanisme peinent à résoudre.',
+            cefrLevel: 'C1',
+            difficulty: 5,
+            category: 'technology',
+            questions: [
+                { question: 'Qu\'envisage le transhumanisme?', answer: 'amélioration capacités humaines par technologie', type: 'factual' },
+                { question: 'Citez deux technologies mentionnées.', answer: 'prothèses augmentées et interfaces cerveau-machine', type: 'factual' },
+                { question: 'Que néglige cette approche selon les critiques?', answer: 'questions sur ce qui définit l\'humain', type: 'factual' },
+                { question: 'Quel risque social est soulevé?', answer: 'société à deux vitesses augmentés/naturels', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-62',
+            title: 'La justice restaurative',
+            passage: 'Contrairement au système pénal traditionnel axé sur la punition, la justice restaurative privilégie la réparation du préjudice et la réconciliation entre victimes et auteurs d\'infractions. Cette approche, inspirée de pratiques ancestrales, reconnaît que le crime affecte d\'abord les personnes et les communautés avant d\'être une violation de la loi. Les rencontres entre parties, dans un cadre sécurisé, peuvent favoriser la responsabilisation des délinquants et aider les victimes à surmonter leur traumatisme, bien que cette méthode ne convienne pas à toutes les situations.',
+            cefrLevel: 'C1',
+            difficulty: 5,
+            category: 'law',
+            questions: [
+                { question: 'Que privilégie la justice restaurative?', answer: 'réparation et réconciliation', type: 'factual' },
+                { question: 'Que reconnaît cette approche?', answer: 'crime affecte personnes avant d\'être violation loi', type: 'factual' },
+                { question: 'Quels bénéfices peuvent avoir les rencontres?', answer: 'responsabilisation et surmonter traumatisme', type: 'factual' },
+                { question: 'Quelle limite est mentionnée?', answer: 'ne convient pas à toutes situations', type: 'factual' }
+            ]
+        },
+
+        // C2 Level - Highly sophisticated texts (5 passages, 4 questions = 20 questions)
+        {
+            id: 'r-63',
+            title: 'L\'herméneutique philosophique',
+            passage: 'L\'herméneutique, initialement cantonnée à l\'interprétation des textes sacrés, s\'est muée en philosophie générale de la compréhension humaine. Hans-Georg Gadamer a révolutionné ce champ en montrant que toute compréhension s\'inscrit dans une tradition interprétative préexistante: nous ne pouvons accéder au sens qu\'à travers nos préjugés, non au sens péjoratif mais comme structures anticipatrices de sens. Cette circularité herméneutique invalide l\'idéal positiviste d\'une objectivité désincarnée, substituant au paradigme de l\'explication celui de la compréhension dialogique où l\'interprète et l\'objet interprété se transforment mutuellement.',
+            cefrLevel: 'C2',
+            difficulty: 6,
+            category: 'philosophy',
+            questions: [
+                { question: 'Comment l\'herméneutique a-t-elle évolué?', answer: 'de l\'interprétation des textes à philosophie de la compréhension', type: 'factual' },
+                { question: 'Que sont les préjugés selon Gadamer?', answer: 'structures anticipatrices de sens', type: 'factual' },
+                { question: 'Quel idéal la circularité herméneutique invalide-t-elle?', answer: 'objectivité désincarnée positiviste', type: 'factual' },
+                { question: 'Par quoi est remplacé le paradigme de l\'explication?', answer: 'compréhension dialogique', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-64',
+            title: 'La phénoménologie de la perception',
+            passage: 'Maurice Merleau-Ponty a fondamentalement contesté la dichotomie cartésienne opposant le corps-objet à l\'esprit pensant. Pour lui, la perception n\'est pas un processus passif d\'enregistrement sensoriel mais une expérience incarnée où le corps-sujet investit activement le monde. Cette corporéité primordiale précède toute élaboration intellectuelle: nous habitons notre corps avant de le penser. Cette phénoménologie du corps vécu récuse tant l\'empirisme réducteur que l\'intellectualisme abstrait, révélant une dimension pré-réflexive de l\'existence où se dissolvent les dualismes traditionnels de la métaphysique occidentale.',
+            cefrLevel: 'C2',
+            difficulty: 6,
+            category: 'philosophy',
+            questions: [
+                { question: 'Quelle dichotomie Merleau-Ponty conteste-t-il?', answer: 'corps-objet opposé à esprit pensant', type: 'factual' },
+                { question: 'Comment définit-il la perception?', answer: 'expérience incarnée active', type: 'factual' },
+                { question: 'Que précède la corporéité?', answer: 'élaboration intellectuelle', type: 'factual' },
+                { question: 'Quels courants philosophiques sont récusés?', answer: 'empirisme réducteur et intellectualisme abstrait', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-65',
+            title: 'La théorie quantique des champs',
+            passage: 'La théorie quantique des champs constitue le cadre conceptuel unificateur de la physique des particules. Elle transcende les limites de la mécanique quantique en traitant les particules comme des excitations de champs sous-jacents imprégnant l\'espace-temps. Cette approche a permis des prédictions d\'une précision inouïe, comme le moment magnétique anomal de l\'électron vérifié à onze décimales. Pourtant, l\'intégration de la gravitation reste un défi insurmontable: la renormalisation, technique permettant d\'extraire des résultats finis de calculs divergents, échoue pour la relativité générale, suggérant qu\'une révolution conceptuelle demeure nécessaire.',
+            cefrLevel: 'C2',
+            difficulty: 6,
+            category: 'science',
+            questions: [
+                { question: 'Que sont les particules selon cette théorie?', answer: 'excitations de champs sous-jacents', type: 'factual' },
+                { question: 'Quelle prédiction illustre sa précision?', answer: 'moment magnétique anomal de l\'électron', type: 'factual' },
+                { question: 'Quel problème reste non résolu?', answer: 'intégration de la gravitation', type: 'factual' },
+                { question: 'Pourquoi la renormalisation échoue-t-elle pour la gravité?', answer: 'divergences non maîtrisables', type: 'inference' }
+            ]
+        },
+        {
+            id: 'r-66',
+            title: 'La déconstruction derridienne',
+            passage: 'Jacques Derrida a élaboré une stratégie de lecture déconstructive visant à révéler les apories inhérentes aux systèmes philosophiques. En montrant comment tout texte contient les germes de sa propre subversion, il conteste la métaphysique de la présence qui privilégie la parole sur l\'écriture, le signifié sur le signifiant. Le concept de différance (avec un "a") désigne ce jeu de différenciation et de temporalisation qui constitue la condition de possibilité du sens tout en en différant perpétuellement la plénitude. Cette pensée, souvent accusée de nihilisme, s\'apparente plutôt à une hyperbolique vigilance critique qui refuse toute clôture dogmatique.',
+            cefrLevel: 'C2',
+            difficulty: 6,
+            category: 'philosophy',
+            questions: [
+                { question: 'Que vise la déconstruction?', answer: 'révéler apories des systèmes philosophiques', type: 'factual' },
+                { question: 'Quelle métaphysique Derrida conteste-t-il?', answer: 'métaphysique de la présence', type: 'factual' },
+                { question: 'Que désigne la différance?', answer: 'différenciation et temporalisation conditionnant le sens', type: 'factual' },
+                { question: 'Comment caractériser cette pensée plutôt que nihiliste?', answer: 'hyperbolique vigilance critique', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-67',
+            title: 'L\'épistémologie des sciences sociales',
+            passage: 'Le débat épistémologique entre explication et compréhension structure la réflexion sur les sciences sociales depuis Dilthey. Tandis que les tenants du naturalisme méthodologique prônent l\'importation des méthodes des sciences naturelles, l\'herméneutique insiste sur la spécificité d\'un objet - l\'action humaine - intrinsèquement porteur de significations. Max Weber tenta une synthèse avec sa sociologie compréhensive, conjuguant interprétation des motivations subjectives et explication causale. Cette tension épistémologique persiste, certains y voyant une richesse heuristique, d\'autres un obstacle à la scientificité des sciences humaines.',
+            cefrLevel: 'C2',
+            difficulty: 6,
+            category: 'epistemology',
+            questions: [
+                { question: 'Quel débat structure l\'épistémologie des sciences sociales?', answer: 'explication versus compréhension', type: 'factual' },
+                { question: 'Que prônent les naturalistes méthodologiques?', answer: 'importation méthodes sciences naturelles', type: 'factual' },
+                { question: 'Quelle synthèse Weber a-t-il proposée?', answer: 'interprétation motivations et explication causale', type: 'factual' },
+                { question: 'Comment cette tension est-elle perçue différemment?', answer: 'richesse heuristique ou obstacle à scientificité', type: 'factual' }
+            ]
         }
     ]
 };
