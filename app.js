@@ -207,16 +207,56 @@ function startPractice() {
  * Load next question
  */
 function loadNextQuestion() {
-    // Get random question from content based on exercise type and CEFR level
-    currentQuestion = window.FrenchContent.getRandomQuestionByLevel(
-        currentExerciseType,
-        null, // Don't filter by exact level
-        currentUser.cefrLevel // Get questions up to this level
-    );
+    // Get all questions for current exercise type and level
+    let availableQuestions = [];
 
-    // Fallback to any question if no questions available at current level
-    if (!currentQuestion) {
+    if (currentExerciseType === 'all') {
+        availableQuestions = window.FrenchContent.getItemsUpToCefrLevel(currentUser.cefrLevel);
+    } else {
+        availableQuestions = window.FrenchContent.getContentByType(currentExerciseType);
+        // Filter by CEFR level
+        const levelOrder = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+        const maxLevelIndex = levelOrder.indexOf(currentUser.cefrLevel);
+        if (maxLevelIndex !== -1) {
+            availableQuestions = availableQuestions.filter(q => {
+                const qLevelIndex = levelOrder.indexOf(q.cefrLevel);
+                return qLevelIndex !== -1 && qLevelIndex <= maxLevelIndex;
+            });
+        }
+    }
+
+    // Fallback if no questions available
+    if (!availableQuestions || availableQuestions.length === 0) {
         currentQuestion = window.FrenchContent.getRandomQuestion(currentExerciseType);
+    } else {
+        // Use spaced repetition to prioritize questions
+        const prioritizedQuestions = window.SpacedRepetitionEngine.prioritizeQuestions(
+            availableQuestions,
+            currentUser.masteryData
+        );
+
+        // Get due items first
+        const dueItems = window.SpacedRepetitionEngine.getDueItems(currentUser.masteryData);
+
+        // If there are due items, prioritize them; otherwise pick from prioritized list
+        if (dueItems.length > 0) {
+            // Filter prioritized questions to only include due items
+            const dueQuestions = prioritizedQuestions.filter(q => dueItems.includes(q.id));
+            if (dueQuestions.length > 0) {
+                // Pick from top 5 due questions for some variety
+                const topDueQuestions = dueQuestions.slice(0, Math.min(5, dueQuestions.length));
+                const randomIndex = Math.floor(Math.random() * topDueQuestions.length);
+                currentQuestion = topDueQuestions[randomIndex];
+            } else {
+                // Fallback to first prioritized question
+                currentQuestion = prioritizedQuestions[0];
+            }
+        } else {
+            // No due items, pick from top prioritized questions
+            const topQuestions = prioritizedQuestions.slice(0, Math.min(10, prioritizedQuestions.length));
+            const randomIndex = Math.floor(Math.random() * topQuestions.length);
+            currentQuestion = topQuestions[randomIndex];
+        }
     }
 
     // Update UI based on question type
@@ -253,6 +293,9 @@ function loadNextQuestion() {
     // Enable input and submit button
     answerInput.disabled = false;
     submitBtn.disabled = false;
+
+    // Track question start time for spaced repetition response time calculation
+    currentUser.questionStartTime = Date.now();
 
     // Save session state
     saveCurrentSession();
@@ -292,8 +335,27 @@ function checkAnswer() {
         isCorrect
     );
 
-    // Save progress
+    // Update spaced repetition metadata
+    if (!currentUser.masteryData[currentQuestion.id].spacedRepetition) {
+        currentUser.masteryData[currentQuestion.id].spacedRepetition =
+            window.SpacedRepetitionEngine.initializeSpacedRepetition(currentQuestion.id);
+    }
+
+    // Calculate response time (if available)
+    const responseTime = currentUser.questionStartTime ?
+        Date.now() - currentUser.questionStartTime : null;
+
+    // Update SR data based on performance
+    currentUser.masteryData[currentQuestion.id].spacedRepetition =
+        window.SpacedRepetitionEngine.updateSpacedRepetition(
+            currentUser.masteryData[currentQuestion.id].spacedRepetition,
+            isCorrect,
+            responseTime
+        );
+
+    // Save progress (including SR data)
     window.AssessmentSystem.saveProgress(currentUser.userId, currentUser.masteryData);
+    window.SpacedRepetitionEngine.saveSpacedRepetitionData(currentUser.userId, currentUser.masteryData);
 
     // Update session stats
     currentUser.sessionStats.total++;
