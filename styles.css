@@ -152,6 +152,11 @@ body {
     font-size: 1.1rem;
 }
 
+.btn-small {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+}
+
 /* User Info Bar */
 .user-info {
     background: var(--bg-white);
@@ -191,6 +196,57 @@ body {
     color: var(--primary-color);
 }
 
+/* Exercise Type Selector */
+.exercise-type-selector {
+    background: var(--bg-white);
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-md);
+    text-align: center;
+}
+
+.exercise-type-selector h3 {
+    margin-bottom: 15px;
+    color: var(--text-primary);
+    font-size: 1.2rem;
+}
+
+.exercise-type-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.exercise-type-btn {
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-white);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.exercise-type-btn:hover {
+    border-color: var(--primary-color);
+    background: var(--bg-light);
+}
+
+.exercise-type-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.exercise-type-btn:active {
+    transform: scale(0.98);
+}
+
 /* Question Card */
 .question-card {
     background: var(--bg-white);
@@ -215,6 +271,16 @@ body {
 .badge-blue {
     background: #dbeafe;
     color: #1e40af;
+}
+
+.badge-green {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.badge-purple {
+    background: #e9d5ff;
+    color: #6b21a8;
 }
 
 .question-content {
@@ -429,6 +495,15 @@ body {
 
     .progress-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .exercise-type-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .exercise-type-btn {
+        width: 100%;
     }
 }
 

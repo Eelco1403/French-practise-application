@@ -223,7 +223,7 @@ function loadProgress(userId) {
 /**
  * generateUUID()
  * Generates a simple UUID for user identification
- * 
+ *
  * @returns {string} UUID-like string
  */
 function generateUUID() {
@@ -232,6 +232,66 @@ function generateUUID() {
     const v = c === 'x' ? r : (r & 0x3 | 0x8);
     return v.toString(16);
   });
+}
+
+/**
+ * saveSession()
+ * Saves current session state to localStorage
+ * This allows users to resume their practice session later
+ *
+ * @param {string} userId - Unique user identifier
+ * @param {Object} sessionState - Current session state
+ * @returns {boolean} True if save successful
+ */
+function saveSession(userId, sessionState) {
+  try {
+    const sessionKey = `session_${userId}`;
+    const sessionData = {
+      ...sessionState,
+      lastSaved: new Date().toISOString()
+    };
+    localStorage.setItem(sessionKey, JSON.stringify(sessionData));
+    return true;
+  } catch (e) {
+    console.error('Error saving session:', e);
+    return false;
+  }
+}
+
+/**
+ * loadSession()
+ * Loads saved session state from localStorage
+ *
+ * @param {string} userId - Unique user identifier
+ * @returns {Object|null} Session state or null if not found
+ */
+function loadSession(userId) {
+  try {
+    const sessionKey = `session_${userId}`;
+    const saved = localStorage.getItem(sessionKey);
+    return saved ? JSON.parse(saved) : null;
+  } catch (e) {
+    console.error('Error loading session:', e);
+    return null;
+  }
+}
+
+/**
+ * clearSession()
+ * Clears saved session state from localStorage
+ *
+ * @param {string} userId - Unique user identifier
+ * @returns {boolean} True if clear successful
+ */
+function clearSession(userId) {
+  try {
+    const sessionKey = `session_${userId}`;
+    localStorage.removeItem(sessionKey);
+    return true;
+  } catch (e) {
+    console.error('Error clearing session:', e);
+    return false;
+  }
 }
 
 // ============================================
@@ -247,7 +307,10 @@ if (typeof module !== 'undefined' && module.exports) {
     evaluateReadinessForNextLevel,
     saveProgress,
     loadProgress,
-    generateUUID
+    generateUUID,
+    saveSession,
+    loadSession,
+    clearSession
   };
 }
 
@@ -260,6 +323,9 @@ if (typeof window !== 'undefined') {
     evaluateReadinessForNextLevel,
     saveProgress,
     loadProgress,
-    generateUUID
+    generateUUID,
+    saveSession,
+    loadSession,
+    clearSession
   };
 }

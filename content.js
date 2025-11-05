@@ -112,6 +112,111 @@ const FRENCH_CONTENT = {
         { id: 'p-6', english: 'Where is the bathroom?', french: 'Où sont les toilettes?', difficulty: 2 },
         { id: 'p-7', english: 'How much does it cost?', french: 'Combien ça coûte?', difficulty: 2 },
         { id: 'p-8', english: 'I would like', french: 'Je voudrais', difficulty: 2 },
+    ],
+
+    // Grammar Exercises
+    grammar: [
+        // Articles - Definite
+        { id: 'g-1', question: 'the house (la maison)', answer: 'la maison', explanation: 'la = the (feminine singular)', category: 'articles', difficulty: 1, type: 'article' },
+        { id: 'g-2', question: 'the boy (le garçon)', answer: 'le garçon', explanation: 'le = the (masculine singular)', category: 'articles', difficulty: 1, type: 'article' },
+        { id: 'g-3', question: 'the girls (les filles)', answer: 'les filles', explanation: 'les = the (plural)', category: 'articles', difficulty: 1, type: 'article' },
+        { id: 'g-4', question: 'the water (l\'eau)', answer: 'l\'eau', explanation: 'l\' = the (before vowel)', category: 'articles', difficulty: 1, type: 'article' },
+
+        // Articles - Indefinite
+        { id: 'g-5', question: 'a house (une maison)', answer: 'une maison', explanation: 'une = a (feminine)', category: 'articles', difficulty: 1, type: 'article' },
+        { id: 'g-6', question: 'a boy (un garçon)', answer: 'un garçon', explanation: 'un = a (masculine)', category: 'articles', difficulty: 1, type: 'article' },
+        { id: 'g-7', question: 'some books (des livres)', answer: 'des livres', explanation: 'des = some (plural)', category: 'articles', difficulty: 1, type: 'article' },
+
+        // Gender Agreement - Adjectives
+        { id: 'g-8', question: 'a big house (un___ grand___ maison)', answer: 'une grande maison', explanation: 'grande = big (feminine), une = a (feminine)', category: 'agreement', difficulty: 2, type: 'agreement' },
+        { id: 'g-9', question: 'a small boy (un petit garçon)', answer: 'un petit garçon', explanation: 'petit = small (masculine), un = a (masculine)', category: 'agreement', difficulty: 2, type: 'agreement' },
+        { id: 'g-10', question: 'the red car (l___ voiture rouge)', answer: 'la voiture rouge', explanation: 'voiture is feminine, so we use la', category: 'agreement', difficulty: 2, type: 'agreement' },
+
+        // Pluralization
+        { id: 'g-11', question: 'the houses (plural of la maison)', answer: 'les maisons', explanation: 'Add -s for plural, article becomes les', category: 'pluralization', difficulty: 1, type: 'plural' },
+        { id: 'g-12', question: 'the animals (plural of l\'animal)', answer: 'les animaux', explanation: 'Words ending in -al become -aux in plural', category: 'pluralization', difficulty: 2, type: 'plural' },
+        { id: 'g-13', question: 'the beautiful (plural of beau)', answer: 'beaux', explanation: 'Words ending in -eau become -eaux in plural', category: 'pluralization', difficulty: 2, type: 'plural' },
+
+        // Prepositions
+        { id: 'g-14', question: 'in France (__ France)', answer: 'en France', explanation: 'Use en before feminine countries', category: 'prepositions', difficulty: 2, type: 'preposition' },
+        { id: 'g-15', question: 'to the school (__ l\'école)', answer: 'à l\'école', explanation: 'à = to/at', category: 'prepositions', difficulty: 2, type: 'preposition' },
+        { id: 'g-16', question: 'from Paris (__ Paris)', answer: 'de Paris', explanation: 'de = from/of', category: 'prepositions', difficulty: 2, type: 'preposition' },
+
+        // Negation
+        { id: 'g-17', question: 'I do not speak (Je __ parle __)', answer: 'Je ne parle pas', explanation: 'Negation: ne...pas around the verb', category: 'negation', difficulty: 2, type: 'negation' },
+        { id: 'g-18', question: 'She does not eat (Elle __ mange __)', answer: 'Elle ne mange pas', explanation: 'Negation: ne...pas around the verb', category: 'negation', difficulty: 2, type: 'negation' },
+
+        // Possessives
+        { id: 'g-19', question: 'my book (mon/ma/mes livre)', answer: 'mon livre', explanation: 'mon = my (masculine singular)', category: 'possessive', difficulty: 2, type: 'possessive' },
+        { id: 'g-20', question: 'my house (mon/ma/mes maison)', answer: 'ma maison', explanation: 'ma = my (feminine singular)', category: 'possessive', difficulty: 2, type: 'possessive' },
+        { id: 'g-21', question: 'my friends (mon/ma/mes amis)', answer: 'mes amis', explanation: 'mes = my (plural)', category: 'possessive', difficulty: 2, type: 'possessive' },
+    ],
+
+    // Conjugation Exercises
+    conjugation: [
+        // être (to be) - Present tense
+        { id: 'c-1', verb: 'être', english: 'to be', subject: 'je', tense: 'present', answer: 'suis', question: 'je (être)', difficulty: 1, category: 'irregular' },
+        { id: 'c-2', verb: 'être', english: 'to be', subject: 'tu', tense: 'present', answer: 'es', question: 'tu (être)', difficulty: 1, category: 'irregular' },
+        { id: 'c-3', verb: 'être', english: 'to be', subject: 'il/elle', tense: 'present', answer: 'est', question: 'il/elle (être)', difficulty: 1, category: 'irregular' },
+        { id: 'c-4', verb: 'être', english: 'to be', subject: 'nous', tense: 'present', answer: 'sommes', question: 'nous (être)', difficulty: 1, category: 'irregular' },
+        { id: 'c-5', verb: 'être', english: 'to be', subject: 'vous', tense: 'present', answer: 'êtes', question: 'vous (être)', difficulty: 1, category: 'irregular' },
+        { id: 'c-6', verb: 'être', english: 'to be', subject: 'ils/elles', tense: 'present', answer: 'sont', question: 'ils/elles (être)', difficulty: 1, category: 'irregular' },
+
+        // avoir (to have) - Present tense
+        { id: 'c-7', verb: 'avoir', english: 'to have', subject: 'je', tense: 'present', answer: 'ai', question: 'je (avoir)', difficulty: 1, category: 'irregular' },
+        { id: 'c-8', verb: 'avoir', english: 'to have', subject: 'tu', tense: 'present', answer: 'as', question: 'tu (avoir)', difficulty: 1, category: 'irregular' },
+        { id: 'c-9', verb: 'avoir', english: 'to have', subject: 'il/elle', tense: 'present', answer: 'a', question: 'il/elle (avoir)', difficulty: 1, category: 'irregular' },
+        { id: 'c-10', verb: 'avoir', english: 'to have', subject: 'nous', tense: 'present', answer: 'avons', question: 'nous (avoir)', difficulty: 1, category: 'irregular' },
+        { id: 'c-11', verb: 'avoir', english: 'to have', subject: 'vous', tense: 'present', answer: 'avez', question: 'vous (avoir)', difficulty: 1, category: 'irregular' },
+        { id: 'c-12', verb: 'avoir', english: 'to have', subject: 'ils/elles', tense: 'present', answer: 'ont', question: 'ils/elles (avoir)', difficulty: 1, category: 'irregular' },
+
+        // aller (to go) - Present tense
+        { id: 'c-13', verb: 'aller', english: 'to go', subject: 'je', tense: 'present', answer: 'vais', question: 'je (aller)', difficulty: 1, category: 'irregular' },
+        { id: 'c-14', verb: 'aller', english: 'to go', subject: 'tu', tense: 'present', answer: 'vas', question: 'tu (aller)', difficulty: 1, category: 'irregular' },
+        { id: 'c-15', verb: 'aller', english: 'to go', subject: 'il/elle', tense: 'present', answer: 'va', question: 'il/elle (aller)', difficulty: 1, category: 'irregular' },
+        { id: 'c-16', verb: 'aller', english: 'to go', subject: 'nous', tense: 'present', answer: 'allons', question: 'nous (aller)', difficulty: 1, category: 'irregular' },
+        { id: 'c-17', verb: 'aller', english: 'to go', subject: 'vous', tense: 'present', answer: 'allez', question: 'vous (aller)', difficulty: 1, category: 'irregular' },
+        { id: 'c-18', verb: 'aller', english: 'to go', subject: 'ils/elles', tense: 'present', answer: 'vont', question: 'ils/elles (aller)', difficulty: 1, category: 'irregular' },
+
+        // -er verbs: parler (to speak)
+        { id: 'c-19', verb: 'parler', english: 'to speak', subject: 'je', tense: 'present', answer: 'parle', question: 'je (parler)', difficulty: 1, category: 'er-verb' },
+        { id: 'c-20', verb: 'parler', english: 'to speak', subject: 'tu', tense: 'present', answer: 'parles', question: 'tu (parler)', difficulty: 1, category: 'er-verb' },
+        { id: 'c-21', verb: 'parler', english: 'to speak', subject: 'il/elle', tense: 'present', answer: 'parle', question: 'il/elle (parler)', difficulty: 1, category: 'er-verb' },
+        { id: 'c-22', verb: 'parler', english: 'to speak', subject: 'nous', tense: 'present', answer: 'parlons', question: 'nous (parler)', difficulty: 1, category: 'er-verb' },
+        { id: 'c-23', verb: 'parler', english: 'to speak', subject: 'vous', tense: 'present', answer: 'parlez', question: 'vous (parler)', difficulty: 1, category: 'er-verb' },
+        { id: 'c-24', verb: 'parler', english: 'to speak', subject: 'ils/elles', tense: 'present', answer: 'parlent', question: 'ils/elles (parler)', difficulty: 1, category: 'er-verb' },
+
+        // -er verbs: manger (to eat)
+        { id: 'c-25', verb: 'manger', english: 'to eat', subject: 'je', tense: 'present', answer: 'mange', question: 'je (manger)', difficulty: 1, category: 'er-verb' },
+        { id: 'c-26', verb: 'manger', english: 'to eat', subject: 'tu', tense: 'present', answer: 'manges', question: 'tu (manger)', difficulty: 1, category: 'er-verb' },
+        { id: 'c-27', verb: 'manger', english: 'to eat', subject: 'il/elle', tense: 'present', answer: 'mange', question: 'il/elle (manger)', difficulty: 1, category: 'er-verb' },
+        { id: 'c-28', verb: 'manger', english: 'to eat', subject: 'nous', tense: 'present', answer: 'mangeons', question: 'nous (manger)', difficulty: 1, category: 'er-verb' },
+        { id: 'c-29', verb: 'manger', english: 'to eat', subject: 'vous', tense: 'present', answer: 'mangez', question: 'vous (manger)', difficulty: 1, category: 'er-verb' },
+        { id: 'c-30', verb: 'manger', english: 'to eat', subject: 'ils/elles', tense: 'present', answer: 'mangent', question: 'ils/elles (manger)', difficulty: 1, category: 'er-verb' },
+
+        // -ir verbs: finir (to finish)
+        { id: 'c-31', verb: 'finir', english: 'to finish', subject: 'je', tense: 'present', answer: 'finis', question: 'je (finir)', difficulty: 2, category: 'ir-verb' },
+        { id: 'c-32', verb: 'finir', english: 'to finish', subject: 'tu', tense: 'present', answer: 'finis', question: 'tu (finir)', difficulty: 2, category: 'ir-verb' },
+        { id: 'c-33', verb: 'finir', english: 'to finish', subject: 'il/elle', tense: 'present', answer: 'finit', question: 'il/elle (finir)', difficulty: 2, category: 'ir-verb' },
+        { id: 'c-34', verb: 'finir', english: 'to finish', subject: 'nous', tense: 'present', answer: 'finissons', question: 'nous (finir)', difficulty: 2, category: 'ir-verb' },
+        { id: 'c-35', verb: 'finir', english: 'to finish', subject: 'vous', tense: 'present', answer: 'finissez', question: 'vous (finir)', difficulty: 2, category: 'ir-verb' },
+        { id: 'c-36', verb: 'finir', english: 'to finish', subject: 'ils/elles', tense: 'present', answer: 'finissent', question: 'ils/elles (finir)', difficulty: 2, category: 'ir-verb' },
+
+        // -re verbs: vendre (to sell)
+        { id: 'c-37', verb: 'vendre', english: 'to sell', subject: 'je', tense: 'present', answer: 'vends', question: 'je (vendre)', difficulty: 2, category: 're-verb' },
+        { id: 'c-38', verb: 'vendre', english: 'to sell', subject: 'tu', tense: 'present', answer: 'vends', question: 'tu (vendre)', difficulty: 2, category: 're-verb' },
+        { id: 'c-39', verb: 'vendre', english: 'to sell', subject: 'il/elle', tense: 'present', answer: 'vend', question: 'il/elle (vendre)', difficulty: 2, category: 're-verb' },
+        { id: 'c-40', verb: 'vendre', english: 'to sell', subject: 'nous', tense: 'present', answer: 'vendons', question: 'nous (vendre)', difficulty: 2, category: 're-verb' },
+        { id: 'c-41', verb: 'vendre', english: 'to sell', subject: 'vous', tense: 'present', answer: 'vendez', question: 'vous (vendre)', difficulty: 2, category: 're-verb' },
+        { id: 'c-42', verb: 'vendre', english: 'to sell', subject: 'ils/elles', tense: 'present', answer: 'vendent', question: 'ils/elles (vendre)', difficulty: 2, category: 're-verb' },
+
+        // faire (to do/make) - Present tense
+        { id: 'c-43', verb: 'faire', english: 'to do/make', subject: 'je', tense: 'present', answer: 'fais', question: 'je (faire)', difficulty: 1, category: 'irregular' },
+        { id: 'c-44', verb: 'faire', english: 'to do/make', subject: 'tu', tense: 'present', answer: 'fais', question: 'tu (faire)', difficulty: 1, category: 'irregular' },
+        { id: 'c-45', verb: 'faire', english: 'to do/make', subject: 'il/elle', tense: 'present', answer: 'fait', question: 'il/elle (faire)', difficulty: 1, category: 'irregular' },
+        { id: 'c-46', verb: 'faire', english: 'to do/make', subject: 'nous', tense: 'present', answer: 'faisons', question: 'nous (faire)', difficulty: 1, category: 'irregular' },
+        { id: 'c-47', verb: 'faire', english: 'to do/make', subject: 'vous', tense: 'present', answer: 'faites', question: 'vous (faire)', difficulty: 1, category: 'irregular' },
+        { id: 'c-48', verb: 'faire', english: 'to do/make', subject: 'ils/elles', tense: 'present', answer: 'font', question: 'ils/elles (faire)', difficulty: 1, category: 'irregular' },
     ]
 };
 
@@ -128,22 +233,45 @@ function getVocabularyByLevel(level) {
 }
 
 /**
- * Get all available content (all levels + phrases)
+ * Get all available content (all levels + phrases + grammar + conjugation)
  */
 function getAllContent() {
     const allItems = [
         ...FRENCH_CONTENT.level1.vocabulary,
         ...FRENCH_CONTENT.level2.vocabulary,
-        ...FRENCH_CONTENT.phrases
+        ...FRENCH_CONTENT.phrases,
+        ...FRENCH_CONTENT.grammar,
+        ...FRENCH_CONTENT.conjugation
     ];
     return allItems;
 }
 
 /**
+ * Get content by exercise type
+ */
+function getContentByType(exerciseType) {
+    switch(exerciseType) {
+        case 'vocabulary':
+            return [
+                ...FRENCH_CONTENT.level1.vocabulary,
+                ...FRENCH_CONTENT.level2.vocabulary,
+                ...FRENCH_CONTENT.phrases
+            ];
+        case 'grammar':
+            return FRENCH_CONTENT.grammar;
+        case 'conjugation':
+            return FRENCH_CONTENT.conjugation;
+        case 'all':
+        default:
+            return getAllContent();
+    }
+}
+
+/**
  * Get a random item from the content database
  */
-function getRandomQuestion() {
-    const allItems = getAllContent();
+function getRandomQuestion(exerciseType = 'all') {
+    const allItems = getContentByType(exerciseType);
     const randomIndex = Math.floor(Math.random() * allItems.length);
     return allItems[randomIndex];
 }
@@ -177,6 +305,7 @@ if (typeof window !== 'undefined') {
     window.FrenchContent = {
         getAllContent,
         getVocabularyByLevel,
+        getContentByType,
         getRandomQuestion,
         getQuestionById,
         getItemsByCategory,
@@ -190,6 +319,7 @@ if (typeof module !== 'undefined' && module.exports) {
         FRENCH_CONTENT,
         getAllContent,
         getVocabularyByLevel,
+        getContentByType,
         getRandomQuestion,
         getQuestionById,
         getItemsByCategory,
