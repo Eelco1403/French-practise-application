@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>French Practice App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🇫🇷 French Practice App</h1>
+            <p class="subtitle">Master French vocabulary with interactive exercises</p>
+        </header>
+
+        <!-- User Setup Screen -->
+        <div id="userSetup" class="screen active">
+            <div class="card">
+                <h2>Welcome! Let's Get Started</h2>
+                <p>Enter your name to begin practicing French</p>
+                <input type="text" id="userName" placeholder="Your name" class="input-field">
+                <button id="startBtn" class="btn btn-primary">Start Learning</button>
+            </div>
+        </div>
+
+        <!-- Main Practice Screen -->
+        <div id="practiceScreen" class="screen">
+            <!-- User Info Bar -->
+            <div class="user-info">
+                <div class="user-name">
+                    <span class="label">Student:</span>
+                    <span id="displayName">-</span>
+                </div>
+                <div class="user-stats">
+                    <div class="stat">
+                        <span class="label">Correct:</span>
+                        <span id="correctCount" class="stat-value">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Total:</span>
+                        <span id="totalCount" class="stat-value">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Accuracy:</span>
+                        <span id="accuracy" class="stat-value">0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question Card -->
+            <div class="question-card">
+                <div class="question-type">
+                    <span id="questionType" class="badge badge-blue">Translation</span>
+                </div>
+
+                <div class="question-content">
+                    <p class="question-label">Translate to French:</p>
+                    <h2 id="questionText" class="question-text">-</h2>
+                </div>
+
+                <div class="answer-section">
+                    <input
+                        type="text"
+                        id="answerInput"
+                        class="input-field input-large"
+                        placeholder="Type your answer here..."
+                        autocomplete="off"
+                    >
+                    <button id="submitBtn" class="btn btn-primary btn-large">Check Answer</button>
+                </div>
+
+                <!-- Feedback Section -->
+                <div id="feedback" class="feedback hidden">
+                    <div class="feedback-content">
+                        <span id="feedbackIcon" class="feedback-icon">✓</span>
+                        <div class="feedback-text">
+                            <p id="feedbackMessage" class="feedback-message">Correct!</p>
+                            <p id="correctAnswer" class="correct-answer"></p>
+                        </div>
+                    </div>
+                    <button id="nextBtn" class="btn btn-secondary">Next Question</button>
+                </div>
+            </div>
+
+            <!-- Progress Overview -->
+            <div class="progress-section">
+                <h3>Your Progress</h3>
+                <div class="progress-grid">
+                    <div class="progress-card">
+                        <div class="progress-icon learning">📚</div>
+                        <div class="progress-info">
+                            <span class="progress-label">Learning</span>
+                            <span id="learningCount" class="progress-number">0</span>
+                        </div>
+                    </div>
+                    <div class="progress-card">
+                        <div class="progress-icon developing">📈</div>
+                        <div class="progress-info">
+                            <span class="progress-label">Developing</span>
+                            <span id="developingCount" class="progress-number">0</span>
+                        </div>
+                    </div>
+                    <div class="progress-card">
+                        <div class="progress-icon mastered">✓</div>
+                        <div class="progress-info">
+                            <span class="progress-label">Mastered</span>
+                            <span id="masteredCount" class="progress-number">0</span>
+                        </div>
+                    </div>
+                    <div class="progress-card">
+                        <div class="progress-icon solid">⭐</div>
+                        <div class="progress-info">
+                            <span class="progress-label">Solid</span>
+                            <span id="solidCount" class="progress-number">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Level Progress -->
+            <div class="level-progress">
+                <h3>Level Progress</h3>
+                <div id="levelStatus" class="level-status">
+                    <p>Complete more exercises to advance to the next level!</p>
+                    <div class="progress-bar">
+                        <div id="progressBar" class="progress-bar-fill" style="width: 0%"></div>
+                    </div>
+                    <p id="progressText" class="progress-text">0/30 items attempted</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Scripts -->
+    <script src="src/logic/utils.js"></script>
+    <script src="src/logic/assessment.js"></script>
+    <script src="content.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
