@@ -889,6 +889,195 @@ const FRENCH_CONTENT = {
         { id: 'g-19', question: 'my book (mon/ma/mes livre)', answer: 'mon livre', explanation: 'mon = my (masculine singular)', category: 'possessive', difficulty: 2, type: 'possessive', cefrLevel: 'A2' },
         { id: 'g-20', question: 'my house (mon/ma/mes maison)', answer: 'ma maison', explanation: 'ma = my (feminine singular)', category: 'possessive', difficulty: 2, type: 'possessive', cefrLevel: 'A2' },
         { id: 'g-21', question: 'my friends (mon/ma/mes amis)', answer: 'mes amis', explanation: 'mes = my (plural)', category: 'possessive', difficulty: 2, type: 'possessive', cefrLevel: 'A2' },
+
+        // A1-A2: Additional Articles
+        { id: 'g-22', question: 'the friend (l\'ami)', answer: 'l\'ami', explanation: 'l\' before vowel sounds', category: 'articles', difficulty: 1, type: 'article', cefrLevel: 'A1' },
+        { id: 'g-23', question: 'the trees (les arbres)', answer: 'les arbres', explanation: 'les = the (plural)', category: 'articles', difficulty: 1, type: 'article', cefrLevel: 'A1' },
+        { id: 'g-24', question: 'a apple (une pomme)', answer: 'une pomme', explanation: 'une = a/an (feminine)', category: 'articles', difficulty: 1, type: 'article', cefrLevel: 'A1' },
+
+        // A1-A2: Additional Agreement Exercises
+        { id: 'g-25', question: 'the happy girl (la fille heureux/heureuse)', answer: 'la fille heureuse', explanation: 'heureuse is feminine form of happy', category: 'agreement', difficulty: 2, type: 'agreement', cefrLevel: 'A2' },
+        { id: 'g-26', question: 'the white house (la maison blanc/blanche)', answer: 'la maison blanche', explanation: 'blanche is feminine form of white', category: 'agreement', difficulty: 2, type: 'agreement', cefrLevel: 'A2' },
+        { id: 'g-27', question: 'a good boy (un bon/bonne garçon)', answer: 'un bon garçon', explanation: 'bon is masculine form', category: 'agreement', difficulty: 2, type: 'agreement', cefrLevel: 'A2' },
+        { id: 'g-28', question: 'the tall woman (la femme grand/grande)', answer: 'la femme grande', explanation: 'grande is feminine form', category: 'agreement', difficulty: 2, type: 'agreement', cefrLevel: 'A2' },
+        { id: 'g-29', question: 'my new car (ma voiture nouveau/nouvelle)', answer: 'ma nouvelle voiture', explanation: 'nouvelle is feminine, placed before noun', category: 'agreement', difficulty: 2, type: 'agreement', cefrLevel: 'A2' },
+        { id: 'g-30', question: 'the old man (le vieil/vieux homme)', answer: 'le vieil homme', explanation: 'vieil before vowel sound', category: 'agreement', difficulty: 2, type: 'agreement', cefrLevel: 'A2' },
+        { id: 'g-31', question: 'the green apples (les pommes vert/vertes)', answer: 'les pommes vertes', explanation: 'vertes is feminine plural', category: 'agreement', difficulty: 2, type: 'agreement', cefrLevel: 'A2' },
+        { id: 'g-32', question: 'the small cats (les petits/petites chats)', answer: 'les petits chats', explanation: 'petits is masculine plural', category: 'agreement', difficulty: 2, type: 'agreement', cefrLevel: 'A2' },
+        { id: 'g-33', question: 'a beautiful day (un beau/belle jour)', answer: 'un beau jour', explanation: 'beau is masculine form', category: 'agreement', difficulty: 2, type: 'agreement', cefrLevel: 'A2' },
+        { id: 'g-34', question: 'the sad girls (les filles triste/tristes)', answer: 'les filles tristes', explanation: 'tristes is plural form', category: 'agreement', difficulty: 2, type: 'agreement', cefrLevel: 'A2' },
+        { id: 'g-35', question: 'my favorite book (mon livre favori/favorite)', answer: 'mon livre favori', explanation: 'favori is masculine form', category: 'agreement', difficulty: 2, type: 'agreement', cefrLevel: 'A2' },
+        { id: 'g-36', question: 'the young teachers (les professeurs jeune/jeunes)', answer: 'les professeurs jeunes', explanation: 'jeunes is plural form', category: 'agreement', difficulty: 2, type: 'agreement', cefrLevel: 'A2' },
+
+        // A1-A2: Additional Pluralization
+        { id: 'g-37', question: 'the books (plural of le livre)', answer: 'les livres', explanation: 'Add -s for regular plural', category: 'pluralization', difficulty: 1, type: 'plural', cefrLevel: 'A1' },
+        { id: 'g-38', question: 'the eyes (plural of l\'œil)', answer: 'les yeux', explanation: 'Irregular plural form', category: 'pluralization', difficulty: 2, type: 'plural', cefrLevel: 'A2' },
+        { id: 'g-39', question: 'the games (plural of le jeu)', answer: 'les jeux', explanation: 'Words ending in -eu become -eux', category: 'pluralization', difficulty: 2, type: 'plural', cefrLevel: 'A2' },
+        { id: 'g-40', question: 'the horses (plural of le cheval)', answer: 'les chevaux', explanation: 'Words ending in -al become -aux', category: 'pluralization', difficulty: 2, type: 'plural', cefrLevel: 'A2' },
+        { id: 'g-41', question: 'the children (plural of l\'enfant)', answer: 'les enfants', explanation: 'Regular plural with -s', category: 'pluralization', difficulty: 1, type: 'plural', cefrLevel: 'A1' },
+        { id: 'g-42', question: 'the newspapers (plural of le journal)', answer: 'les journaux', explanation: 'Words ending in -al become -aux', category: 'pluralization', difficulty: 2, type: 'plural', cefrLevel: 'A2' },
+        { id: 'g-43', question: 'the voices (plural of la voix)', answer: 'les voix', explanation: 'Words ending in -x stay the same', category: 'pluralization', difficulty: 2, type: 'plural', cefrLevel: 'A2' },
+
+        // A1-A2: Additional Prepositions
+        { id: 'g-44', question: 'at the restaurant (__ restaurant)', answer: 'au restaurant', explanation: 'au = à + le (at/to the)', category: 'prepositions', difficulty: 2, type: 'preposition', cefrLevel: 'A2' },
+        { id: 'g-45', question: 'of the students (__ étudiants)', answer: 'des étudiants', explanation: 'des = de + les (of the)', category: 'prepositions', difficulty: 2, type: 'preposition', cefrLevel: 'A2' },
+        { id: 'g-46', question: 'with my friend (__ mon ami)', answer: 'avec mon ami', explanation: 'avec = with', category: 'prepositions', difficulty: 2, type: 'preposition', cefrLevel: 'A2' },
+        { id: 'g-47', question: 'for you (__ toi)', answer: 'pour toi', explanation: 'pour = for', category: 'prepositions', difficulty: 2, type: 'preposition', cefrLevel: 'A2' },
+        { id: 'g-48', question: 'without money (__ argent)', answer: 'sans argent', explanation: 'sans = without', category: 'prepositions', difficulty: 2, type: 'preposition', cefrLevel: 'A2' },
+        { id: 'g-49', question: 'in the United States (__ États-Unis)', answer: 'aux États-Unis', explanation: 'aux = à + les (in/to the)', category: 'prepositions', difficulty: 2, type: 'preposition', cefrLevel: 'A2' },
+        { id: 'g-50', question: 'near the school (__ de l\'école)', answer: 'près de l\'école', explanation: 'près de = near', category: 'prepositions', difficulty: 2, type: 'preposition', cefrLevel: 'A2' },
+        { id: 'g-51', question: 'in front of the house (__ la maison)', answer: 'devant la maison', explanation: 'devant = in front of', category: 'prepositions', difficulty: 2, type: 'preposition', cefrLevel: 'A2' },
+        { id: 'g-52', question: 'behind the door (__ la porte)', answer: 'derrière la porte', explanation: 'derrière = behind', category: 'prepositions', difficulty: 2, type: 'preposition', cefrLevel: 'A2' },
+        { id: 'g-53', question: 'between Paris and Lyon (__ Paris et Lyon)', answer: 'entre Paris et Lyon', explanation: 'entre = between', category: 'prepositions', difficulty: 2, type: 'preposition', cefrLevel: 'A2' },
+        { id: 'g-54', question: 'on the table (__ la table)', answer: 'sur la table', explanation: 'sur = on', category: 'prepositions', difficulty: 2, type: 'preposition', cefrLevel: 'A2' },
+        { id: 'g-55', question: 'under the bed (__ le lit)', answer: 'sous le lit', explanation: 'sous = under', category: 'prepositions', difficulty: 2, type: 'preposition', cefrLevel: 'A2' },
+
+        // A1-A2: Additional Negation
+        { id: 'g-56', question: 'I never eat (Je __ mange __)', answer: 'Je ne mange jamais', explanation: 'ne...jamais = never', category: 'negation', difficulty: 2, type: 'negation', cefrLevel: 'A2' },
+        { id: 'g-57', question: 'He has nothing (Il __ a __)', answer: 'Il n\'a rien', explanation: 'ne...rien = nothing', category: 'negation', difficulty: 2, type: 'negation', cefrLevel: 'A2' },
+        { id: 'g-58', question: 'We don\'t see anyone (Nous __ voyons __)', answer: 'Nous ne voyons personne', explanation: 'ne...personne = no one', category: 'negation', difficulty: 2, type: 'negation', cefrLevel: 'A2' },
+        { id: 'g-59', question: 'They no longer live here (Ils __ habitent __ ici)', answer: 'Ils n\'habitent plus ici', explanation: 'ne...plus = no longer', category: 'negation', difficulty: 2, type: 'negation', cefrLevel: 'A2' },
+        { id: 'g-60', question: 'I only have five euros (Je __ ai __ cinq euros)', answer: 'Je n\'ai que cinq euros', explanation: 'ne...que = only', category: 'negation', difficulty: 2, type: 'negation', cefrLevel: 'A2' },
+        { id: 'g-61', question: 'She doesn\'t know anyone (Elle __ connaît __)', answer: 'Elle ne connaît personne', explanation: 'ne...personne = no one', category: 'negation', difficulty: 2, type: 'negation', cefrLevel: 'A2' },
+        { id: 'g-62', question: 'I have neither time nor money (Je __ ai __ temps __ argent)', answer: 'Je n\'ai ni temps ni argent', explanation: 'ne...ni...ni = neither...nor', category: 'negation', difficulty: 2, type: 'negation', cefrLevel: 'A2' },
+        { id: 'g-63', question: 'You never study (Tu __ études __)', answer: 'Tu n\'étudies jamais', explanation: 'ne...jamais = never', category: 'negation', difficulty: 2, type: 'negation', cefrLevel: 'A2' },
+
+        // A1-A2: Additional Possessives
+        { id: 'g-64', question: 'his car (sa/son voiture)', answer: 'sa voiture', explanation: 'sa = his/her (feminine object)', category: 'possessive', difficulty: 2, type: 'possessive', cefrLevel: 'A2' },
+        { id: 'g-65', question: 'their house (leur/leurs maison)', answer: 'leur maison', explanation: 'leur = their (singular object)', category: 'possessive', difficulty: 2, type: 'possessive', cefrLevel: 'A2' },
+        { id: 'g-66', question: 'our children (notre/nos enfants)', answer: 'nos enfants', explanation: 'nos = our (plural)', category: 'possessive', difficulty: 2, type: 'possessive', cefrLevel: 'A2' },
+        { id: 'g-67', question: 'your book (ton/ta/tes livre)', answer: 'ton livre', explanation: 'ton = your (familiar, masculine)', category: 'possessive', difficulty: 2, type: 'possessive', cefrLevel: 'A2' },
+        { id: 'g-68', question: 'her brothers (ses frères)', answer: 'ses frères', explanation: 'ses = her/his (plural)', category: 'possessive', difficulty: 2, type: 'possessive', cefrLevel: 'A2' },
+        { id: 'g-69', question: 'your keys (votre/vos clés)', answer: 'vos clés', explanation: 'vos = your (formal/plural)', category: 'possessive', difficulty: 2, type: 'possessive', cefrLevel: 'A2' },
+        { id: 'g-70', question: 'my idea (mon/ma idée)', answer: 'mon idée', explanation: 'mon before feminine word starting with vowel', category: 'possessive', difficulty: 2, type: 'possessive', cefrLevel: 'A2' },
+
+        // B1: Pronouns
+        { id: 'g-71', question: 'I see him (Je __ vois)', answer: 'Je le vois', explanation: 'le = him/it (masculine direct object)', category: 'pronouns', difficulty: 3, type: 'pronoun', cefrLevel: 'B1' },
+        { id: 'g-72', question: 'She gives it to me (Elle __ __ donne)', answer: 'Elle me le donne', explanation: 'me = to me, le = it (indirect + direct)', category: 'pronouns', difficulty: 3, type: 'pronoun', cefrLevel: 'B1' },
+        { id: 'g-73', question: 'We talk to them (Nous __ parlons)', answer: 'Nous leur parlons', explanation: 'leur = to them (indirect object)', category: 'pronouns', difficulty: 3, type: 'pronoun', cefrLevel: 'B1' },
+        { id: 'g-74', question: 'They think about it (Ils __ pensent)', answer: 'Ils y pensent', explanation: 'y replaces à + thing', category: 'pronouns', difficulty: 3, type: 'pronoun', cefrLevel: 'B1' },
+        { id: 'g-75', question: 'I have some (J\'__ ai)', answer: 'J\'en ai', explanation: 'en replaces de + noun', category: 'pronouns', difficulty: 3, type: 'pronoun', cefrLevel: 'B1' },
+        { id: 'g-76', question: 'Tell it to me! (Dites-__-__!)', answer: 'Dites-le-moi!', explanation: 'Imperative order: direct + indirect', category: 'pronouns', difficulty: 3, type: 'pronoun', cefrLevel: 'B1' },
+        { id: 'g-77', question: 'He helps himself (Il __ aide)', answer: 'Il s\'aide', explanation: 'se/s\' = himself (reflexive)', category: 'pronouns', difficulty: 3, type: 'pronoun', cefrLevel: 'B1' },
+        { id: 'g-78', question: 'Which one? This one or that one? (__ ou __?)', answer: 'Celui-ci ou celui-là?', explanation: 'celui-ci/celui-là = demonstrative pronouns', category: 'pronouns', difficulty: 3, type: 'pronoun', cefrLevel: 'B1' },
+        { id: 'g-79', question: 'It\'s mine (C\'est __ moi)', answer: 'C\'est à moi', explanation: 'à + stressed pronoun shows possession', category: 'pronouns', difficulty: 3, type: 'pronoun', cefrLevel: 'B1' },
+        { id: 'g-80', question: 'Don\'t give it to them! (Ne __ __ donnez pas!)', answer: 'Ne le leur donnez pas!', explanation: 'Negative: direct before indirect', category: 'pronouns', difficulty: 3, type: 'pronoun', cefrLevel: 'B1' },
+
+        // B1: Passé Composé
+        { id: 'g-81', question: 'I ate (manger - je)', answer: 'J\'ai mangé', explanation: 'Passé composé with avoir', category: 'past_tense', difficulty: 3, type: 'past', cefrLevel: 'B1' },
+        { id: 'g-82', question: 'She went (aller - elle)', answer: 'Elle est allée', explanation: 'Passé composé with être (add -e for feminine)', category: 'past_tense', difficulty: 3, type: 'past', cefrLevel: 'B1' },
+        { id: 'g-83', question: 'We finished (finir - nous)', answer: 'Nous avons fini', explanation: 'Passé composé: avoir + past participle', category: 'past_tense', difficulty: 3, type: 'past', cefrLevel: 'B1' },
+        { id: 'g-84', question: 'They arrived (arriver - ils)', answer: 'Ils sont arrivés', explanation: 'Movement verbs use être, add -s for plural', category: 'past_tense', difficulty: 3, type: 'past', cefrLevel: 'B1' },
+        { id: 'g-85', question: 'You took (prendre - tu)', answer: 'Tu as pris', explanation: 'Irregular past participle: pris', category: 'past_tense', difficulty: 3, type: 'past', cefrLevel: 'B1' },
+        { id: 'g-86', question: 'I was born (naître - je)', answer: 'Je suis né(e)', explanation: 'être verb, agreement with subject', category: 'past_tense', difficulty: 3, type: 'past', cefrLevel: 'B1' },
+        { id: 'g-87', question: 'We saw (voir - nous)', answer: 'Nous avons vu', explanation: 'Irregular past participle: vu', category: 'past_tense', difficulty: 3, type: 'past', cefrLevel: 'B1' },
+        { id: 'g-88', question: 'She became (devenir - elle)', answer: 'Elle est devenue', explanation: 'Compound of venir, uses être', category: 'past_tense', difficulty: 3, type: 'past', cefrLevel: 'B1' },
+
+        // B1: Imparfait
+        { id: 'g-89', question: 'I was eating (manger - je)', answer: 'Je mangeais', explanation: 'Imparfait: ongoing past action', category: 'past_tense', difficulty: 3, type: 'imperfect', cefrLevel: 'B1' },
+        { id: 'g-90', question: 'We were going (aller - nous)', answer: 'Nous allions', explanation: 'Imparfait ending: -ions', category: 'past_tense', difficulty: 3, type: 'imperfect', cefrLevel: 'B1' },
+        { id: 'g-91', question: 'They used to play (jouer - ils)', answer: 'Ils jouaient', explanation: 'Imparfait for habitual past', category: 'past_tense', difficulty: 3, type: 'imperfect', cefrLevel: 'B1' },
+        { id: 'g-92', question: 'You were (être - tu)', answer: 'Tu étais', explanation: 'Irregular imparfait of être', category: 'past_tense', difficulty: 3, type: 'imperfect', cefrLevel: 'B1' },
+        { id: 'g-93', question: 'She was finishing (finir - elle)', answer: 'Elle finissait', explanation: 'Imparfait: -issait for -ir verbs', category: 'past_tense', difficulty: 3, type: 'imperfect', cefrLevel: 'B1' },
+        { id: 'g-94', question: 'I was having (avoir - je)', answer: 'J\'avais', explanation: 'Irregular imparfait stem: av-', category: 'past_tense', difficulty: 3, type: 'imperfect', cefrLevel: 'B1' },
+        { id: 'g-95', question: 'We were doing (faire - nous)', answer: 'Nous faisions', explanation: 'Irregular stem: fais-', category: 'past_tense', difficulty: 3, type: 'imperfect', cefrLevel: 'B1' },
+        { id: 'g-96', question: 'It was raining (pleuvoir)', answer: 'Il pleuvait', explanation: 'Imparfait for weather descriptions', category: 'past_tense', difficulty: 3, type: 'imperfect', cefrLevel: 'B1' },
+
+        // B1: Conditional
+        { id: 'g-97', question: 'I would like (aimer - je)', answer: 'J\'aimerais', explanation: 'Conditional: future stem + imparfait endings', category: 'conditional', difficulty: 3, type: 'conditional', cefrLevel: 'B1' },
+        { id: 'g-98', question: 'We could (pouvoir - nous)', answer: 'Nous pourrions', explanation: 'Irregular conditional stem: pourr-', category: 'conditional', difficulty: 3, type: 'conditional', cefrLevel: 'B1' },
+        { id: 'g-99', question: 'They would go (aller - ils)', answer: 'Ils iraient', explanation: 'Irregular stem: ir-', category: 'conditional', difficulty: 3, type: 'conditional', cefrLevel: 'B1' },
+        { id: 'g-100', question: 'You should (devoir - tu)', answer: 'Tu devrais', explanation: 'Irregular stem: devr-', category: 'conditional', difficulty: 3, type: 'conditional', cefrLevel: 'B1' },
+        { id: 'g-101', question: 'She would have (avoir - elle)', answer: 'Elle aurait', explanation: 'Irregular stem: aur-', category: 'conditional', difficulty: 3, type: 'conditional', cefrLevel: 'B1' },
+
+        // B1: Introduction to Subjunctive
+        { id: 'g-102', question: 'I want you to come (Je veux que tu __)', answer: 'Je veux que tu viennes', explanation: 'Subjunctive after expressions of desire', category: 'subjunctive', difficulty: 3, type: 'subjunctive', cefrLevel: 'B1' },
+        { id: 'g-103', question: 'It\'s important that he knows (Il est important qu\'il __)', answer: 'Il est important qu\'il sache', explanation: 'Subjunctive after impersonal expressions', category: 'subjunctive', difficulty: 3, type: 'subjunctive', cefrLevel: 'B1' },
+        { id: 'g-104', question: 'I doubt that she has (Je doute qu\'elle __)', answer: 'Je doute qu\'elle ait', explanation: 'Subjunctive after expressions of doubt', category: 'subjunctive', difficulty: 3, type: 'subjunctive', cefrLevel: 'B1' },
+        { id: 'g-105', question: 'I\'m afraid that they are (J\'ai peur qu\'ils __)', answer: 'J\'ai peur qu\'ils soient', explanation: 'Subjunctive after expressions of emotion', category: 'subjunctive', difficulty: 3, type: 'subjunctive', cefrLevel: 'B1' },
+
+        // B2: Comprehensive Subjunctive
+        { id: 'g-106', question: 'Before he leaves (Avant qu\'il __)', answer: 'Avant qu\'il parte', explanation: 'Subjunctive after avant que', category: 'subjunctive', difficulty: 4, type: 'subjunctive', cefrLevel: 'B2' },
+        { id: 'g-107', question: 'Although she is (Bien qu\'elle __)', answer: 'Bien qu\'elle soit', explanation: 'Subjunctive after bien que', category: 'subjunctive', difficulty: 4, type: 'subjunctive', cefrLevel: 'B2' },
+        { id: 'g-108', question: 'Until they arrive (Jusqu\'à ce qu\'ils __)', answer: 'Jusqu\'à ce qu\'ils arrivent', explanation: 'Subjunctive after jusqu\'à ce que', category: 'subjunctive', difficulty: 4, type: 'subjunctive', cefrLevel: 'B2' },
+        { id: 'g-109', question: 'Provided that you come (Pourvu que tu __)', answer: 'Pourvu que tu viennes', explanation: 'Subjunctive after pourvu que', category: 'subjunctive', difficulty: 4, type: 'subjunctive', cefrLevel: 'B2' },
+        { id: 'g-110', question: 'Without my knowing (Sans que je le __)', answer: 'Sans que je le sache', explanation: 'Subjunctive after sans que', category: 'subjunctive', difficulty: 4, type: 'subjunctive', cefrLevel: 'B2' },
+        { id: 'g-111', question: 'In case he forgets (Au cas où il __ - subj or cond?)', answer: 'Au cas où il oublierait', explanation: 'Exception: au cas où takes conditional', category: 'subjunctive', difficulty: 4, type: 'subjunctive', cefrLevel: 'B2' },
+        { id: 'g-112', question: 'The best that I know (Le meilleur que je __)', answer: 'Le meilleur que je connaisse', explanation: 'Subjunctive after superlative', category: 'subjunctive', difficulty: 4, type: 'subjunctive', cefrLevel: 'B2' },
+        { id: 'g-113', question: 'I\'m looking for someone who speaks French (Je cherche quelqu\'un qui __ français)', answer: 'Je cherche quelqu\'un qui parle français', explanation: 'Indicative when referring to specific person', category: 'subjunctive', difficulty: 4, type: 'subjunctive', cefrLevel: 'B2' },
+        { id: 'g-114', question: 'Whatever he does (Quoi qu\'il __)', answer: 'Quoi qu\'il fasse', explanation: 'Subjunctive after indefinite relative', category: 'subjunctive', difficulty: 4, type: 'subjunctive', cefrLevel: 'B2' },
+        { id: 'g-115', question: 'It\'s the only one that works (C\'est le seul qui __)', answer: 'C\'est le seul qui fonctionne', explanation: 'Subjunctive after restrictive expression', category: 'subjunctive', difficulty: 4, type: 'subjunctive', cefrLevel: 'B2' },
+
+        // B2: Conditional Perfect
+        { id: 'g-116', question: 'I would have done (faire - je)', answer: 'J\'aurais fait', explanation: 'Conditional perfect: would have + past participle', category: 'conditional', difficulty: 4, type: 'conditional_perfect', cefrLevel: 'B2' },
+        { id: 'g-117', question: 'She would have gone (aller - elle)', answer: 'Elle serait allée', explanation: 'Conditional perfect with être', category: 'conditional', difficulty: 4, type: 'conditional_perfect', cefrLevel: 'B2' },
+        { id: 'g-118', question: 'If I had known... (Si j\'__ su...)', answer: 'Si j\'avais su...', explanation: 'Pluperfect in si-clause', category: 'conditional', difficulty: 4, type: 'conditional_perfect', cefrLevel: 'B2' },
+        { id: 'g-119', question: 'They would have come (venir - ils)', answer: 'Ils seraient venus', explanation: 'Conditional perfect with être, agreement', category: 'conditional', difficulty: 4, type: 'conditional_perfect', cefrLevel: 'B2' },
+        { id: 'g-120', question: 'We could have (pouvoir - nous)', answer: 'Nous aurions pu', explanation: 'Irregular past participle: pu', category: 'conditional', difficulty: 4, type: 'conditional_perfect', cefrLevel: 'B2' },
+
+        // B2: Gerunds & Infinitives
+        { id: 'g-121', question: 'While eating (En __ [manger])', answer: 'En mangeant', explanation: 'Gerund: en + present participle', category: 'gerund', difficulty: 4, type: 'gerund', cefrLevel: 'B2' },
+        { id: 'g-122', question: 'After having eaten (Après __ mangé)', answer: 'Après avoir mangé', explanation: 'Past infinitive: après + avoir/être + pp', category: 'infinitive', difficulty: 4, type: 'infinitive', cefrLevel: 'B2' },
+        { id: 'g-123', question: 'Before leaving (Avant de __)', answer: 'Avant de partir', explanation: 'Infinitive after avant de', category: 'infinitive', difficulty: 4, type: 'infinitive', cefrLevel: 'B2' },
+        { id: 'g-124', question: 'Without saying (Sans __)', answer: 'Sans dire', explanation: 'Infinitive after sans', category: 'infinitive', difficulty: 4, type: 'infinitive', cefrLevel: 'B2' },
+        { id: 'g-125', question: 'By working hard (En __ dur)', answer: 'En travaillant dur', explanation: 'Gerund shows manner', category: 'gerund', difficulty: 4, type: 'gerund', cefrLevel: 'B2' },
+
+        // B2: Relative Clauses
+        { id: 'g-126', question: 'The book that I read (Le livre __ je lis)', answer: 'Le livre que je lis', explanation: 'que = direct object relative pronoun', category: 'relative', difficulty: 4, type: 'relative', cefrLevel: 'B2' },
+        { id: 'g-127', question: 'The man who speaks (L\'homme __ parle)', answer: 'L\'homme qui parle', explanation: 'qui = subject relative pronoun', category: 'relative', difficulty: 4, type: 'relative', cefrLevel: 'B2' },
+        { id: 'g-128', question: 'The city where I live (La ville __ j\'habite)', answer: 'La ville où j\'habite', explanation: 'où = where', category: 'relative', difficulty: 4, type: 'relative', cefrLevel: 'B2' },
+        { id: 'g-129', question: 'The friend whose car (L\'ami __ voiture)', answer: 'L\'ami dont la voiture', explanation: 'dont = whose/of which', category: 'relative', difficulty: 4, type: 'relative', cefrLevel: 'B2' },
+        { id: 'g-130', question: 'What interests me (Ce __ m\'intéresse)', answer: 'Ce qui m\'intéresse', explanation: 'ce qui = what (subject)', category: 'relative', difficulty: 4, type: 'relative', cefrLevel: 'B2' },
+
+        // B2: Indirect Speech
+        { id: 'g-131', question: 'He said that he was tired (Il a dit qu\'il __ fatigué)', answer: 'Il a dit qu\'il était fatigué', explanation: 'Tense agreement in indirect speech', category: 'indirect_speech', difficulty: 4, type: 'indirect', cefrLevel: 'B2' },
+        { id: 'g-132', question: 'She asked me if I would come (Elle m\'a demandé si je __)', answer: 'Elle m\'a demandé si je viendrais', explanation: 'Future becomes conditional', category: 'indirect_speech', difficulty: 4, type: 'indirect', cefrLevel: 'B2' },
+        { id: 'g-133', question: 'I told her I had finished (Je lui ai dit que j\'__ fini)', answer: 'Je lui ai dit que j\'avais fini', explanation: 'Passé composé becomes pluperfect', category: 'indirect_speech', difficulty: 4, type: 'indirect', cefrLevel: 'B2' },
+        { id: 'g-134', question: 'He said he was leaving tomorrow (Il a dit qu\'il partait __)', answer: 'Il a dit qu\'il partait le lendemain', explanation: 'demain becomes le lendemain', category: 'indirect_speech', difficulty: 4, type: 'indirect', cefrLevel: 'B2' },
+        { id: 'g-135', question: 'She asked me where I lived (Elle m\'a demandé où j\'__)', answer: 'Elle m\'a demandé où j\'habitais', explanation: 'Present becomes imperfect', category: 'indirect_speech', difficulty: 4, type: 'indirect', cefrLevel: 'B2' },
+
+        // C1: Advanced Subjunctive
+        { id: 'g-136', question: 'Not that I know of (Non pas que je __ [savoir])', answer: 'Non pas que je sache', explanation: 'Subjunctive after restrictive expression', category: 'subjunctive', difficulty: 5, type: 'subjunctive', cefrLevel: 'C1' },
+        { id: 'g-137', question: 'Far from being finished (Loin d\'être __)', answer: 'Loin d\'être fini', explanation: 'Past participle after loin de', category: 'subjunctive', difficulty: 5, type: 'subjunctive', cefrLevel: 'C1' },
+        { id: 'g-138', question: 'However it may be (Quoi qu\'il en __)', answer: 'Quoi qu\'il en soit', explanation: 'Fixed subjunctive expression', category: 'subjunctive', difficulty: 5, type: 'subjunctive', cefrLevel: 'C1' },
+        { id: 'g-139', question: 'That I know of (Que je __ [savoir])', answer: 'Que je sache', explanation: 'Subjunctive in relative clause', category: 'subjunctive', difficulty: 5, type: 'subjunctive', cefrLevel: 'C1' },
+
+        // C1: Passive Voice Complexity
+        { id: 'g-140', question: 'The book was written by her (Le livre __ écrit par elle)', answer: 'Le livre a été écrit par elle', explanation: 'Passive: être + past participle', category: 'passive', difficulty: 5, type: 'passive', cefrLevel: 'C1' },
+        { id: 'g-141', question: 'French is spoken here (On __ français ici)', answer: 'On parle français ici', explanation: 'Alternative to passive: on + active', category: 'passive', difficulty: 5, type: 'passive', cefrLevel: 'C1' },
+        { id: 'g-142', question: 'She was given a gift (On __ a offert un cadeau)', answer: 'On lui a offert un cadeau', explanation: 'Avoid passive with indirect object', category: 'passive', difficulty: 5, type: 'passive', cefrLevel: 'C1' },
+
+        // C1: Concessive Clauses
+        { id: 'g-143', question: 'Even though he is rich (Même s\'il __ riche)', answer: 'Même s\'il est riche', explanation: 'Même si + indicative', category: 'concessive', difficulty: 5, type: 'concessive', cefrLevel: 'C1' },
+        { id: 'g-144', question: 'Despite being tired (Bien qu\'__ fatigué)', answer: 'Bien qu\'il soit fatigué', explanation: 'Bien que + subjunctive', category: 'concessive', difficulty: 5, type: 'concessive', cefrLevel: 'C1' },
+        { id: 'g-145', question: 'No matter what happens (Quoi qu\'il __)', answer: 'Quoi qu\'il arrive', explanation: 'Quoi que + subjunctive', category: 'concessive', difficulty: 5, type: 'concessive', cefrLevel: 'C1' },
+
+        // C1: Hypothetical Structures
+        { id: 'g-146', question: 'Had I known (Si j\'__ su)', answer: 'Si j\'avais su', explanation: 'Past perfect in si-clause', category: 'hypothetical', difficulty: 5, type: 'hypothetical', cefrLevel: 'C1' },
+        { id: 'g-147', question: 'Were he to come (S\'il __ venir)', answer: 'S\'il devait venir', explanation: 'Hypothetical future', category: 'hypothetical', difficulty: 5, type: 'hypothetical', cefrLevel: 'C1' },
+        { id: 'g-148', question: 'Should you need help (__ vous besoin d\'aide)', answer: 'Si vous aviez besoin d\'aide', explanation: 'Conditional help offer', category: 'hypothetical', difficulty: 5, type: 'hypothetical', cefrLevel: 'C1' },
+
+        // C1: Stylistic Transformations
+        { id: 'g-149', question: 'Transform: Il mange (literary past)', answer: 'Il mangea', explanation: 'Passé simple (literary past)', category: 'style', difficulty: 5, type: 'style', cefrLevel: 'C1' },
+        { id: 'g-150', question: 'Formal: Tu as raison (vouvoyer)', answer: 'Vous avez raison', explanation: 'Register shift: tu → vous', category: 'style', difficulty: 5, type: 'style', cefrLevel: 'C1' },
+
+        // C2: Rare/Archaic Tenses
+        { id: 'g-151', question: 'Literary past: être - il', answer: 'il fut', explanation: 'Passé simple of être', category: 'archaic', difficulty: 6, type: 'archaic', cefrLevel: 'C2' },
+        { id: 'g-152', question: 'Subjunctive imperfect: avoir - je', answer: 'que j\'eusse', explanation: 'Imparfait du subjonctif (literary)', category: 'archaic', difficulty: 6, type: 'archaic', cefrLevel: 'C2' },
+        { id: 'g-153', question: 'Past anterior: finir - nous', answer: 'nous eûmes fini', explanation: 'Passé antérieur (rare)', category: 'archaic', difficulty: 6, type: 'archaic', cefrLevel: 'C2' },
+
+        // C2: Complex Modal Expressions
+        { id: 'g-154', question: 'He should have done it (Il __ le faire)', answer: 'Il aurait dû le faire', explanation: 'Complex modal + infinitive', category: 'modal', difficulty: 6, type: 'modal', cefrLevel: 'C2' },
+        { id: 'g-155', question: 'They might have been (Ils __ été)', answer: 'Ils auraient pu être', explanation: 'Layered modality', category: 'modal', difficulty: 6, type: 'modal', cefrLevel: 'C2' },
+
+        // C2: Literary/Poetic Constructions
+        { id: 'g-156', question: 'Were it not for you (N\'__ -ce vous)', answer: 'N\'était-ce vous', explanation: 'Archaic conditional construction', category: 'literary', difficulty: 6, type: 'literary', cefrLevel: 'C2' },
+        { id: 'g-157', question: 'Would that I could (Plût au ciel que je __)', answer: 'Plût au ciel que je puisse', explanation: 'Literary wish construction', category: 'literary', difficulty: 6, type: 'literary', cefrLevel: 'C2' },
+        { id: 'g-158', question: 'Barely had he arrived (À peine __-il arrivé)', answer: 'À peine était-il arrivé', explanation: 'Inversion after à peine', category: 'literary', difficulty: 6, type: 'literary', cefrLevel: 'C2' },
+
+        // C2: Sophisticated Register Shifting
+        { id: 'g-159', question: 'Formal written: Il faut qu\'on parte', answer: 'Il convient que nous partions', explanation: 'Elevated register transformation', category: 'register', difficulty: 6, type: 'register', cefrLevel: 'C2' },
+        { id: 'g-160', question: 'Academic: Je pense que c\'est vrai', answer: 'Il semble que cela soit avéré', explanation: 'Academic register shift', category: 'register', difficulty: 6, type: 'register', cefrLevel: 'C2' },
     ],
 
     // Conjugation Exercises
