@@ -1258,6 +1258,475 @@ const FRENCH_CONTENT = {
         { id: 'c-46', verb: 'faire', english: 'to do/make', subject: 'nous', tense: 'present', answer: 'faisons', question: 'nous (faire)', difficulty: 1, category: 'irregular', cefrLevel: 'A1' },
         { id: 'c-47', verb: 'faire', english: 'to do/make', subject: 'vous', tense: 'present', answer: 'faites', question: 'vous (faire)', difficulty: 1, category: 'irregular', cefrLevel: 'A1' },
         { id: 'c-48', verb: 'faire', english: 'to do/make', subject: 'ils/elles', tense: 'present', answer: 'font', question: 'ils/elles (faire)', difficulty: 1, category: 'irregular', cefrLevel: 'A1' },
+    ],
+
+    // Reading Comprehension Passages
+    reading: [
+        // A1 Level - Simple texts (10 passages, 2 questions each = 20 total questions)
+        {
+            id: 'r-1',
+            title: 'Ma famille',
+            passage: 'Je m\'appelle Marie. J\'ai une famille. Mon père s\'appelle Jean. Ma mère s\'appelle Claire. J\'ai un frère, Thomas. Il a dix ans.',
+            cefrLevel: 'A1',
+            difficulty: 1,
+            category: 'family',
+            questions: [
+                { question: 'Comment s\'appelle le père?', answer: 'Jean', type: 'factual' },
+                { question: 'Quel âge a Thomas?', answer: 'dix ans', type: 'factual', alternatives: ['10 ans'] }
+            ]
+        },
+        {
+            id: 'r-2',
+            title: 'À l\'école',
+            passage: 'Je vais à l\'école le lundi. J\'aime l\'école. Ma professeure s\'appelle Madame Dubois. Elle est gentille. J\'ai des amis à l\'école.',
+            cefrLevel: 'A1',
+            difficulty: 1,
+            category: 'school',
+            questions: [
+                { question: 'Quand va-t-il/elle à l\'école?', answer: 'le lundi', type: 'factual' },
+                { question: 'Comment est la professeure?', answer: 'gentille', type: 'descriptive' }
+            ]
+        },
+        {
+            id: 'r-3',
+            title: 'Au café',
+            passage: 'Je suis au café. Je bois un café. Mon ami boit un thé. Nous mangeons des croissants. C\'est délicieux.',
+            cefrLevel: 'A1',
+            difficulty: 1,
+            category: 'food',
+            questions: [
+                { question: 'Que boit l\'ami?', answer: 'un thé', type: 'factual', alternatives: ['thé'] },
+                { question: 'Que mangent-ils?', answer: 'des croissants', type: 'factual', alternatives: ['croissants'] }
+            ]
+        },
+        {
+            id: 'r-4',
+            title: 'Ma maison',
+            passage: 'J\'habite dans une maison. Ma maison est grande. Il y a trois chambres. Il y a un jardin. J\'aime ma maison.',
+            cefrLevel: 'A1',
+            difficulty: 1,
+            category: 'home',
+            questions: [
+                { question: 'Comment est la maison?', answer: 'grande', type: 'descriptive' },
+                { question: 'Combien de chambres y a-t-il?', answer: 'trois', type: 'factual', alternatives: ['3'] }
+            ]
+        },
+        {
+            id: 'r-5',
+            title: 'Les animaux',
+            passage: 'J\'ai un chien. Mon chien s\'appelle Max. Il est noir. Max aime jouer. Il est très gentil.',
+            cefrLevel: 'A1',
+            difficulty: 1,
+            category: 'animals',
+            questions: [
+                { question: 'Comment s\'appelle le chien?', answer: 'Max', type: 'factual' },
+                { question: 'De quelle couleur est Max?', answer: 'noir', type: 'descriptive' }
+            ]
+        },
+        {
+            id: 'r-6',
+            title: 'Le weekend',
+            passage: 'Le samedi, je joue au football. Le dimanche, je vais au parc. J\'aime le weekend. Je suis content.',
+            cefrLevel: 'A1',
+            difficulty: 1,
+            category: 'activities',
+            questions: [
+                { question: 'Quand joue-t-il au football?', answer: 'le samedi', type: 'factual' },
+                { question: 'Où va-t-il le dimanche?', answer: 'au parc', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-7',
+            title: 'Les courses',
+            passage: 'Je vais au supermarché. J\'achète du pain. J\'achète aussi du lait et des œufs. Je paie à la caisse.',
+            cefrLevel: 'A1',
+            difficulty: 1,
+            category: 'shopping',
+            questions: [
+                { question: 'Où va-t-il?', answer: 'au supermarché', type: 'factual' },
+                { question: 'Qu\'achète-t-il avec le pain?', answer: 'du lait et des œufs', type: 'factual', alternatives: ['lait et œufs'] }
+            ]
+        },
+        {
+            id: 'r-8',
+            title: 'La météo',
+            passage: 'Aujourd\'hui, il fait beau. Le soleil brille. Il ne pleut pas. Je vais à la plage.',
+            cefrLevel: 'A1',
+            difficulty: 1,
+            category: 'weather',
+            questions: [
+                { question: 'Quel temps fait-il?', answer: 'beau', type: 'descriptive', alternatives: ['il fait beau'] },
+                { question: 'Où va-t-il?', answer: 'à la plage', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-9',
+            title: 'Mon ami',
+            passage: 'J\'ai un ami. Il s\'appelle Paul. Paul est grand. Il a les cheveux blonds. Nous jouons ensemble.',
+            cefrLevel: 'A1',
+            difficulty: 1,
+            category: 'friends',
+            questions: [
+                { question: 'Comment s\'appelle l\'ami?', answer: 'Paul', type: 'factual' },
+                { question: 'Comment est Paul?', answer: 'grand', type: 'descriptive' }
+            ]
+        },
+        {
+            id: 'r-10',
+            title: 'Les couleurs',
+            passage: 'J\'aime les couleurs. Mon couleur préférée est le bleu. Le ciel est bleu. La mer est bleue aussi.',
+            cefrLevel: 'A1',
+            difficulty: 1,
+            category: 'description',
+            questions: [
+                { question: 'Quelle est sa couleur préférée?', answer: 'bleu', type: 'factual', alternatives: ['le bleu'] },
+                { question: 'De quelle couleur est le ciel?', answer: 'bleu', type: 'factual' }
+            ]
+        },
+
+        // A2 Level - Simple connected texts (15 passages, 2-3 questions each = 35 total questions)
+        {
+            id: 'r-11',
+            title: 'Mes vacances',
+            passage: 'L\'été dernier, je suis allé à Paris. J\'ai visité la Tour Eiffel. C\'était magnifique! J\'ai aussi visité le Louvre. J\'ai pris beaucoup de photos. Je veux retourner à Paris l\'année prochaine.',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'travel',
+            questions: [
+                { question: 'Où est-il allé l\'été dernier?', answer: 'Paris', type: 'factual', alternatives: ['à Paris'] },
+                { question: 'Qu\'a-t-il visité?', answer: 'la Tour Eiffel et le Louvre', type: 'factual', alternatives: ['Tour Eiffel et Louvre'] },
+                { question: 'Quand veut-il retourner?', answer: 'l\'année prochaine', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-12',
+            title: 'Mon travail',
+            passage: 'Je travaille dans un restaurant. Je commence à 10 heures du matin. Je finis à 18 heures. J\'aime mon travail parce que mes collègues sont sympathiques. Le restaurant est près de ma maison.',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'work',
+            questions: [
+                { question: 'Où travaille-t-il?', answer: 'dans un restaurant', type: 'factual', alternatives: ['restaurant'] },
+                { question: 'Pourquoi aime-t-il son travail?', answer: 'ses collègues sont sympathiques', type: 'inference', alternatives: ['collègues sympathiques'] }
+            ]
+        },
+        {
+            id: 'r-13',
+            title: 'Le marché',
+            passage: 'Tous les samedis, je vais au marché. J\'achète des fruits et des légumes frais. Le vendeur est très gentil. Les tomates sont délicieuses. Les pommes sont moins chères qu\'au supermarché.',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'shopping',
+            questions: [
+                { question: 'Quand va-t-il au marché?', answer: 'tous les samedis', type: 'factual', alternatives: ['le samedi'] },
+                { question: 'Que sont moins chères?', answer: 'les pommes', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-14',
+            title: 'La fête d\'anniversaire',
+            passage: 'Hier, c\'était l\'anniversaire de ma sœur. Elle a eu 25 ans. Nous avons organisé une fête. Beaucoup d\'amis sont venus. Nous avons mangé un gâteau au chocolat. Ma sœur était très contente.',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'celebration',
+            questions: [
+                { question: 'Quel âge a la sœur maintenant?', answer: '25 ans', type: 'factual', alternatives: ['vingt-cinq ans'] },
+                { question: 'Qu\'ont-ils mangé?', answer: 'un gâteau au chocolat', type: 'factual', alternatives: ['gâteau au chocolat'] },
+                { question: 'Comment était la sœur?', answer: 'contente', type: 'descriptive', alternatives: ['très contente'] }
+            ]
+        },
+        {
+            id: 'r-15',
+            title: 'Mon quartier',
+            passage: 'J\'habite dans un quartier calme. Il y a un parc à côté de ma maison. Les enfants jouent souvent dans le parc. Il y a aussi une boulangerie où j\'achète du pain tous les matins. Les voisins sont gentils.',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'neighborhood',
+            questions: [
+                { question: 'Comment est le quartier?', answer: 'calme', type: 'descriptive' },
+                { question: 'Qu\'y a-t-il à côté de la maison?', answer: 'un parc', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-16',
+            title: 'Le cinéma',
+            passage: 'J\'aime aller au cinéma. Le weekend dernier, j\'ai vu un film français. C\'était une comédie. J\'ai ri beaucoup. Le film parlait d\'une famille parisienne. Je recommande ce film à mes amis.',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'entertainment',
+            questions: [
+                { question: 'Quel type de film a-t-il vu?', answer: 'une comédie', type: 'factual', alternatives: ['comédie'] },
+                { question: 'De quoi parlait le film?', answer: 'd\'une famille parisienne', type: 'factual', alternatives: ['famille parisienne'] }
+            ]
+        },
+        {
+            id: 'r-17',
+            title: 'La routine quotidienne',
+            passage: 'Chaque matin, je me réveille à 7 heures. Je prends une douche et je prends mon petit déjeuner. Ensuite, je vais au travail en métro. Le trajet dure 30 minutes. Je rentre chez moi vers 19 heures.',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'daily-life',
+            questions: [
+                { question: 'À quelle heure se réveille-t-il?', answer: '7 heures', type: 'factual', alternatives: ['sept heures'] },
+                { question: 'Combien de temps dure le trajet?', answer: '30 minutes', type: 'factual', alternatives: ['trente minutes'] }
+            ]
+        },
+        {
+            id: 'r-18',
+            title: 'Le sport',
+            passage: 'Je fais du sport trois fois par semaine. Le lundi et le mercredi, je vais à la salle de sport. Le vendredi, je joue au tennis avec mes amis. Le sport est important pour la santé.',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'sports',
+            questions: [
+                { question: 'Combien de fois fait-il du sport?', answer: 'trois fois par semaine', type: 'factual', alternatives: ['3 fois'] },
+                { question: 'Quel sport pratique-t-il le vendredi?', answer: 'tennis', type: 'factual', alternatives: ['le tennis'] }
+            ]
+        },
+        {
+            id: 'r-19',
+            title: 'La météo changeante',
+            passage: 'Ce matin, il faisait beau mais maintenant il pleut. J\'ai oublié mon parapluie à la maison. Je dois attendre que la pluie s\'arrête. Demain, la météo annonce du soleil.',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'weather',
+            questions: [
+                { question: 'Quel temps fait-il maintenant?', answer: 'il pleut', type: 'factual', alternatives: ['pluie'] },
+                { question: 'Qu\'a-t-il oublié?', answer: 'son parapluie', type: 'factual', alternatives: ['parapluie'] },
+                { question: 'Quel temps est annoncé pour demain?', answer: 'soleil', type: 'factual', alternatives: ['du soleil'] }
+            ]
+        },
+        {
+            id: 'r-20',
+            title: 'Le restaurant',
+            passage: 'Hier soir, je suis allé au restaurant avec ma famille. Nous avons commandé des plats traditionnels français. J\'ai pris du bœuf bourguignon. C\'était délicieux. Le service était excellent.',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'dining',
+            questions: [
+                { question: 'Avec qui est-il allé au restaurant?', answer: 'sa famille', type: 'factual', alternatives: ['famille'] },
+                { question: 'Qu\'a-t-il commandé?', answer: 'du bœuf bourguignon', type: 'factual', alternatives: ['bœuf bourguignon'] }
+            ]
+        },
+        {
+            id: 'r-21',
+            title: 'Les études',
+            passage: 'Ma fille étudie à l\'université. Elle fait des études de médecine. C\'est difficile mais elle travaille beaucoup. Elle veut devenir médecin. Ses professeurs disent qu\'elle est très talentueuse.',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'education',
+            questions: [
+                { question: 'Qu\'étudie la fille?', answer: 'médecine', type: 'factual', alternatives: ['la médecine'] },
+                { question: 'Que veut-elle devenir?', answer: 'médecin', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-22',
+            title: 'La bibliothèque',
+            passage: 'J\'adore la bibliothèque de mon quartier. Elle est grande et calme. On peut emprunter des livres gratuitement. J\'y vais souvent le weekend pour lire et étudier. Il y a aussi des ordinateurs disponibles.',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'facilities',
+            questions: [
+                { question: 'Comment est la bibliothèque?', answer: 'grande et calme', type: 'descriptive' },
+                { question: 'Quand y va-t-il?', answer: 'le weekend', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-23',
+            title: 'Les transports',
+            passage: 'Pour aller au travail, je peux prendre le bus ou le métro. Le métro est plus rapide mais le bus est plus confortable. Parfois, je prends mon vélo quand il fait beau. C\'est bon pour l\'environnement.',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'transportation',
+            questions: [
+                { question: 'Quel transport est plus rapide?', answer: 'le métro', type: 'factual', alternatives: ['métro'] },
+                { question: 'Quand prend-il son vélo?', answer: 'quand il fait beau', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-24',
+            title: 'Le jardin',
+            passage: 'Mon grand-père a un grand jardin. Il cultive des tomates, des salades et des carottes. Il passe beaucoup de temps dans son jardin. En été, il nous donne des légumes frais. C\'est un bon jardinier.',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'hobbies',
+            questions: [
+                { question: 'Que cultive le grand-père?', answer: 'tomates, salades et carottes', type: 'factual', alternatives: ['légumes'] },
+                { question: 'Quand donne-t-il des légumes?', answer: 'en été', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-25',
+            title: 'La musique',
+            passage: 'J\'apprends à jouer de la guitare depuis six mois. C\'est difficile au début mais maintenant je progresse. Je prends des cours tous les mardis soir. Mon professeur est patient et encourageant.',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'hobbies',
+            questions: [
+                { question: 'Depuis combien de temps apprend-il?', answer: 'six mois', type: 'factual', alternatives: ['6 mois'] },
+                { question: 'Quand prend-il des cours?', answer: 'tous les mardis soir', type: 'factual', alternatives: ['mardis soir'] },
+                { question: 'Comment est le professeur?', answer: 'patient et encourageant', type: 'descriptive' }
+            ]
+        },
+
+        // B1 Level - Coherent texts on familiar topics (12 passages, 3 questions each = 36 questions)
+        {
+            id: 'r-26',
+            title: 'Le télétravail',
+            passage: 'Depuis la pandémie, beaucoup de personnes travaillent depuis chez elles. Le télétravail présente des avantages comme l\'économie de temps de transport et plus de flexibilité. Cependant, certains trouvent difficile de séparer vie professionnelle et vie personnelle. L\'isolement social peut aussi être un problème.',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'work',
+            questions: [
+                { question: 'Quels sont les avantages du télétravail mentionnés?', answer: 'économie de temps et flexibilité', type: 'factual', alternatives: ['temps et flexibilité'] },
+                { question: 'Quel est un problème du télétravail?', answer: 'isolement social', type: 'factual', alternatives: ['séparation vie pro/perso', 'l\'isolement'] },
+                { question: 'Depuis quand le télétravail s\'est-il développé?', answer: 'depuis la pandémie', type: 'inference' }
+            ]
+        },
+        {
+            id: 'r-27',
+            title: 'L\'environnement',
+            passage: 'La protection de l\'environnement est devenue une priorité mondiale. De plus en plus de personnes adoptent des gestes écologiques au quotidien: recyclage, réduction de la consommation d\'eau, utilisation des transports en commun. Les gouvernements mettent également en place des politiques pour réduire les émissions de CO2.',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'environment',
+            questions: [
+                { question: 'Donnez deux exemples de gestes écologiques mentionnés.', answer: 'recyclage et réduction d\'eau', type: 'factual', alternatives: ['recyclage et transports en commun'] },
+                { question: 'Que font les gouvernements?', answer: 'réduire les émissions de CO2', type: 'factual', alternatives: ['politiques environnementales'] },
+                { question: 'Quelle est l\'idée principale du texte?', answer: 'protection de l\'environnement', type: 'inference' }
+            ]
+        },
+        {
+            id: 'r-28',
+            title: 'Les réseaux sociaux',
+            passage: 'Les réseaux sociaux ont transformé notre façon de communiquer. Ils permettent de rester en contact avec des amis éloignés et de partager des moments de vie. Toutefois, l\'utilisation excessive peut avoir des effets négatifs sur la santé mentale, notamment chez les jeunes. Il est important de trouver un équilibre.',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'technology',
+            questions: [
+                { question: 'Quel est l\'avantage des réseaux sociaux?', answer: 'rester en contact', type: 'factual', alternatives: ['communication', 'contact avec amis'] },
+                { question: 'Quel est le risque mentionné?', answer: 'effets négatifs sur santé mentale', type: 'factual', alternatives: ['santé mentale des jeunes'] },
+                { question: 'Que recommande le texte?', answer: 'trouver un équilibre', type: 'inference' }
+            ]
+        },
+        {
+            id: 'r-29',
+            title: 'La cuisine française',
+            passage: 'La gastronomie française est reconnue mondialement. Chaque région a ses spécialités: la bouillabaisse à Marseille, le cassoulet dans le Sud-Ouest, la choucroute en Alsace. Les Français accordent beaucoup d\'importance aux repas, qui sont des moments de convivialité. Le repas français a même été inscrit au patrimoine culturel de l\'UNESCO.',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'culture',
+            questions: [
+                { question: 'Citez une spécialité et sa région.', answer: 'bouillabaisse à Marseille', type: 'factual', alternatives: ['cassoulet Sud-Ouest', 'choucroute Alsace'] },
+                { question: 'Pourquoi les repas sont-ils importants en France?', answer: 'moments de convivialité', type: 'inference' },
+                { question: 'Quelle reconnaissance internationale est mentionnée?', answer: 'patrimoine UNESCO', type: 'factual', alternatives: ['UNESCO'] }
+            ]
+        },
+        {
+            id: 'r-30',
+            title: 'Le système éducatif',
+            passage: 'En France, l\'école est obligatoire de 3 à 16 ans. Le système éducatif comprend l\'école maternelle, l\'école élémentaire, le collège et le lycée. Après le baccalauréat, les étudiants peuvent poursuivre des études supérieures à l\'université ou dans des grandes écoles. L\'éducation publique est gratuite et laïque.',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'education',
+            questions: [
+                { question: 'De quel âge à quel âge l\'école est-elle obligatoire?', answer: 'de 3 à 16 ans', type: 'factual', alternatives: ['3-16 ans'] },
+                { question: 'Que peut-on faire après le baccalauréat?', answer: 'études supérieures', type: 'factual', alternatives: ['université ou grandes écoles'] },
+                { question: 'Quelles sont les caractéristiques de l\'éducation publique?', answer: 'gratuite et laïque', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-31',
+            title: 'Le tourisme durable',
+            passage: 'Le tourisme de masse a des impacts négatifs sur l\'environnement et les communautés locales. C\'est pourquoi le concept de tourisme durable gagne en popularité. Il s\'agit de voyager de manière responsable, en respectant l\'environnement et les cultures locales. Les voyageurs choisissent des hébergements écologiques et privilégient les activités qui bénéficient aux populations locales.',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'travel',
+            questions: [
+                { question: 'Quels sont les impacts du tourisme de masse?', answer: 'négatifs sur environnement et communautés', type: 'factual' },
+                { question: 'Qu\'est-ce que le tourisme durable?', answer: 'voyager de manière responsable', type: 'inference', alternatives: ['respecter environnement et cultures'] },
+                { question: 'Que font les voyageurs responsables?', answer: 'hébergements écologiques et activités locales', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-32',
+            title: 'La lecture numérique',
+            passage: 'Avec l\'arrivée des liseuses et des tablettes, les habitudes de lecture ont changé. Certains préfèrent les livres numériques pour leur praticité: on peut emporter des centaines de livres en voyage. D\'autres restent attachés aux livres papier pour le plaisir du toucher et de l\'odeur. Les bibliothèques proposent maintenant les deux formats.',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'technology',
+            questions: [
+                { question: 'Quel est l\'avantage des livres numériques?', answer: 'praticité', type: 'factual', alternatives: ['emporter beaucoup de livres'] },
+                { question: 'Pourquoi certains préfèrent les livres papier?', answer: 'plaisir du toucher et de l\'odeur', type: 'factual' },
+                { question: 'Comment les bibliothèques se sont-elles adaptées?', answer: 'proposent les deux formats', type: 'inference' }
+            ]
+        },
+        {
+            id: 'r-33',
+            title: 'Le volontariat',
+            passage: 'De nombreux jeunes choisissent de faire du volontariat avant d\'entrer dans la vie active. Cette expérience permet de découvrir de nouveaux pays, d\'aider les communautés dans le besoin et de développer des compétences personnelles. Les organisations internationales offrent diverses missions dans les domaines de l\'éducation, de la santé et de l\'environnement.',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'social',
+            questions: [
+                { question: 'Pourquoi les jeunes font-ils du volontariat?', answer: 'découvrir pays et aider communautés', type: 'factual', alternatives: ['expérience et compétences'] },
+                { question: 'Dans quels domaines trouve-t-on des missions?', answer: 'éducation, santé et environnement', type: 'factual' },
+                { question: 'Quand font-ils généralement du volontariat?', answer: 'avant la vie active', type: 'inference' }
+            ]
+        },
+        {
+            id: 'r-34',
+            title: 'L\'économie circulaire',
+            passage: 'L\'économie circulaire vise à réduire le gaspillage en réutilisant les ressources existantes. Contrairement au modèle linéaire traditionnel (produire, consommer, jeter), elle encourage la réparation, le recyclage et le partage. De plus en plus d\'entreprises adoptent ce modèle pour minimiser leur impact environnemental et créer de la valeur durable.',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'economics',
+            questions: [
+                { question: 'Quel est l\'objectif de l\'économie circulaire?', answer: 'réduire le gaspillage', type: 'factual', alternatives: ['réutiliser ressources'] },
+                { question: 'Qu\'encourage-t-elle?', answer: 'réparation, recyclage et partage', type: 'factual' },
+                { question: 'En quoi diffère-t-elle du modèle traditionnel?', answer: 'réutilise au lieu de jeter', type: 'inference' }
+            ]
+        },
+        {
+            id: 'r-35',
+            title: 'La santé mentale',
+            passage: 'La société moderne prend de plus en plus conscience de l\'importance de la santé mentale. Le stress chronique et l\'anxiété affectent de nombreuses personnes. Il est essentiel de parler de ces problèmes et de chercher de l\'aide quand nécessaire. La méditation, l\'exercice physique et le maintien de liens sociaux sont des moyens efficaces de préserver son bien-être mental.',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'health',
+            questions: [
+                { question: 'Quels problèmes sont mentionnés?', answer: 'stress et anxiété', type: 'factual', alternatives: ['stress chronique et anxiété'] },
+                { question: 'Que recommande le texte?', answer: 'parler et chercher de l\'aide', type: 'factual' },
+                { question: 'Citez deux moyens de préserver la santé mentale.', answer: 'méditation et exercice', type: 'factual', alternatives: ['exercice et liens sociaux'] }
+            ]
+        },
+        {
+            id: 'r-36',
+            title: 'Les villes intelligentes',
+            passage: 'Les villes intelligentes utilisent la technologie pour améliorer la qualité de vie des habitants. Des capteurs collectent des données sur le trafic, la pollution et la consommation d\'énergie. Ces informations permettent d\'optimiser les services publics et de réduire l\'impact environnemental. Cependant, la protection des données personnelles reste une préoccupation majeure.',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'technology',
+            questions: [
+                { question: 'Que collectent les capteurs?', answer: 'données sur trafic, pollution et énergie', type: 'factual' },
+                { question: 'À quoi servent ces informations?', answer: 'optimiser services et réduire impact', type: 'factual' },
+                { question: 'Quelle préoccupation est mentionnée?', answer: 'protection données personnelles', type: 'factual' }
+            ]
+        },
+        {
+            id: 'r-37',
+            title: 'L\'apprentissage des langues',
+            passage: 'Apprendre une langue étrangère offre de nombreux avantages. Cela améliore les capacités cognitives, facilite les voyages et ouvre des opportunités professionnelles. Les méthodes d\'apprentissage ont évolué: applications mobiles, échanges linguistiques en ligne, séries en version originale. L\'important est de pratiquer régulièrement et de ne pas avoir peur de faire des erreurs.',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'education',
+            questions: [
+                { question: 'Quels sont les avantages d\'apprendre une langue?', answer: 'capacités cognitives, voyages, opportunités pro', type: 'factual' },
+                { question: 'Citez deux méthodes modernes mentionnées.', answer: 'applications et échanges en ligne', type: 'factual', alternatives: ['applications et séries'] },
+                { question: 'Quelle est la clé du succès?', answer: 'pratiquer régulièrement', type: 'inference', alternatives: ['ne pas avoir peur des erreurs'] }
+            ]
+        }
     ]
 };
 
