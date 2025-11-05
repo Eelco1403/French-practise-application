@@ -21,6 +21,7 @@
                 <p>Enter your name to begin practicing French</p>
                 <input type="text" id="userName" placeholder="Your name" class="input-field">
                 <button id="startBtn" class="btn btn-primary">Start Learning</button>
+                <button id="resumeSessionBtn" class="btn btn-secondary" style="display: none; margin-left: 10px;">Resume Last Session</button>
             </div>
         </div>
 
@@ -46,6 +47,18 @@
                         <span id="accuracy" class="stat-value">0%</span>
                     </div>
                 </div>
+            </div>
+
+            <!-- Exercise Type Selector -->
+            <div class="exercise-type-selector">
+                <h3>Choose Exercise Type</h3>
+                <div class="exercise-type-buttons">
+                    <button class="exercise-type-btn active" data-type="vocabulary">📚 Vocabulary</button>
+                    <button class="exercise-type-btn" data-type="grammar">📝 Grammar</button>
+                    <button class="exercise-type-btn" data-type="conjugation">🔄 Conjugation</button>
+                    <button class="exercise-type-btn" data-type="all">🎯 All Types</button>
+                </div>
+                <button id="saveSessionBtn" class="btn btn-secondary btn-small">💾 Save Progress</button>
             </div>
 
             <!-- Question Card -->

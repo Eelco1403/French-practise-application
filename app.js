@@ -15,6 +15,7 @@ let currentUser = {
 };
 
 let currentQuestion = null;
+let currentExerciseType = 'vocabulary'; // 'vocabulary', 'grammar', 'conjugation', or 'all'
 
 // DOM Elements
 const userSetupScreen = document.getElementById('userSetup');
@@ -54,12 +55,35 @@ function init() {
         }
     });
 
+    // Exercise type selector event listeners
+    const exerciseTypeBtns = document.querySelectorAll('.exercise-type-btn');
+    exerciseTypeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            switchExerciseType(btn.dataset.type);
+        });
+    });
+
+    // Session control event listeners
+    const saveSessionBtn = document.getElementById('saveSessionBtn');
+    const resumeSessionBtn = document.getElementById('resumeSessionBtn');
+
+    if (saveSessionBtn) {
+        saveSessionBtn.addEventListener('click', saveCurrentSession);
+    }
+
     // Try to load existing user from localStorage
     const savedUserId = localStorage.getItem('currentUserId');
     if (savedUserId) {
         const savedName = localStorage.getItem('currentUserName');
         if (savedName) {
             userNameInput.value = savedName;
+        }
+
+        // Check if there's a saved session
+        const savedSession = window.AssessmentSystem.loadSession(savedUserId);
+        if (savedSession && resumeSessionBtn) {
+            resumeSessionBtn.style.display = 'inline-block';
+            resumeSessionBtn.addEventListener('click', () => resumeSession(savedUserId));
         }
     }
 }
@@ -107,11 +131,33 @@ function startPractice() {
  * Load next question
  */
 function loadNextQuestion() {
-    // Get random question from content
-    currentQuestion = window.FrenchContent.getRandomQuestion();
+    // Get random question from content based on exercise type
+    currentQuestion = window.FrenchContent.getRandomQuestion(currentExerciseType);
 
-    // Update UI
-    questionText.textContent = currentQuestion.english;
+    // Update UI based on question type
+    const questionLabel = document.querySelector('.question-label');
+    const questionTypeDisplay = document.getElementById('questionType');
+
+    if (currentQuestion.verb) {
+        // Conjugation exercise
+        questionLabel.textContent = 'Conjugate the verb:';
+        questionText.textContent = currentQuestion.question;
+        questionTypeDisplay.textContent = 'Conjugation';
+        questionTypeDisplay.className = 'badge badge-purple';
+    } else if (currentQuestion.explanation) {
+        // Grammar exercise
+        questionLabel.textContent = 'Complete the grammar exercise:';
+        questionText.textContent = currentQuestion.question;
+        questionTypeDisplay.textContent = 'Grammar';
+        questionTypeDisplay.className = 'badge badge-green';
+    } else {
+        // Vocabulary exercise
+        questionLabel.textContent = 'Translate to French:';
+        questionText.textContent = currentQuestion.english;
+        questionTypeDisplay.textContent = 'Vocabulary';
+        questionTypeDisplay.className = 'badge badge-blue';
+    }
+
     answerInput.value = '';
     answerInput.focus();
 
@@ -122,6 +168,9 @@ function loadNextQuestion() {
     // Enable input and submit button
     answerInput.disabled = false;
     submitBtn.disabled = false;
+
+    // Save session state
+    saveCurrentSession();
 }
 
 /**
@@ -135,8 +184,21 @@ function checkAnswer() {
         return;
     }
 
+    // Get the correct answer based on question type
+    let correctAnswer;
+    if (currentQuestion.verb) {
+        // Conjugation exercise
+        correctAnswer = currentQuestion.answer;
+    } else if (currentQuestion.explanation) {
+        // Grammar exercise
+        correctAnswer = currentQuestion.answer;
+    } else {
+        // Vocabulary exercise
+        correctAnswer = currentQuestion.french;
+    }
+
     // Validate answer using utility function
-    const isCorrect = window.UtilityFunctions.validateAnswer(userAnswer, currentQuestion.french);
+    const isCorrect = window.UtilityFunctions.validateAnswer(userAnswer, correctAnswer);
 
     // Record attempt in mastery system
     currentUser.masteryData = window.AssessmentSystem.recordAttempt(
@@ -158,7 +220,7 @@ function checkAnswer() {
     updateStatsDisplay();
 
     // Show feedback
-    showFeedback(isCorrect);
+    showFeedback(isCorrect, correctAnswer);
 
     // Disable input and submit button
     answerInput.disabled = true;
@@ -171,7 +233,7 @@ function checkAnswer() {
 /**
  * Show feedback to user
  */
-function showFeedback(isCorrect) {
+function showFeedback(isCorrect, answerText) {
     feedback.classList.remove('hidden');
 
     if (isCorrect) {
@@ -179,13 +241,27 @@ function showFeedback(isCorrect) {
         feedback.classList.remove('incorrect');
         feedbackIcon.textContent = '✓';
         feedbackMessage.textContent = 'Correct! Well done!';
-        correctAnswer.textContent = '';
+
+        // Show explanation for grammar exercises
+        if (currentQuestion.explanation) {
+            correctAnswer.textContent = currentQuestion.explanation;
+            correctAnswer.style.color = '#10b981';
+        } else {
+            correctAnswer.textContent = '';
+        }
     } else {
         feedback.classList.add('incorrect');
         feedback.classList.remove('correct');
         feedbackIcon.textContent = '✗';
         feedbackMessage.textContent = 'Not quite right.';
-        correctAnswer.textContent = `The correct answer is: ${currentQuestion.french}`;
+
+        // Show correct answer and explanation
+        let feedbackText = `The correct answer is: ${answerText}`;
+        if (currentQuestion.explanation) {
+            feedbackText += `\n${currentQuestion.explanation}`;
+        }
+        correctAnswer.textContent = feedbackText;
+        correctAnswer.style.color = '#ef4444';
     }
 }
 
@@ -259,10 +335,76 @@ function updateLevelProgress() {
 }
 
 /**
+ * Switch exercise type
+ */
+function switchExerciseType(type) {
+    currentExerciseType = type;
+
+    // Update button states
+    const exerciseTypeBtns = document.querySelectorAll('.exercise-type-btn');
+    exerciseTypeBtns.forEach(btn => {
+        if (btn.dataset.type === type) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+
+    // Load new question of selected type
+    loadNextQuestion();
+}
+
+/**
+ * Save current session
+ */
+function saveCurrentSession() {
+    if (!currentUser.userId) return;
+
+    const sessionState = {
+        exerciseType: currentExerciseType,
+        sessionStats: currentUser.sessionStats,
+        currentQuestionId: currentQuestion ? currentQuestion.id : null
+    };
+
+    window.AssessmentSystem.saveSession(currentUser.userId, sessionState);
+}
+
+/**
+ * Resume saved session
+ */
+function resumeSession(userId) {
+    const savedSession = window.AssessmentSystem.loadSession(userId);
+
+    if (savedSession) {
+        // Restore session state
+        currentExerciseType = savedSession.exerciseType || 'vocabulary';
+        currentUser.sessionStats = savedSession.sessionStats || { correct: 0, total: 0 };
+
+        // Update UI button states
+        const exerciseTypeBtns = document.querySelectorAll('.exercise-type-btn');
+        exerciseTypeBtns.forEach(btn => {
+            if (btn.dataset.type === currentExerciseType) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+
+        // Update stats display
+        updateStatsDisplay();
+
+        alert(`Session resumed! You were working on ${currentExerciseType} exercises.`);
+    }
+}
+
+/**
  * Reset session (for testing purposes)
  */
 function resetSession() {
     if (confirm('Are you sure you want to reset your progress? This cannot be undone.')) {
+        if (currentUser.userId) {
+            window.AssessmentSystem.clearSession(currentUser.userId);
+        }
         localStorage.removeItem(`progress_${currentUser.userId}`);
         localStorage.removeItem('currentUserId');
         localStorage.removeItem('currentUserName');
