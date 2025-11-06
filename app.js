@@ -99,6 +99,18 @@ function init() {
         viewReportBtn.addEventListener('click', showProgressReport);
     }
 
+    // Analytics Dashboard
+    const viewAnalyticsBtn = document.getElementById('viewAnalyticsBtn');
+    const closeAnalyticsBtn = document.getElementById('closeAnalyticsBtn');
+
+    if (viewAnalyticsBtn) {
+        viewAnalyticsBtn.addEventListener('click', showAnalyticsDashboard);
+    }
+
+    if (closeAnalyticsBtn) {
+        closeAnalyticsBtn.addEventListener('click', closeAnalyticsDashboard);
+    }
+
     if (changeLevelBtn) {
         changeLevelBtn.addEventListener('click', showLevelChangeDialog);
     }
@@ -250,6 +262,49 @@ function advanceToNext() {
         }
     }
 
+    // Check if current question is a dialogue with more questions
+    if (currentQuestion && currentQuestion.turns && currentQuestion.questions && currentQuestion.questions.length > 0) {
+        currentQuestion.currentQuestionIndex++;
+
+        // If there are more questions, display the next one
+        if (currentQuestion.currentQuestionIndex < currentQuestion.questions.length) {
+            const currentQ = currentQuestion.questions[currentQuestion.currentQuestionIndex];
+            const questionText = document.getElementById('questionText');
+
+            const dialogueHTML = currentQuestion.turns.map((turn, idx) =>
+                `<div style="margin:10px 0;">
+                    <strong>Speaker ${turn.speaker}:</strong> ${turn.text}<br>
+                    <em style="color:#666;">(${turn.translation})</em>
+                </div>`
+            ).join('');
+
+            questionText.innerHTML = `<div style="background:#f5f5f5;padding:15px;border-radius:8px;margin-bottom:15px;">
+                <strong>${currentQuestion.title}</strong><br><br>
+                ${dialogueHTML}
+            </div>
+            <div style="margin-top:20px;">
+                <strong>Question ${currentQuestion.currentQuestionIndex + 1}/${currentQuestion.questions.length}:</strong><br>
+                ${currentQ.question}
+            </div>`;
+
+            answerInput.value = '';
+            answerInput.focus();
+
+            // Hide feedback
+            feedback.classList.add('hidden');
+            feedback.classList.remove('correct', 'incorrect');
+
+            // Enable input and submit button
+            answerInput.disabled = false;
+            submitBtn.disabled = false;
+
+            // Track question start time
+            currentUser.questionStartTime = Date.now();
+
+            return; // Don't load a new question
+        }
+    }
+
     // Otherwise, load a completely new question
     loadNextQuestion();
 }
@@ -355,20 +410,97 @@ function loadNextQuestion() {
             </div>`
         ).join('');
 
-        questionText.innerHTML = `<div style="background:#f5f5f5;padding:15px;border-radius:8px;">
-            <strong>${currentQuestion.title}</strong><br><br>
-            ${dialogueHTML}
-        </div>`;
+        // If dialogue has comprehension questions, show them
+        if (currentQuestion.questions && currentQuestion.questions.length > 0) {
+            if (!currentQuestion.currentQuestionIndex) {
+                currentQuestion.currentQuestionIndex = 0;
+            }
 
-        // For dialogues, just mark as viewed (no answer required)
-        answerInput.placeholder = 'Type "done" when you\'ve reviewed this dialogue';
+            const currentQ = currentQuestion.questions[currentQuestion.currentQuestionIndex];
+            questionText.innerHTML = `<div style="background:#f5f5f5;padding:15px;border-radius:8px;margin-bottom:15px;">
+                <strong>${currentQuestion.title}</strong><br><br>
+                ${dialogueHTML}
+            </div>
+            <div style="margin-top:20px;">
+                <strong>Question ${currentQuestion.currentQuestionIndex + 1}/${currentQuestion.questions.length}:</strong><br>
+                ${currentQ.question}
+            </div>`;
+            answerInput.placeholder = 'Type your answer...';
+        } else {
+            // For dialogues without questions, just mark as viewed
+            questionText.innerHTML = `<div style="background:#f5f5f5;padding:15px;border-radius:8px;">
+                <strong>${currentQuestion.title}</strong><br><br>
+                ${dialogueHTML}
+            </div>`;
+            answerInput.placeholder = 'Type "done" when you\'ve reviewed this dialogue';
+        }
     }
-    // Handle conjugation
+    // Handle conjugation table (full 6-form table)
+    else if (currentQuestion.forms && Array.isArray(currentQuestion.forms)) {
+        questionLabel.textContent = 'Complete the conjugation table:';
+        questionTypeDisplay.textContent = '🔄 Conjugation Table';
+        questionTypeDisplay.className = 'badge badge-purple';
+
+        // Hide regular answer input, we'll use custom inputs
+        answerInput.style.display = 'none';
+        submitBtn.style.display = 'none';
+
+        // Create conjugation table HTML
+        const tableHTML = `
+            <div style="background:#f5f5f5;padding:20px;border-radius:8px;">
+                <h3 style="margin-top:0;">${currentQuestion.verb} (${currentQuestion.english})</h3>
+                <p><strong>Tense:</strong> ${currentQuestion.tenseFr || currentQuestion.tense}</p>
+                <div style="display:grid;grid-template-columns:1fr 2fr;gap:15px;margin-top:20px;">
+                    ${currentQuestion.forms.map((form, idx) => `
+                        <div style="display:contents;">
+                            <label style="font-weight:bold;align-self:center;">${form.subject}</label>
+                            <input
+                                type="text"
+                                id="conj-input-${idx}"
+                                class="conj-table-input input-field"
+                                placeholder="Enter conjugation..."
+                                autocomplete="off"
+                                style="width:100%;"
+                            >
+                        </div>
+                    `).join('')}
+                </div>
+                <button id="submitTableBtn" class="btn btn-primary btn-large" style="margin-top:20px;width:100%;">
+                    Check All Answers
+                </button>
+            </div>
+        `;
+
+        questionText.innerHTML = tableHTML;
+
+        // Add event listener to submit button
+        setTimeout(() => {
+            const submitTableBtn = document.getElementById('submitTableBtn');
+            if (submitTableBtn) {
+                submitTableBtn.addEventListener('click', checkConjugationTable);
+
+                // Also allow Enter key on last input to submit
+                const lastInput = document.getElementById(`conj-input-${currentQuestion.forms.length - 1}`);
+                if (lastInput) {
+                    lastInput.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') {
+                            checkConjugationTable();
+                        }
+                    });
+                }
+            }
+        }, 10);
+    }
+    // Handle conjugation (single form)
     else if (currentQuestion.verb) {
         questionLabel.textContent = 'Conjugate the verb:';
         questionText.textContent = currentQuestion.question;
         questionTypeDisplay.textContent = window.I18n.t('badges.conjugation');
         questionTypeDisplay.className = 'badge badge-purple';
+
+        // Ensure regular inputs are visible
+        answerInput.style.display = '';
+        submitBtn.style.display = '';
     }
     // Handle grammar
     else if (currentQuestion.explanation) {
@@ -438,10 +570,29 @@ function checkAnswer() {
             }
         }
     }
-    // Handle dialogue practice (always correct if user types "done")
+    // Handle dialogue practice
     else if (currentQuestion.turns) {
-        correctAnswer = 'done';
-        isCorrect = userAnswer.toLowerCase() === 'done';
+        // If dialogue has comprehension questions
+        if (currentQuestion.questions && currentQuestion.questions.length > 0) {
+            const currentQ = currentQuestion.questions[currentQuestion.currentQuestionIndex];
+            correctAnswer = currentQ.answer;
+
+            isCorrect = window.UtilityFunctions.validateAnswer(userAnswer, correctAnswer);
+
+            // Check alternatives
+            if (!isCorrect && currentQ.alternatives) {
+                for (const alt of currentQ.alternatives) {
+                    if (window.UtilityFunctions.validateAnswer(userAnswer, alt)) {
+                        isCorrect = true;
+                        break;
+                    }
+                }
+            }
+        } else {
+            // For dialogues without questions, just check for "done"
+            correctAnswer = 'done';
+            isCorrect = userAnswer.toLowerCase() === 'done';
+        }
     }
     // Handle conjugation
     else if (currentQuestion.verb) {
@@ -556,6 +707,104 @@ function showFeedback(isCorrect, answerText) {
 }
 
 /**
+ * Check conjugation table answers (all 6 forms)
+ */
+function checkConjugationTable() {
+    if (!currentQuestion || !currentQuestion.forms) return;
+
+    const submitTableBtn = document.getElementById('submitTableBtn');
+    if (submitTableBtn) {
+        submitTableBtn.disabled = true;
+    }
+
+    // Collect all user answers
+    const userAnswers = currentQuestion.forms.map((form, idx) => {
+        const input = document.getElementById(`conj-input-${idx}`);
+        return input ? input.value.trim() : '';
+    });
+
+    // Check each answer
+    const results = currentQuestion.forms.map((form, idx) => {
+        const userAnswer = userAnswers[idx];
+        const isCorrect = window.UtilityFunctions.validateAnswer(userAnswer, form.answer);
+        return { subject: form.subject, userAnswer, correctAnswer: form.answer, isCorrect };
+    });
+
+    const allCorrect = results.every(r => r.isCorrect);
+    const correctCount = results.filter(r => r.isCorrect).length;
+
+    // Visual feedback for each input
+    results.forEach((result, idx) => {
+        const input = document.getElementById(`conj-input-${idx}`);
+        if (input) {
+            input.style.borderColor = result.isCorrect ? '#10b981' : '#ef4444';
+            input.style.borderWidth = '2px';
+            input.disabled = true;
+        }
+    });
+
+    // Show overall feedback
+    const feedbackHTML = `
+        <div style="margin-top:20px;padding:15px;background:${allCorrect ? '#d1fae5' : '#fee2e2'};border-radius:8px;">
+            <p style="font-size:18px;font-weight:bold;margin:0 0 10px 0;">
+                ${allCorrect ? '✓ Perfect! All correct!' : `${correctCount}/6 correct`}
+            </p>
+            ${!allCorrect ? `
+                <div style="margin-top:10px;">
+                    <strong>Corrections:</strong>
+                    ${results.filter(r => !r.isCorrect).map(r =>
+                        `<div style="margin:5px 0;">
+                            <strong>${r.subject}:</strong> You wrote "${r.userAnswer}" → Correct: <strong>${r.correctAnswer}</strong>
+                        </div>`
+                    ).join('')}
+                </div>
+            ` : ''}
+            <button id="nextTableBtn" class="btn btn-secondary" style="margin-top:15px;width:100%;">
+                Next Table
+            </button>
+        </div>
+    `;
+
+    const tableContainer = questionText.querySelector('div');
+    if (tableContainer) {
+        const feedbackDiv = document.createElement('div');
+        feedbackDiv.innerHTML = feedbackHTML;
+        tableContainer.appendChild(feedbackDiv);
+
+        // Add next button event listener
+        setTimeout(() => {
+            const nextTableBtn = document.getElementById('nextTableBtn');
+            if (nextTableBtn) {
+                nextTableBtn.addEventListener('click', () => {
+                    // Update stats
+                    if (allCorrect) {
+                        currentUser.sessionStats.correct++;
+                    }
+                    currentUser.sessionStats.total++;
+                    updateStatsDisplay();
+
+                    // Track mastery for the verb/tense
+                    if (currentUser.userId && window.AssessmentSystem) {
+                        window.AssessmentSystem.updateMastery(
+                            currentUser.userId,
+                            currentQuestion.id,
+                            allCorrect,
+                            currentUser.masteryData
+                        );
+                        updateProgressDisplay();
+                    }
+
+                    // Reset inputs and load next question
+                    answerInput.style.display = '';
+                    submitBtn.style.display = '';
+                    loadNextQuestion();
+                });
+            }
+        }, 10);
+    }
+}
+
+/**
  * Update session statistics display
  */
 function updateStatsDisplay() {
@@ -636,7 +885,12 @@ function updateLevelProgress() {
  * Switch exercise type
  */
 function switchExerciseType(type) {
-    currentExerciseType = type;
+    // Use conjugation tables instead of individual conjugations
+    if (type === 'conjugation') {
+        currentExerciseType = 'conjugation-table';
+    } else {
+        currentExerciseType = type;
+    }
 
     // Update button states
     const exerciseTypeBtns = document.querySelectorAll('.exercise-type-btn');
@@ -734,6 +988,12 @@ function handleLanguageChange(event) {
 function updateUILanguage() {
     const t = window.I18n.t;
 
+    // Sync language dropdown with current language
+    const interfaceLanguageSelect = document.getElementById('interfaceLanguage');
+    if (interfaceLanguageSelect) {
+        interfaceLanguageSelect.value = window.I18n.getCurrentLanguage();
+    }
+
     // Welcome screen
     const welcomeTitle = document.getElementById('welcomeTitle');
     const welcomeSubtitle = document.getElementById('welcomeSubtitle');
@@ -767,7 +1027,7 @@ function updateUILanguage() {
     document.getElementById('allTypesLabel').textContent = t('practice.allTypes');
     document.getElementById('saveProgressLabel').textContent = t('practice.saveProgress');
     document.getElementById('viewReportLabel').textContent = t('practice.viewReport');
-    document.getElementById('changeLevelLabel').textContent = t('practice.changeLanguage');
+    document.getElementById('changeLevelLabel').textContent = t('practice.changeLevel');
 
     // Progress labels
     document.getElementById('levelProgressTitle').textContent = t('progress.levelGoal');
@@ -789,6 +1049,159 @@ function handleLevelDescriptionUpdate() {
     if (cefrLevelSelect && levelDescription) {
         const selectedLevel = cefrLevelSelect.value;
         levelDescription.textContent = window.I18n.t(`levelDescriptions.${selectedLevel}`);
+    }
+}
+
+/**
+ * Show Analytics Dashboard
+ */
+function showAnalyticsDashboard() {
+    if (!currentUser.userId || !window.AnalyticsEngine) {
+        alert('Analytics not available yet. Please start practicing first!');
+        return;
+    }
+
+    const analyticsEngine = new window.AnalyticsEngine(currentUser, currentUser.masteryData);
+    const dashboardData = analyticsEngine.getDashboardData();
+
+    const analyticsContent = document.getElementById('analyticsContent');
+    const analyticsModal = document.getElementById('analyticsModal');
+
+    if (!analyticsContent || !analyticsModal) return;
+
+    // Build HTML for analytics dashboard
+    let html = `
+        <div style="padding: 20px;">
+            <!-- Overview Section -->
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                <h3 style="margin-top: 0; color: white;">📈 Overview</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <div>
+                        <div style="font-size: 32px; font-weight: bold;">${dashboardData.overview.totalAttempts}</div>
+                        <div style="opacity: 0.9;">Total Attempts</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 32px; font-weight: bold;">${dashboardData.overview.overallAccuracy}%</div>
+                        <div style="opacity: 0.9;">Overall Accuracy</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 32px; font-weight: bold;">${dashboardData.overview.currentStreak}</div>
+                        <div style="opacity: 0.9;">Day Streak</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 32px; font-weight: bold;">${dashboardData.overview.uniqueItemsPracticed}</div>
+                        <div style="opacity: 0.9;">Items Practiced</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Strengths & Weaknesses -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; border: 2px solid #86efac;">
+                    <h4 style="color: #15803d; margin-top: 0;">💪 Your Strengths</h4>
+                    ${dashboardData.strengthsWeaknesses.strengths.length > 0 ?
+                        dashboardData.strengthsWeaknesses.strengths.map(s =>
+                            `<div style="margin: 10px 0;">
+                                <strong>${s.category}</strong><br>
+                                <span style="color: #16a34a;">${s.accuracy.toFixed(1)}% accuracy</span>
+                                <span style="color: #666;"> (${s.attempts} attempts)</span>
+                            </div>`
+                        ).join('')
+                        : '<p style="color: #666;">Keep practicing to discover your strengths!</p>'}
+                </div>
+                <div style="background: #fef2f2; padding: 15px; border-radius: 8px; border: 2px solid #fca5a5;">
+                    <h4 style="color: #991b1b; margin-top: 0;">🎯 Areas to Improve</h4>
+                    ${dashboardData.strengthsWeaknesses.weaknesses.length > 0 ?
+                        dashboardData.strengthsWeaknesses.weaknesses.map(w =>
+                            `<div style="margin: 10px 0;">
+                                <strong>${w.category}</strong><br>
+                                <span style="color: #dc2626;">${w.accuracy.toFixed(1)}% accuracy</span>
+                                <span style="color: #666;"> (${w.attempts} attempts)</span>
+                            </div>`
+                        ).join('')
+                        : '<p style="color: #666;">No weak areas yet - great job!</p>'}
+                </div>
+            </div>
+
+            <!-- Level Analytics -->
+            <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e5e7eb; margin-bottom: 20px;">
+                <h4 style="margin-top: 0;">📚 Performance by Level</h4>
+                ${Object.entries(dashboardData.levelAnalytics).map(([level, data]) => {
+                    if (data.attempts === 0) return '';
+                    const width = (data.accuracy / 100) * 100;
+                    const color = data.accuracy >= 80 ? '#10b981' : data.accuracy >= 60 ? '#f59e0b' : '#ef4444';
+                    return `
+                        <div style="margin: 15px 0;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <strong>${level}</strong>
+                                <span>${data.accuracy.toFixed(1)}% (${data.correct}/${data.attempts})</span>
+                            </div>
+                            <div style="background: #e5e7eb; height: 8px; border-radius: 4px; overflow: hidden;">
+                                <div style="background: ${color}; height: 100%; width: ${width}%; transition: width 0.3s;"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+
+            <!-- Category Performance -->
+            <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e5e7eb; margin-bottom: 20px;">
+                <h4 style="margin-top: 0;">📊 Category Performance</h4>
+                <div style="max-height: 300px; overflow-y: auto;">
+                ${Object.entries(dashboardData.categoryAnalytics)
+                    .sort((a, b) => b[1].accuracy - a[1].accuracy)
+                    .slice(0, 10)
+                    .map(([category, data]) => {
+                        const width = (data.accuracy / 100) * 100;
+                        const color = data.accuracy >= 70 ? '#10b981' : data.accuracy >= 50 ? '#f59e0b' : '#ef4444';
+                        return `
+                            <div style="margin: 12px 0;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                    <span style="font-weight: 500;">${category}</span>
+                                    <span>${data.accuracy.toFixed(1)}%</span>
+                                </div>
+                                <div style="background: #e5e7eb; height: 6px; border-radius: 3px; overflow: hidden;">
+                                    <div style="background: ${color}; height: 100%; width: ${width}%; transition: width 0.3s;"></div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+
+            <!-- Study Habits -->
+            <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e5e7eb;">
+                <h4 style="margin-top: 0;">⏰ Study Habits</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                    <div>
+                        <div style="font-size: 24px; font-weight: bold; color: #6366f1;">${dashboardData.studyHabits.avgSessionLength}</div>
+                        <div style="color: #666; font-size: 14px;">Avg. Session (min)</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 24px; font-weight: bold; color: #6366f1;">${dashboardData.studyHabits.totalSessions}</div>
+                        <div style="color: #666; font-size: 14px;">Total Sessions</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 24px; font-weight: bold; color: #6366f1;">${dashboardData.studyHabits.mostProductiveTime}</div>
+                        <div style="color: #666; font-size: 14px;">Best Time</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 24px; font-weight: bold; color: #6366f1;">${dashboardData.studyHabits.consistencyScore.toFixed(1)}%</div>
+                        <div style="color: #666; font-size: 14px;">Consistency</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    analyticsContent.innerHTML = html;
+    analyticsModal.style.display = 'block';
+}
+
+function closeAnalyticsDashboard() {
+    const analyticsModal = document.getElementById('analyticsModal');
+    if (analyticsModal) {
+        analyticsModal.style.display = 'none';
     }
 }
 

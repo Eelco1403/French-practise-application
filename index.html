@@ -93,8 +93,9 @@
                 </div>
                 <div class="action-buttons">
                     <button id="placementTestBtn" class="btn btn-success btn-small">🎓 <span id="placementTestLabel">Take Placement Test</span></button>
+                    <button id="viewAnalyticsBtn" class="btn btn-info btn-small">📊 Analytics</button>
                     <button id="saveSessionBtn" class="btn btn-secondary btn-small">💾 <span id="saveProgressLabel">Save Progress</span></button>
-                    <button id="viewReportBtn" class="btn btn-info btn-small">📊 <span id="viewReportLabel">View Report</span></button>
+                    <button id="viewReportBtn" class="btn btn-secondary btn-small">📄 <span id="viewReportLabel">Report</span></button>
                     <button id="changeLevelBtn" class="btn btn-tertiary btn-small">🎯 <span id="changeLevelLabel">Change Level</span></button>
                 </div>
             </div>
@@ -207,6 +208,19 @@
                     <button id="exportJSONBtn" class="btn btn-secondary">📄 <span id="exportJSONLabel">Download JSON</span></button>
                     <button id="exportCSVBtn" class="btn btn-secondary">📊 <span id="exportCSVLabel">Download CSV</span></button>
                     <button id="printReportBtn" class="btn btn-primary">🖨️ <span id="printLabel">Print</span></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Dashboard Modal -->
+        <div id="analyticsModal" class="modal">
+            <div class="modal-content" style="max-width: 900px;">
+                <div class="modal-header">
+                    <h2>📊 Learning Analytics Dashboard</h2>
+                    <button id="closeAnalyticsBtn" class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body" id="analyticsContent" style="max-height: 70vh; overflow-y: auto;">
+                    <!-- Analytics content will be inserted here dynamically -->
                 </div>
             </div>
         </div>

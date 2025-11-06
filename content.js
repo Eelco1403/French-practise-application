@@ -2283,70 +2283,496 @@ const FRENCH_CONTENT = {
 
     // Dialogue Practice - Conversational scenarios (13 dialogues)
     dialogues: [
-        // A1 Level - Basic greetings (5 dialogues)
-        { id: 'd-1', title: 'Meeting someone', cefrLevel: 'A1', difficulty: 1, category: 'greetings', turns: [
-            { speaker: 'A', text: 'Bonjour!', translation: 'Hello!' },
-            { speaker: 'B', text: 'Bonjour! Comment allez-vous?', translation: 'Hello! How are you?' },
-            { speaker: 'A', text: 'Je vais bien, merci. Et vous?', translation: 'I\'m fine, thank you. And you?' },
-            { speaker: 'B', text: 'Très bien, merci!', translation: 'Very well, thank you!' }
-        ]},
-        { id: 'd-2', title: 'Introducing yourself', cefrLevel: 'A1', difficulty: 1, category: 'introduction', turns: [
-            { speaker: 'A', text: 'Je m\'appelle Marie.', translation: 'My name is Marie.' },
-            { speaker: 'B', text: 'Moi, c\'est Pierre. Enchanté!', translation: 'I\'m Pierre. Nice to meet you!' }
-        ]},
-        { id: 'd-3', title: 'At the café', cefrLevel: 'A1', difficulty: 1, category: 'shopping', turns: [
-            { speaker: 'A', text: 'Bonjour, un café s\'il vous plaît.', translation: 'Hello, a coffee please.' },
-            { speaker: 'B', text: 'Ça fait 2 euros.', translation: 'That\'s 2 euros.' }
-        ]},
-        { id: 'd-4', title: 'Asking directions', cefrLevel: 'A1', difficulty: 1, category: 'directions', turns: [
-            { speaker: 'A', text: 'Pardon, où est la gare?', translation: 'Excuse me, where is the train station?' },
-            { speaker: 'B', text: 'C\'est tout droit.', translation: 'It\'s straight ahead.' }
-        ]},
-        { id: 'd-5', title: 'Buying something', cefrLevel: 'A1', difficulty: 1, category: 'shopping', turns: [
-            { speaker: 'A', text: 'Combien ça coûte?', translation: 'How much does it cost?' },
-            { speaker: 'B', text: 'Quinze euros.', translation: 'Fifteen euros.' }
-        ]},
+        // A1 Level - Basic greetings (5 dialogues with comprehension questions)
+        {
+            id: 'd-1',
+            title: 'Meeting someone',
+            cefrLevel: 'A1',
+            difficulty: 1,
+            category: 'greetings',
+            turns: [
+                { speaker: 'A', text: 'Bonjour!', translation: 'Hello!' },
+                { speaker: 'B', text: 'Bonjour! Comment allez-vous?', translation: 'Hello! How are you?' },
+                { speaker: 'A', text: 'Je vais bien, merci. Et vous?', translation: 'I\'m fine, thank you. And you?' },
+                { speaker: 'B', text: 'Très bien, merci!', translation: 'Very well, thank you!' }
+            ],
+            questions: [
+                { question: 'Comment va la personne A?', answer: 'bien', type: 'comprehension' },
+                { question: 'Est-ce une conversation formelle ou informelle?', answer: 'formelle', type: 'comprehension', alternatives: ['formal', 'vous'] }
+            ]
+        },
+        {
+            id: 'd-2',
+            title: 'Introducing yourself',
+            cefrLevel: 'A1',
+            difficulty: 1,
+            category: 'introduction',
+            turns: [
+                { speaker: 'A', text: 'Je m\'appelle Marie.', translation: 'My name is Marie.' },
+                { speaker: 'B', text: 'Moi, c\'est Pierre. Enchanté!', translation: 'I\'m Pierre. Nice to meet you!' }
+            ],
+            questions: [
+                { question: 'Comment s\'appelle la personne A?', answer: 'Marie', type: 'comprehension' },
+                { question: 'Comment s\'appelle la personne B?', answer: 'Pierre', type: 'comprehension' }
+            ]
+        },
+        {
+            id: 'd-3',
+            title: 'At the café',
+            cefrLevel: 'A1',
+            difficulty: 1,
+            category: 'shopping',
+            turns: [
+                { speaker: 'A', text: 'Bonjour, un café s\'il vous plaît.', translation: 'Hello, a coffee please.' },
+                { speaker: 'B', text: 'Ça fait 2 euros.', translation: 'That\'s 2 euros.' }
+            ],
+            questions: [
+                { question: 'Que commande la personne A?', answer: 'un café', type: 'comprehension', alternatives: ['café', 'coffee'] },
+                { question: 'Combien coûte le café?', answer: '2 euros', type: 'comprehension', alternatives: ['2', 'deux euros'] }
+            ]
+        },
+        {
+            id: 'd-4',
+            title: 'Asking directions',
+            cefrLevel: 'A1',
+            difficulty: 1,
+            category: 'directions',
+            turns: [
+                { speaker: 'A', text: 'Pardon, où est la gare?', translation: 'Excuse me, where is the train station?' },
+                { speaker: 'B', text: 'C\'est tout droit.', translation: 'It\'s straight ahead.' }
+            ],
+            questions: [
+                { question: 'Que cherche la personne A?', answer: 'la gare', type: 'comprehension', alternatives: ['gare'] },
+                { question: 'Dans quelle direction est la gare?', answer: 'tout droit', type: 'comprehension', alternatives: ['droit'] }
+            ]
+        },
+        {
+            id: 'd-5',
+            title: 'Buying something',
+            cefrLevel: 'A1',
+            difficulty: 1,
+            category: 'shopping',
+            turns: [
+                { speaker: 'A', text: 'Combien ça coûte?', translation: 'How much does it cost?' },
+                { speaker: 'B', text: 'Quinze euros.', translation: 'Fifteen euros.' }
+            ],
+            questions: [
+                { question: 'Combien coûte l\'objet?', answer: '15 euros', type: 'comprehension', alternatives: ['quinze euros', '15', 'quinze'] }
+            ]
+        },
 
         // A2 Level (3 dialogues)
-        { id: 'd-6', title: 'Making plans', cefrLevel: 'A2', difficulty: 2, category: 'social', turns: [
-            { speaker: 'A', text: 'Tu es libre samedi?', translation: 'Are you free Saturday?' },
-            { speaker: 'B', text: 'Oui, pourquoi?', translation: 'Yes, why?' },
-            { speaker: 'A', text: 'On pourrait aller au cinéma.', translation: 'We could go to the cinema.' }
-        ]},
-        { id: 'd-7', title: 'At restaurant', cefrLevel: 'A2', difficulty: 2, category: 'food', turns: [
-            { speaker: 'A', text: 'Vous avez choisi?', translation: 'Have you chosen?' },
-            { speaker: 'B', text: 'Oui, je prends le menu du jour.', translation: 'Yes, I\'ll have the daily menu.' }
-        ]},
-        { id: 'd-8', title: 'Hobbies', cefrLevel: 'A2', difficulty: 2, category: 'hobbies', turns: [
-            { speaker: 'A', text: 'Qu\'aimes-tu faire?', translation: 'What do you like to do?' },
-            { speaker: 'B', text: 'J\'aime lire et faire du sport.', translation: 'I like reading and sports.' }
-        ]},
+        {
+            id: 'd-6',
+            title: 'Making plans',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'social',
+            turns: [
+                { speaker: 'A', text: 'Tu es libre samedi?', translation: 'Are you free Saturday?' },
+                { speaker: 'B', text: 'Oui, pourquoi?', translation: 'Yes, why?' },
+                { speaker: 'A', text: 'On pourrait aller au cinéma.', translation: 'We could go to the cinema.' }
+            ],
+            questions: [
+                { question: 'Quel jour sont-ils disponibles?', answer: 'samedi', type: 'comprehension', alternatives: ['Saturday'] },
+                { question: 'Où proposent-ils d\'aller?', answer: 'au cinéma', type: 'comprehension', alternatives: ['cinéma', 'cinema'] }
+            ]
+        },
+        {
+            id: 'd-7',
+            title: 'At restaurant',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'food',
+            turns: [
+                { speaker: 'A', text: 'Vous avez choisi?', translation: 'Have you chosen?' },
+                { speaker: 'B', text: 'Oui, je prends le menu du jour.', translation: 'Yes, I\'ll have the daily menu.' }
+            ],
+            questions: [
+                { question: 'Où se passe cette conversation?', answer: 'au restaurant', type: 'comprehension', alternatives: ['restaurant'] },
+                { question: 'Que commande la personne B?', answer: 'le menu du jour', type: 'comprehension', alternatives: ['menu du jour', 'menu'] }
+            ]
+        },
+        {
+            id: 'd-8',
+            title: 'Hobbies',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'hobbies',
+            turns: [
+                { speaker: 'A', text: 'Qu\'aimes-tu faire?', translation: 'What do you like to do?' },
+                { speaker: 'B', text: 'J\'aime lire et faire du sport.', translation: 'I like reading and sports.' }
+            ],
+            questions: [
+                { question: 'Quels sont les deux passe-temps de la personne B?', answer: 'lire et faire du sport', type: 'comprehension', alternatives: ['lire et sport', 'lecture et sport', 'reading and sports'] },
+                { question: 'Est-ce que la personne B aime lire?', answer: 'oui', type: 'comprehension', alternatives: ['yes'] }
+            ]
+        },
 
         // B1 Level (2 dialogues)
-        { id: 'd-9', title: 'Job interview', cefrLevel: 'B1', difficulty: 3, category: 'work', turns: [
-            { speaker: 'A', text: 'Parlez-moi de votre expérience.', translation: 'Tell me about your experience.' },
-            { speaker: 'B', text: 'J\'ai travaillé trois ans comme développeur web.', translation: 'I worked three years as a web developer.' }
-        ]},
-        { id: 'd-10', title: 'Travel plans', cefrLevel: 'B1', difficulty: 3, category: 'travel', turns: [
-            { speaker: 'A', text: 'Où vas-tu en vacances?', translation: 'Where are you going on vacation?' },
-            { speaker: 'B', text: 'J\'hésite entre l\'Espagne et l\'Italie.', translation: 'I\'m hesitating between Spain and Italy.' }
-        ]},
+        {
+            id: 'd-9',
+            title: 'Job interview',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'work',
+            turns: [
+                { speaker: 'A', text: 'Parlez-moi de votre expérience.', translation: 'Tell me about your experience.' },
+                { speaker: 'B', text: 'J\'ai travaillé trois ans comme développeur web.', translation: 'I worked three years as a web developer.' }
+            ],
+            questions: [
+                { question: 'Combien de temps la personne B a-t-elle travaillé?', answer: 'trois ans', type: 'comprehension', alternatives: ['3 ans', 'three years'] },
+                { question: 'Quel était le métier de la personne B?', answer: 'développeur web', type: 'comprehension', alternatives: ['développeur', 'web developer'] }
+            ]
+        },
+        {
+            id: 'd-10',
+            title: 'Travel plans',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'travel',
+            turns: [
+                { speaker: 'A', text: 'Où vas-tu en vacances?', translation: 'Where are you going on vacation?' },
+                { speaker: 'B', text: 'J\'hésite entre l\'Espagne et l\'Italie.', translation: 'I\'m hesitating between Spain and Italy.' }
+            ],
+            questions: [
+                { question: 'Entre quels pays la personne B hésite-t-elle?', answer: 'l\'Espagne et l\'Italie', type: 'comprehension', alternatives: ['Espagne et Italie', 'Spain and Italy', 'Espagne Italie'] },
+                { question: 'La personne B a-t-elle décidé sa destination?', answer: 'non', type: 'comprehension', alternatives: ['no', 'pas encore'] }
+            ]
+        },
 
         // B2 Level (2 dialogues)
-        { id: 'd-11', title: 'Remote work debate', cefrLevel: 'B2', difficulty: 4, category: 'work', turns: [
-            { speaker: 'A', text: 'Que penses-tu du télétravail?', translation: 'What do you think about remote work?' },
-            { speaker: 'B', text: 'C\'est intéressant mais comporte des risques d\'isolement.', translation: 'It\'s interesting but carries risks of isolation.' }
-        ]},
-        { id: 'd-12', title: 'Environmental policy', cefrLevel: 'B2', difficulty: 4, category: 'environment', turns: [
-            { speaker: 'A', text: 'Comment réduire les émissions de CO2?', translation: 'How to reduce CO2 emissions?' },
-            { speaker: 'B', text: 'Il faut investir massivement dans les énergies renouvelables.', translation: 'We must invest massively in renewable energies.' }
-        ]},
+        {
+            id: 'd-11',
+            title: 'Remote work debate',
+            cefrLevel: 'B2',
+            difficulty: 4,
+            category: 'work',
+            turns: [
+                { speaker: 'A', text: 'Que penses-tu du télétravail?', translation: 'What do you think about remote work?' },
+                { speaker: 'B', text: 'C\'est intéressant mais comporte des risques d\'isolement.', translation: 'It\'s interesting but carries risks of isolation.' }
+            ],
+            questions: [
+                { question: 'Quel est le sujet de discussion?', answer: 'le télétravail', type: 'comprehension', alternatives: ['télétravail', 'remote work'] },
+                { question: 'Quel risque du télétravail est mentionné?', answer: 'l\'isolement', type: 'comprehension', alternatives: ['isolement', 'isolation'] }
+            ]
+        },
+        {
+            id: 'd-12',
+            title: 'Environmental policy',
+            cefrLevel: 'B2',
+            difficulty: 4,
+            category: 'environment',
+            turns: [
+                { speaker: 'A', text: 'Comment réduire les émissions de CO2?', translation: 'How to reduce CO2 emissions?' },
+                { speaker: 'B', text: 'Il faut investir massivement dans les énergies renouvelables.', translation: 'We must invest massively in renewable energies.' }
+            ],
+            questions: [
+                { question: 'Quel est le problème environnemental discuté?', answer: 'les émissions de CO2', type: 'comprehension', alternatives: ['émissions de CO2', 'CO2', 'CO2 emissions'] },
+                { question: 'Quelle est la solution proposée?', answer: 'investir dans les énergies renouvelables', type: 'comprehension', alternatives: ['énergies renouvelables', 'renewable energies'] }
+            ]
+        },
 
         // C1 Level (1 dialogue)
-        { id: 'd-13', title: 'AI philosophy', cefrLevel: 'C1', difficulty: 5, category: 'philosophy', turns: [
-            { speaker: 'A', text: 'L\'IA peut-elle avoir une conscience?', translation: 'Can AI have consciousness?' },
-            { speaker: 'B', text: 'Question philosophique complexe. Imiter n\'est pas posséder.', translation: 'Complex philosophical question. Imitating is not possessing.' }
-        ]}
+        {
+            id: 'd-13',
+            title: 'AI philosophy',
+            cefrLevel: 'C1',
+            difficulty: 5,
+            category: 'philosophy',
+            turns: [
+                { speaker: 'A', text: 'L\'IA peut-elle avoir une conscience?', translation: 'Can AI have consciousness?' },
+                { speaker: 'B', text: 'Question philosophique complexe. Imiter n\'est pas posséder.', translation: 'Complex philosophical question. Imitating is not possessing.' }
+            ],
+            questions: [
+                { question: 'Quel est le sujet philosophique abordé?', answer: 'la conscience de l\'IA', type: 'comprehension', alternatives: ['conscience IA', 'AI consciousness', 'intelligence artificielle'] },
+                { question: 'Selon B, quelle est la différence importante?', answer: 'imiter n\'est pas posséder', type: 'comprehension', alternatives: ['imiter et posséder', 'imitating is not possessing'] }
+            ]
+        }
+    ],
+
+    // Conjugation Tables - Full verb conjugations (all 6 forms at once)
+    // Each table groups 6 conjugation items for practice
+    conjugationTables: [
+        // A1 Level - Essential verbs in Présent
+        {
+            id: 'ct-1',
+            verb: 'être',
+            english: 'to be',
+            tense: 'présent',
+            tenseFr: 'Présent',
+            cefrLevel: 'A1',
+            difficulty: 1,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'suis' },
+                { subject: 'tu', answer: 'es' },
+                { subject: 'il/elle', answer: 'est' },
+                { subject: 'nous', answer: 'sommes' },
+                { subject: 'vous', answer: 'êtes' },
+                { subject: 'ils/elles', answer: 'sont' }
+            ]
+        },
+        {
+            id: 'ct-2',
+            verb: 'avoir',
+            english: 'to have',
+            tense: 'présent',
+            tenseFr: 'Présent',
+            cefrLevel: 'A1',
+            difficulty: 1,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'ai' },
+                { subject: 'tu', answer: 'as' },
+                { subject: 'il/elle', answer: 'a' },
+                { subject: 'nous', answer: 'avons' },
+                { subject: 'vous', answer: 'avez' },
+                { subject: 'ils/elles', answer: 'ont' }
+            ]
+        },
+        {
+            id: 'ct-3',
+            verb: 'aller',
+            english: 'to go',
+            tense: 'présent',
+            tenseFr: 'Présent',
+            cefrLevel: 'A1',
+            difficulty: 1,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'vais' },
+                { subject: 'tu', answer: 'vas' },
+                { subject: 'il/elle', answer: 'va' },
+                { subject: 'nous', answer: 'allons' },
+                { subject: 'vous', answer: 'allez' },
+                { subject: 'ils/elles', answer: 'vont' }
+            ]
+        },
+        {
+            id: 'ct-4',
+            verb: 'parler',
+            english: 'to speak',
+            tense: 'présent',
+            tenseFr: 'Présent',
+            cefrLevel: 'A1',
+            difficulty: 1,
+            category: 'er-verb',
+            forms: [
+                { subject: 'je', answer: 'parle' },
+                { subject: 'tu', answer: 'parles' },
+                { subject: 'il/elle', answer: 'parle' },
+                { subject: 'nous', answer: 'parlons' },
+                { subject: 'vous', answer: 'parlez' },
+                { subject: 'ils/elles', answer: 'parlent' }
+            ]
+        },
+        {
+            id: 'ct-5',
+            verb: 'faire',
+            english: 'to do/make',
+            tense: 'présent',
+            tenseFr: 'Présent',
+            cefrLevel: 'A1',
+            difficulty: 1,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'fais' },
+                { subject: 'tu', answer: 'fais' },
+                { subject: 'il/elle', answer: 'fait' },
+                { subject: 'nous', answer: 'faisons' },
+                { subject: 'vous', answer: 'faites' },
+                { subject: 'ils/elles', answer: 'font' }
+            ]
+        },
+
+        // A2 Level - Passé Composé
+        {
+            id: 'ct-6',
+            verb: 'parler',
+            english: 'to speak',
+            tense: 'passé composé',
+            tenseFr: 'Passé Composé',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'er-verb',
+            forms: [
+                { subject: 'je', answer: 'ai parlé' },
+                { subject: 'tu', answer: 'as parlé' },
+                { subject: 'il/elle', answer: 'a parlé' },
+                { subject: 'nous', answer: 'avons parlé' },
+                { subject: 'vous', answer: 'avez parlé' },
+                { subject: 'ils/elles', answer: 'ont parlé' }
+            ]
+        },
+        {
+            id: 'ct-7',
+            verb: 'aller',
+            english: 'to go',
+            tense: 'passé composé',
+            tenseFr: 'Passé Composé',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'suis allé(e)' },
+                { subject: 'tu', answer: 'es allé(e)' },
+                { subject: 'il/elle', answer: 'est allé(e)' },
+                { subject: 'nous', answer: 'sommes allé(e)s' },
+                { subject: 'vous', answer: 'êtes allé(e)(s)' },
+                { subject: 'ils/elles', answer: 'sont allé(e)s' }
+            ]
+        },
+
+        // A2 Level - Imparfait
+        {
+            id: 'ct-8',
+            verb: 'être',
+            english: 'to be',
+            tense: 'imparfait',
+            tenseFr: 'Imparfait',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'étais' },
+                { subject: 'tu', answer: 'étais' },
+                { subject: 'il/elle', answer: 'était' },
+                { subject: 'nous', answer: 'étions' },
+                { subject: 'vous', answer: 'étiez' },
+                { subject: 'ils/elles', answer: 'étaient' }
+            ]
+        },
+        {
+            id: 'ct-9',
+            verb: 'parler',
+            english: 'to speak',
+            tense: 'imparfait',
+            tenseFr: 'Imparfait',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'er-verb',
+            forms: [
+                { subject: 'je', answer: 'parlais' },
+                { subject: 'tu', answer: 'parlais' },
+                { subject: 'il/elle', answer: 'parlait' },
+                { subject: 'nous', answer: 'parlions' },
+                { subject: 'vous', answer: 'parliez' },
+                { subject: 'ils/elles', answer: 'parlaient' }
+            ]
+        },
+
+        // B1 Level - Futur Simple
+        {
+            id: 'ct-10',
+            verb: 'être',
+            english: 'to be',
+            tense: 'futur simple',
+            tenseFr: 'Futur Simple',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'serai' },
+                { subject: 'tu', answer: 'seras' },
+                { subject: 'il/elle', answer: 'sera' },
+                { subject: 'nous', answer: 'serons' },
+                { subject: 'vous', answer: 'serez' },
+                { subject: 'ils/elles', answer: 'seront' }
+            ]
+        },
+        {
+            id: 'ct-11',
+            verb: 'avoir',
+            english: 'to have',
+            tense: 'futur simple',
+            tenseFr: 'Futur Simple',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'aurai' },
+                { subject: 'tu', answer: 'auras' },
+                { subject: 'il/elle', answer: 'aura' },
+                { subject: 'nous', answer: 'aurons' },
+                { subject: 'vous', answer: 'aurez' },
+                { subject: 'ils/elles', answer: 'auront' }
+            ]
+        },
+        {
+            id: 'ct-12',
+            verb: 'parler',
+            english: 'to speak',
+            tense: 'futur simple',
+            tenseFr: 'Futur Simple',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'er-verb',
+            forms: [
+                { subject: 'je', answer: 'parlerai' },
+                { subject: 'tu', answer: 'parleras' },
+                { subject: 'il/elle', answer: 'parlera' },
+                { subject: 'nous', answer: 'parlerons' },
+                { subject: 'vous', answer: 'parlerez' },
+                { subject: 'ils/elles', answer: 'parleront' }
+            ]
+        },
+
+        // B1 Level - Conditionnel
+        {
+            id: 'ct-13',
+            verb: 'être',
+            english: 'to be',
+            tense: 'conditionnel',
+            tenseFr: 'Conditionnel',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'serais' },
+                { subject: 'tu', answer: 'serais' },
+                { subject: 'il/elle', answer: 'serait' },
+                { subject: 'nous', answer: 'serions' },
+                { subject: 'vous', answer: 'seriez' },
+                { subject: 'ils/elles', answer: 'seraient' }
+            ]
+        },
+        {
+            id: 'ct-14',
+            verb: 'avoir',
+            english: 'to have',
+            tense: 'conditionnel',
+            tenseFr: 'Conditionnel',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'aurais' },
+                { subject: 'tu', answer: 'aurais' },
+                { subject: 'il/elle', answer: 'aurait' },
+                { subject: 'nous', answer: 'aurions' },
+                { subject: 'vous', answer: 'auriez' },
+                { subject: 'ils/elles', answer: 'auraient' }
+            ]
+        },
+        {
+            id: 'ct-15',
+            verb: 'parler',
+            english: 'to speak',
+            tense: 'conditionnel',
+            tenseFr: 'Conditionnel',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'er-verb',
+            forms: [
+                { subject: 'je', answer: 'parlerais' },
+                { subject: 'tu', answer: 'parlerais' },
+                { subject: 'il/elle', answer: 'parlerait' },
+                { subject: 'nous', answer: 'parlerions' },
+                { subject: 'vous', answer: 'parleriez' },
+                { subject: 'ils/elles', answer: 'parleraient' }
+            ]
+        }
     ]
 };
 
@@ -2402,6 +2828,8 @@ function getContentByType(exerciseType) {
             return FRENCH_CONTENT.grammar;
         case 'conjugation':
             return FRENCH_CONTENT.conjugation;
+        case 'conjugation-table':
+            return FRENCH_CONTENT.conjugationTables || [];
         case 'reading':
             return FRENCH_CONTENT.reading || [];
         case 'dialogue':
