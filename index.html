@@ -110,6 +110,59 @@
                 <button id="clearFilterBtn" class="btn btn-secondary btn-small" style="margin-top: 10px; margin-left: 10px;">Clear All</button>
             </div>
 
+            <!-- Grammar Topic Selector -->
+            <div id="grammarTopicSelector" class="grammar-topic-selector" style="display:none;">
+                <div class="grammar-view-controls" style="margin-bottom: 20px;">
+                    <button id="backToTopicsBtn" class="btn btn-secondary btn-small" style="display:none;">
+                        ← Back to Topics
+                    </button>
+                </div>
+
+                <!-- Topics Grid View -->
+                <div id="topicsGridView" class="topics-grid">
+                    <h3 style="margin-bottom: 15px;">Choose a Grammar Topic:</h3>
+                    <div id="grammarTopicsContainer" class="grammar-topics-grid">
+                        <!-- Topics will be added dynamically -->
+                    </div>
+                </div>
+
+                <!-- Lesson View -->
+                <div id="lessonView" class="lesson-view" style="display:none;">
+                    <div class="lesson-header">
+                        <h2 id="lessonTitle" class="lesson-title"></h2>
+                        <span id="lessonLevel" class="badge badge-blue"></span>
+                    </div>
+                    <p id="lessonDescription" class="lesson-description"></p>
+
+                    <!-- Theory Section -->
+                    <div class="lesson-theory" style="margin: 20px 0; padding: 20px; background: #f9fafb; border-radius: 8px;">
+                        <h3>Theory</h3>
+                        <div id="theoryContent" class="theory-content"></div>
+                    </div>
+
+                    <!-- Examples Section -->
+                    <div class="lesson-examples" style="margin: 20px 0; padding: 20px; background: #fff3cd; border-radius: 8px;">
+                        <h3>Examples</h3>
+                        <ul id="examplesList" class="examples-list"></ul>
+                    </div>
+
+                    <!-- Practice Button -->
+                    <div style="text-align: center; margin: 30px 0;">
+                        <button id="startPracticeBtn" class="btn btn-primary btn-large">
+                            Start Practice Exercises
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Practice View (uses existing question card) -->
+                <div id="practiceView" style="display:none;">
+                    <div class="practice-header" style="margin-bottom: 20px;">
+                        <h3 id="practiceTopicTitle"></h3>
+                        <p id="practiceProgress"></p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Question Card -->
             <div class="question-card">
                 <div class="question-type">

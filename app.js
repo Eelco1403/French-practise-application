@@ -225,6 +225,12 @@ function startPractice() {
  * Advance to next item (handles multi-question reading passages)
  */
 function advanceToNext() {
+    // Handle topic practice mode
+    if (topicPracticeMode) {
+        nextTopicExercise();
+        return;
+    }
+
     // Check if current question is a reading passage with more questions
     if (currentQuestion && currentQuestion.passage && currentQuestion.questions) {
         currentQuestion.currentQuestionIndex++;
@@ -541,6 +547,12 @@ function loadNextQuestion() {
  * Check user's answer
  */
 function checkAnswer() {
+    // Handle topic practice mode
+    if (topicPracticeMode) {
+        handleTopicPracticeSubmit();
+        return;
+    }
+
     const userAnswer = answerInput.value.trim();
 
     if (!userAnswer) {
@@ -904,15 +916,41 @@ function switchExerciseType(type) {
 
     // Show/hide category filter for vocabulary
     const categoryFilter = document.getElementById('categoryFilter');
+    const grammarTopicSelector = document.getElementById('grammarTopicSelector');
+    const questionCard = document.querySelector('.question-card');
+    const progressSection = document.querySelector('.progress-section');
+
     if (type === 'vocabulary' && categoryFilter) {
         categoryFilter.style.display = 'block';
         initializeCategoryFilter();
-    } else if (categoryFilter) {
-        categoryFilter.style.display = 'none';
+        if (grammarTopicSelector) grammarTopicSelector.style.display = 'none';
+        if (questionCard) questionCard.style.display = 'block';
+        if (progressSection) progressSection.style.display = 'block';
+    } else if (type === 'grammar' && grammarTopicSelector) {
+        // Show grammar topic selector
+        if (categoryFilter) categoryFilter.style.display = 'none';
+        grammarTopicSelector.style.display = 'block';
+        initializeGrammarTopicSelector();
+
+        // Show topics grid view by default
+        document.getElementById('topicsGridView').style.display = 'block';
+        document.getElementById('lessonView').style.display = 'none';
+        document.getElementById('practiceView').style.display = 'none';
+        document.getElementById('backToTopicsBtn').style.display = 'none';
+
+        if (questionCard) questionCard.style.display = 'block';
+        if (progressSection) progressSection.style.display = 'block';
+    } else {
+        if (categoryFilter) categoryFilter.style.display = 'none';
+        if (grammarTopicSelector) grammarTopicSelector.style.display = 'none';
+        if (questionCard) questionCard.style.display = 'block';
+        if (progressSection) progressSection.style.display = 'block';
     }
 
-    // Load new question of selected type
-    loadNextQuestion();
+    // Load new question of selected type (unless grammar topic mode)
+    if (type !== 'grammar') {
+        loadNextQuestion();
+    }
 }
 
 /**
@@ -1535,6 +1573,344 @@ function startPlacementTest() {
     }
 
     askNextQuestion();
+}
+
+/**
+ * Grammar Topic Selector Functionality
+ */
+
+let currentTopic = null;
+let currentTopicExercises = [];
+let currentTopicExerciseIndex = 0;
+let topicPracticeMode = false;
+
+/**
+ * Initialize Grammar Topic Selector
+ */
+function initializeGrammarTopicSelector() {
+    const grammarTopics = FRENCH_CONTENT.grammarTopics || [];
+    const container = document.getElementById('grammarTopicsContainer');
+
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    // Create a card for each topic
+    grammarTopics.forEach(topic => {
+        const card = createTopicCard(topic);
+        container.appendChild(card);
+    });
+
+    // Add event listeners
+    const backBtn = document.getElementById('backToTopicsBtn');
+    const startPracticeBtn = document.getElementById('startPracticeBtn');
+
+    if (backBtn) {
+        backBtn.onclick = showTopicsGrid;
+    }
+
+    if (startPracticeBtn) {
+        startPracticeBtn.onclick = startTopicPractice;
+    }
+}
+
+/**
+ * Create a topic card element
+ */
+function createTopicCard(topic) {
+    const card = document.createElement('div');
+    card.className = 'grammar-topic-card';
+
+    // Calculate progress for this topic
+    const progress = calculateTopicProgress(topic);
+
+    // Add status class
+    if (progress.percentage === 100) {
+        card.classList.add('completed');
+    } else if (progress.percentage > 0) {
+        card.classList.add('in-progress');
+    }
+
+    // Create card HTML
+    card.innerHTML = `
+        <div class="topic-card-header">
+            <h3 class="topic-card-title">${topic.title}</h3>
+            <span class="topic-card-level badge badge-blue">${topic.cefrLevel}</span>
+        </div>
+        <p class="topic-card-description">${topic.description}</p>
+        <div class="topic-card-footer">
+            <span class="topic-card-exercises">${topic.exerciseIds.length} exercises</span>
+            <span class="topic-card-progress ${progress.statusClass}">
+                ${progress.label}
+            </span>
+        </div>
+    `;
+
+    // Add click handler
+    card.addEventListener('click', () => showLesson(topic));
+
+    return card;
+}
+
+/**
+ * Calculate progress for a topic
+ */
+function calculateTopicProgress(topic) {
+    if (!currentUser || !currentUser.masteryData) {
+        return { percentage: 0, label: 'Not Started', statusClass: 'not-started' };
+    }
+
+    const exerciseIds = topic.exerciseIds || [];
+    if (exerciseIds.length === 0) {
+        return { percentage: 0, label: 'No Exercises', statusClass: 'not-started' };
+    }
+
+    let masteredCount = 0;
+    let attemptedCount = 0;
+
+    exerciseIds.forEach(id => {
+        const mastery = currentUser.masteryData[id];
+        if (mastery) {
+            attemptedCount++;
+            if (mastery.stage === 'mastered' || mastery.stage === 'solid') {
+                masteredCount++;
+            }
+        }
+    });
+
+    const percentage = Math.round((masteredCount / exerciseIds.length) * 100);
+
+    let label, statusClass;
+    if (percentage === 100) {
+        label = '✓ Mastered';
+        statusClass = 'mastered';
+    } else if (percentage > 0) {
+        label = `${percentage}% Complete`;
+        statusClass = 'in-progress';
+    } else if (attemptedCount > 0) {
+        label = 'In Progress';
+        statusClass = 'in-progress';
+    } else {
+        label = 'Not Started';
+        statusClass = 'not-started';
+    }
+
+    return { percentage, label, statusClass };
+}
+
+/**
+ * Show lesson view for a topic
+ */
+function showLesson(topic) {
+    currentTopic = topic;
+
+    // Hide topics grid, show lesson view
+    document.getElementById('topicsGridView').style.display = 'none';
+    document.getElementById('lessonView').style.display = 'block';
+    document.getElementById('backToTopicsBtn').style.display = 'block';
+
+    // Hide question card in lesson view
+    document.querySelector('.question-card').style.display = 'none';
+    document.querySelector('.progress-section').style.display = 'none';
+
+    // Populate lesson content
+    document.getElementById('lessonTitle').textContent = topic.title;
+    document.getElementById('lessonLevel').textContent = topic.cefrLevel;
+    document.getElementById('lessonDescription').textContent = topic.description;
+    document.getElementById('theoryContent').innerHTML = topic.theory;
+
+    // Populate examples
+    const examplesList = document.getElementById('examplesList');
+    examplesList.innerHTML = '';
+    topic.examples.forEach(example => {
+        const li = document.createElement('li');
+        li.textContent = example;
+        examplesList.appendChild(li);
+    });
+
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/**
+ * Show topics grid (back from lesson)
+ */
+function showTopicsGrid() {
+    // Reset topic practice mode
+    topicPracticeMode = false;
+    currentTopic = null;
+    currentTopicExercises = [];
+    currentTopicExerciseIndex = 0;
+
+    // Show topics grid, hide lesson and practice views
+    document.getElementById('topicsGridView').style.display = 'block';
+    document.getElementById('lessonView').style.display = 'none';
+    document.getElementById('practiceView').style.display = 'none';
+    document.getElementById('backToTopicsBtn').style.display = 'none';
+
+    // Show question card and progress section
+    document.querySelector('.question-card').style.display = 'block';
+    document.querySelector('.progress-section').style.display = 'block';
+
+    // Reload regular grammar exercises
+    loadNextQuestion();
+
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/**
+ * Start practice exercises for the current topic
+ */
+function startTopicPractice() {
+    if (!currentTopic) return;
+
+    topicPracticeMode = true;
+    currentTopicExerciseIndex = 0;
+
+    // Get all exercises for this topic from the grammar array
+    const allGrammar = FRENCH_CONTENT.level1.grammar || [];
+    currentTopicExercises = allGrammar.filter(ex =>
+        currentTopic.exerciseIds.includes(ex.id)
+    );
+
+    if (currentTopicExercises.length === 0) {
+        alert('No exercises available for this topic.');
+        return;
+    }
+
+    // Hide lesson view, show practice view and question card
+    document.getElementById('lessonView').style.display = 'none';
+    document.getElementById('practiceView').style.display = 'block';
+    document.querySelector('.question-card').style.display = 'block';
+    document.querySelector('.progress-section').style.display = 'block';
+
+    // Update practice header
+    updateTopicPracticeHeader();
+
+    // Load first question
+    loadNextTopicQuestion();
+
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/**
+ * Update topic practice header
+ */
+function updateTopicPracticeHeader() {
+    const titleEl = document.getElementById('practiceTopicTitle');
+    const progressEl = document.getElementById('practiceProgress');
+
+    if (titleEl && currentTopic) {
+        titleEl.textContent = `Practice: ${currentTopic.title}`;
+    }
+
+    if (progressEl) {
+        const completed = currentTopicExerciseIndex;
+        const total = currentTopicExercises.length;
+        progressEl.textContent = `Question ${completed + 1} of ${total}`;
+    }
+}
+
+/**
+ * Load next question in topic practice mode
+ */
+function loadNextTopicQuestion() {
+    if (!topicPracticeMode || currentTopicExerciseIndex >= currentTopicExercises.length) {
+        // Finished all exercises in this topic
+        const confirmContinue = confirm(`You've completed all exercises for "${currentTopic.title}"!\n\nWould you like to return to the topics menu?`);
+        if (confirmContinue) {
+            showTopicsGrid();
+        }
+        return;
+    }
+
+    // Get the next exercise
+    const exercise = currentTopicExercises[currentTopicExerciseIndex];
+    currentQuestion = exercise;
+
+    // Display the question
+    displayGrammarQuestion(exercise);
+
+    // Update practice header
+    updateTopicPracticeHeader();
+
+    // Reset feedback
+    const feedback = document.getElementById('feedback');
+    const answerInput = document.getElementById('answerInput');
+
+    if (feedback) feedback.classList.add('hidden');
+    if (answerInput) {
+        answerInput.value = '';
+        answerInput.disabled = false;
+    }
+
+    const submitBtn = document.getElementById('submitBtn');
+    if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.style.display = 'block';
+    }
+}
+
+/**
+ * Display a grammar question
+ */
+function displayGrammarQuestion(question) {
+    const questionLabel = document.querySelector('.question-label');
+    const questionText = document.getElementById('questionText');
+    const questionTypeDisplay = document.getElementById('questionType');
+
+    if (questionLabel) {
+        questionLabel.textContent = 'Complete the grammar exercise:';
+    }
+
+    if (questionText) {
+        // Remove parenthetical hints for cleaner display
+        const cleanQuestion = question.question.replace(/\s*\([^)]*\)/g, '');
+        questionText.textContent = cleanQuestion;
+    }
+
+    if (questionTypeDisplay) {
+        questionTypeDisplay.textContent = window.I18n.t('badges.grammar');
+        questionTypeDisplay.className = 'badge badge-green';
+    }
+}
+
+/**
+ * Handle topic practice answer submission
+ */
+function handleTopicPracticeSubmit() {
+    // Use the existing answer validation logic
+    const answerInput = document.getElementById('answerInput');
+    const userAnswer = answerInput.value.trim();
+
+    // Validate answer using existing utility
+    const isCorrect = window.Utils.validateAnswer(userAnswer, currentQuestion.answer, currentQuestion.alternatives);
+
+    // Update mastery data
+    if (currentUser && currentUser.masteryData) {
+        window.AssessmentSystem.recordAnswer(
+            currentUser.masteryData,
+            currentQuestion.id,
+            isCorrect
+        );
+    }
+
+    // Show feedback
+    showFeedback(isCorrect, currentQuestion.answer, currentQuestion.explanation);
+
+    // Disable input
+    answerInput.disabled = true;
+    document.getElementById('submitBtn').style.display = 'none';
+}
+
+/**
+ * Move to next topic exercise
+ */
+function nextTopicExercise() {
+    currentTopicExerciseIndex++;
+    loadNextTopicQuestion();
 }
 
 // Initialize app when DOM is ready
