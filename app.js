@@ -54,7 +54,7 @@ function init() {
     // Add event listeners
     startBtn.addEventListener('click', startPractice);
     submitBtn.addEventListener('click', checkAnswer);
-    nextBtn.addEventListener('click', loadNextQuestion);
+    nextBtn.addEventListener('click', advanceToNext);
     answerInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             checkAnswer();
@@ -210,6 +210,51 @@ function startPractice() {
 }
 
 /**
+ * Advance to next item (handles multi-question reading passages)
+ */
+function advanceToNext() {
+    // Check if current question is a reading passage with more questions
+    if (currentQuestion && currentQuestion.passage && currentQuestion.questions) {
+        currentQuestion.currentQuestionIndex++;
+
+        // If there are more questions, display the next one
+        if (currentQuestion.currentQuestionIndex < currentQuestion.questions.length) {
+            const currentQ = currentQuestion.questions[currentQuestion.currentQuestionIndex];
+            const questionLabel = document.querySelector('.question-label');
+            const questionText = document.getElementById('questionText');
+
+            questionText.innerHTML = `<div style="background:#f5f5f5;padding:15px;border-radius:8px;margin-bottom:15px;">
+                <strong>${currentQuestion.title}</strong><br><br>
+                ${currentQuestion.passage}
+            </div>
+            <div style="margin-top:20px;">
+                <strong>Question ${currentQuestion.currentQuestionIndex + 1}/${currentQuestion.questions.length}:</strong><br>
+                ${currentQ.question}
+            </div>`;
+
+            answerInput.value = '';
+            answerInput.focus();
+
+            // Hide feedback
+            feedback.classList.add('hidden');
+            feedback.classList.remove('correct', 'incorrect');
+
+            // Enable input and submit button
+            answerInput.disabled = false;
+            submitBtn.disabled = false;
+
+            // Track question start time
+            currentUser.questionStartTime = Date.now();
+
+            return; // Don't load a new question
+        }
+    }
+
+    // Otherwise, load a completely new question
+    loadNextQuestion();
+}
+
+/**
  * Load next question
  */
 function loadNextQuestion() {
@@ -269,20 +314,64 @@ function loadNextQuestion() {
     const questionLabel = document.querySelector('.question-label');
     const questionTypeDisplay = document.getElementById('questionType');
 
-    if (currentQuestion.verb) {
-        // Conjugation exercise
+    // Handle reading comprehension passages
+    if (currentQuestion.passage && currentQuestion.questions) {
+        questionLabel.textContent = 'Reading Comprehension:';
+        questionTypeDisplay.textContent = '📖 Reading';
+        questionTypeDisplay.className = 'badge badge-orange';
+
+        // Display passage and first question
+        if (!currentQuestion.currentQuestionIndex) {
+            currentQuestion.currentQuestionIndex = 0;
+        }
+
+        const currentQ = currentQuestion.questions[currentQuestion.currentQuestionIndex];
+        questionText.innerHTML = `<div style="background:#f5f5f5;padding:15px;border-radius:8px;margin-bottom:15px;">
+            <strong>${currentQuestion.title}</strong><br><br>
+            ${currentQuestion.passage}
+        </div>
+        <div style="margin-top:20px;">
+            <strong>Question ${currentQuestion.currentQuestionIndex + 1}/${currentQuestion.questions.length}:</strong><br>
+            ${currentQ.question}
+        </div>`;
+    }
+    // Handle dialogue practice
+    else if (currentQuestion.turns) {
+        questionLabel.textContent = 'Dialogue Practice:';
+        questionTypeDisplay.textContent = '💬 Dialogue';
+        questionTypeDisplay.className = 'badge badge-teal';
+
+        const dialogueHTML = currentQuestion.turns.map((turn, idx) =>
+            `<div style="margin:10px 0;">
+                <strong>Speaker ${turn.speaker}:</strong> ${turn.text}<br>
+                <em style="color:#666;">(${turn.translation})</em>
+            </div>`
+        ).join('');
+
+        questionText.innerHTML = `<div style="background:#f5f5f5;padding:15px;border-radius:8px;">
+            <strong>${currentQuestion.title}</strong><br><br>
+            ${dialogueHTML}
+        </div>`;
+
+        // For dialogues, just mark as viewed (no answer required)
+        answerInput.placeholder = 'Type "done" when you\'ve reviewed this dialogue';
+    }
+    // Handle conjugation
+    else if (currentQuestion.verb) {
         questionLabel.textContent = 'Conjugate the verb:';
         questionText.textContent = currentQuestion.question;
         questionTypeDisplay.textContent = window.I18n.t('badges.conjugation');
         questionTypeDisplay.className = 'badge badge-purple';
-    } else if (currentQuestion.explanation) {
-        // Grammar exercise
+    }
+    // Handle grammar
+    else if (currentQuestion.explanation) {
         questionLabel.textContent = 'Complete the grammar exercise:';
         questionText.textContent = currentQuestion.question;
         questionTypeDisplay.textContent = window.I18n.t('badges.grammar');
         questionTypeDisplay.className = 'badge badge-green';
-    } else {
-        // Vocabulary exercise
+    }
+    // Handle vocabulary
+    else {
         questionLabel.textContent = 'Translate to French:';
         questionText.textContent = currentQuestion.english;
         questionTypeDisplay.textContent = window.I18n.t('badges.vocabulary');
@@ -320,19 +409,46 @@ function checkAnswer() {
 
     // Get the correct answer based on question type
     let correctAnswer;
-    if (currentQuestion.verb) {
-        // Conjugation exercise
-        correctAnswer = currentQuestion.answer;
-    } else if (currentQuestion.explanation) {
-        // Grammar exercise
-        correctAnswer = currentQuestion.answer;
-    } else {
-        // Vocabulary exercise
-        correctAnswer = currentQuestion.french;
-    }
+    let isCorrect;
 
-    // Validate answer using utility function
-    const isCorrect = window.UtilityFunctions.validateAnswer(userAnswer, correctAnswer);
+    // Handle reading comprehension
+    if (currentQuestion.passage && currentQuestion.questions) {
+        const currentQ = currentQuestion.questions[currentQuestion.currentQuestionIndex];
+        correctAnswer = currentQ.answer;
+
+        // Check if answer is correct
+        isCorrect = window.UtilityFunctions.validateAnswer(userAnswer, correctAnswer);
+
+        // If there are alternatives, check those too
+        if (!isCorrect && currentQ.alternatives) {
+            for (const alt of currentQ.alternatives) {
+                if (window.UtilityFunctions.validateAnswer(userAnswer, alt)) {
+                    isCorrect = true;
+                    break;
+                }
+            }
+        }
+    }
+    // Handle dialogue practice (always correct if user types "done")
+    else if (currentQuestion.turns) {
+        correctAnswer = 'done';
+        isCorrect = userAnswer.toLowerCase() === 'done';
+    }
+    // Handle conjugation
+    else if (currentQuestion.verb) {
+        correctAnswer = currentQuestion.answer;
+        isCorrect = window.UtilityFunctions.validateAnswer(userAnswer, correctAnswer);
+    }
+    // Handle grammar
+    else if (currentQuestion.explanation) {
+        correctAnswer = currentQuestion.answer;
+        isCorrect = window.UtilityFunctions.validateAnswer(userAnswer, correctAnswer);
+    }
+    // Handle vocabulary
+    else {
+        correctAnswer = currentQuestion.french;
+        isCorrect = window.UtilityFunctions.validateAnswer(userAnswer, correctAnswer);
+    }
 
     // Record attempt in mastery system
     currentUser.masteryData = window.AssessmentSystem.recordAttempt(
@@ -399,7 +515,19 @@ function showFeedback(isCorrect, answerText) {
         if (currentQuestion.explanation) {
             correctAnswer.textContent = currentQuestion.explanation;
             correctAnswer.style.color = '#10b981';
-        } else {
+        }
+        // Show info for reading comprehension
+        else if (currentQuestion.passage && currentQuestion.questions) {
+            const remaining = currentQuestion.questions.length - currentQuestion.currentQuestionIndex - 1;
+            if (remaining > 0) {
+                correctAnswer.textContent = `Great! ${remaining} more question(s) about this passage.`;
+                correctAnswer.style.color = '#10b981';
+            } else {
+                correctAnswer.textContent = 'Perfect! You\'ve completed all questions for this passage.';
+                correctAnswer.style.color = '#10b981';
+            }
+        }
+        else {
             correctAnswer.textContent = '';
         }
     } else {
