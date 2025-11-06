@@ -2773,6 +2773,702 @@ const FRENCH_CONTENT = {
                 { subject: 'ils/elles', answer: 'parleraient' }
             ]
         }
+    ],
+
+    // Grammar Topics with Lessons
+    grammarTopics: [
+        {
+            id: 'topic-1',
+            title: 'Articles (Definite and Indefinite)',
+            description: 'Learn how to use le, la, les, un, une, and des',
+            cefrLevel: 'A1',
+            category: 'articles',
+            theory: `
+                <h3>Definite Articles (the)</h3>
+                <ul>
+                    <li><strong>le</strong> - masculine singular (le garçon = the boy)</li>
+                    <li><strong>la</strong> - feminine singular (la maison = the house)</li>
+                    <li><strong>les</strong> - plural (les filles = the girls)</li>
+                    <li><strong>l'</strong> - before vowels (l'ami = the friend)</li>
+                </ul>
+                <h3>Indefinite Articles (a/an, some)</h3>
+                <ul>
+                    <li><strong>un</strong> - masculine (un livre = a book)</li>
+                    <li><strong>une</strong> - feminine (une pomme = an apple)</li>
+                    <li><strong>des</strong> - plural (des livres = some books)</li>
+                </ul>
+            `,
+            examples: [
+                'le garçon (the boy)',
+                'la fille (the girl)',
+                'les enfants (the children)',
+                'un chat (a cat)',
+                'une maison (a house)',
+                'des pommes (some apples)'
+            ],
+            exerciseIds: ['g-1', 'g-2', 'g-3', 'g-4', 'g-5', 'g-6', 'g-7', 'g-22', 'g-23', 'g-24']
+        },
+        {
+            id: 'topic-2',
+            title: 'Gender Agreement with Adjectives',
+            description: 'Mastering adjective-noun agreement',
+            cefrLevel: 'A2',
+            category: 'agreement',
+            theory: `
+                <h3>Adjective Agreement</h3>
+                <p>In French, adjectives must agree in gender (masculine/feminine) and number (singular/plural) with the nouns they describe.</p>
+                <h4>Basic Rules:</h4>
+                <ul>
+                    <li><strong>Masculine:</strong> petit (small)</li>
+                    <li><strong>Feminine:</strong> Add -e → petite</li>
+                    <li><strong>Plural:</strong> Add -s → petits (m), petites (f)</li>
+                </ul>
+                <h4>Special Cases:</h4>
+                <ul>
+                    <li><strong>beau/belle</strong> (beautiful)</li>
+                    <li><strong>vieux/vieille</strong> (old) - vieil before vowel</li>
+                    <li><strong>nouveau/nouvelle</strong> (new)</li>
+                </ul>
+            `,
+            examples: [
+                'un grand garçon (a big boy)',
+                'une grande fille (a big girl)',
+                'le petit chat (the small cat)',
+                'la petite maison (the small house)',
+                'un beau jour (a beautiful day)',
+                'une belle journée (a beautiful day)'
+            ],
+            exerciseIds: ['g-8', 'g-9', 'g-10', 'g-25', 'g-26', 'g-27', 'g-28', 'g-29', 'g-30', 'g-31', 'g-32', 'g-33', 'g-34', 'g-35', 'g-36']
+        },
+        {
+            id: 'topic-3',
+            title: 'Pluralization',
+            description: 'Rules for forming plurals in French',
+            cefrLevel: 'A1',
+            category: 'pluralization',
+            theory: `
+                <h3>Plural Formation</h3>
+                <h4>Regular Plurals:</h4>
+                <ul>
+                    <li><strong>Add -s:</strong> le livre → les livres (books)</li>
+                    <li><strong>-al → -aux:</strong> l'animal → les animaux (animals)</li>
+                    <li><strong>-eau → -eaux:</strong> le beau → les beaux (beautiful ones)</li>
+                    <li><strong>-eu → -eux:</strong> le jeu → les jeux (games)</li>
+                </ul>
+                <h4>Irregular Plurals:</h4>
+                <ul>
+                    <li><strong>l'œil → les yeux</strong> (eyes)</li>
+                    <li><strong>Words ending in -x stay the same:</strong> la voix → les voix</li>
+                </ul>
+            `,
+            examples: [
+                'la maison → les maisons',
+                'le cheval → les chevaux',
+                'le journal → les journaux',
+                'le jeu → les jeux',
+                'l\'œil → les yeux'
+            ],
+            exerciseIds: ['g-11', 'g-12', 'g-13', 'g-37', 'g-38', 'g-39', 'g-40', 'g-41', 'g-42', 'g-43']
+        },
+        {
+            id: 'topic-4',
+            title: 'Prepositions',
+            description: 'Essential French prepositions and their usage',
+            cefrLevel: 'A2',
+            category: 'prepositions',
+            theory: `
+                <h3>Common Prepositions</h3>
+                <h4>Basic Prepositions:</h4>
+                <ul>
+                    <li><strong>à</strong> - to, at (à l'école = to/at school)</li>
+                    <li><strong>de</strong> - from, of (de Paris = from Paris)</li>
+                    <li><strong>en</strong> - in (en France = in France)</li>
+                    <li><strong>avec</strong> - with (avec moi = with me)</li>
+                    <li><strong>pour</strong> - for (pour toi = for you)</li>
+                    <li><strong>sans</strong> - without (sans argent = without money)</li>
+                </ul>
+                <h4>Contractions:</h4>
+                <ul>
+                    <li><strong>à + le = au</strong> (au restaurant)</li>
+                    <li><strong>à + les = aux</strong> (aux États-Unis)</li>
+                    <li><strong>de + le = du</strong> (du pain)</li>
+                    <li><strong>de + les = des</strong> (des étudiants)</li>
+                </ul>
+                <h4>Location Prepositions:</h4>
+                <ul>
+                    <li><strong>sur</strong> - on (sur la table)</li>
+                    <li><strong>sous</strong> - under (sous le lit)</li>
+                    <li><strong>devant</strong> - in front of</li>
+                    <li><strong>derrière</strong> - behind</li>
+                    <li><strong>entre</strong> - between</li>
+                </ul>
+            `,
+            examples: [
+                'Je vais à l\'école (I go to school)',
+                'Il vient de Paris (He comes from Paris)',
+                'Elle habite en France (She lives in France)',
+                'Le livre est sur la table (The book is on the table)',
+                'Nous allons au restaurant (We go to the restaurant)'
+            ],
+            exerciseIds: ['g-14', 'g-15', 'g-16', 'g-44', 'g-45', 'g-46', 'g-47', 'g-48', 'g-49', 'g-50', 'g-51', 'g-52', 'g-53', 'g-54', 'g-55']
+        },
+        {
+            id: 'topic-5',
+            title: 'Negation',
+            description: 'How to make negative sentences in French',
+            cefrLevel: 'A2',
+            category: 'negation',
+            theory: `
+                <h3>Negation in French</h3>
+                <h4>Basic Negation: ne...pas</h4>
+                <p>Place ne before the verb and pas after it.</p>
+                <p><strong>Example:</strong> Je parle → Je ne parle pas (I don't speak)</p>
+
+                <h4>Other Negative Structures:</h4>
+                <ul>
+                    <li><strong>ne...jamais</strong> - never (Je ne mange jamais)</li>
+                    <li><strong>ne...rien</strong> - nothing (Il n'a rien)</li>
+                    <li><strong>ne...personne</strong> - no one (Elle ne voit personne)</li>
+                    <li><strong>ne...plus</strong> - no longer (Ils n'habitent plus ici)</li>
+                    <li><strong>ne...que</strong> - only (Je n'ai que cinq euros)</li>
+                    <li><strong>ne...ni...ni</strong> - neither...nor (Je n'ai ni temps ni argent)</li>
+                </ul>
+
+                <h4>Note:</h4>
+                <p>Before a vowel, <strong>ne</strong> becomes <strong>n'</strong></p>
+            `,
+            examples: [
+                'Je ne parle pas français (I don\'t speak French)',
+                'Elle ne mange jamais de viande (She never eats meat)',
+                'Il n\'a rien (He has nothing)',
+                'Nous ne voyons personne (We don\'t see anyone)',
+                'Je n\'ai que dix euros (I only have ten euros)'
+            ],
+            exerciseIds: ['g-17', 'g-18', 'g-56', 'g-57', 'g-58', 'g-59', 'g-60', 'g-61', 'g-62', 'g-63']
+        },
+        {
+            id: 'topic-6',
+            title: 'Possessive Adjectives',
+            description: 'My, your, his, her, our, their in French',
+            cefrLevel: 'A2',
+            category: 'possessive',
+            theory: `
+                <h3>Possessive Adjectives</h3>
+                <p>Possessive adjectives agree with the object possessed, not the possessor.</p>
+
+                <h4>Singular:</h4>
+                <table border="1" cellpadding="5">
+                    <tr><th>English</th><th>Masculine</th><th>Feminine</th><th>Plural</th></tr>
+                    <tr><td>my</td><td>mon</td><td>ma</td><td>mes</td></tr>
+                    <tr><td>your (tu)</td><td>ton</td><td>ta</td><td>tes</td></tr>
+                    <tr><td>his/her</td><td>son</td><td>sa</td><td>ses</td></tr>
+                    <tr><td>our</td><td>notre</td><td>notre</td><td>nos</td></tr>
+                    <tr><td>your (vous)</td><td>votre</td><td>votre</td><td>vos</td></tr>
+                    <tr><td>their</td><td>leur</td><td>leur</td><td>leurs</td></tr>
+                </table>
+
+                <h4>Special Rule:</h4>
+                <p>Use masculine form (mon, ton, son) before feminine words starting with a vowel:</p>
+                <p><strong>mon idée</strong> (my idea - not "ma idée")</p>
+            `,
+            examples: [
+                'mon livre (my book)',
+                'ma maison (my house)',
+                'mes amis (my friends)',
+                'ton chat (your cat)',
+                'sa voiture (his/her car)',
+                'notre école (our school)',
+                'leur maison (their house)'
+            ],
+            exerciseIds: ['g-19', 'g-20', 'g-21', 'g-64', 'g-65', 'g-66', 'g-67', 'g-68', 'g-69', 'g-70']
+        },
+        {
+            id: 'topic-7',
+            title: 'Object Pronouns',
+            description: 'Direct and indirect object pronouns',
+            cefrLevel: 'B1',
+            category: 'pronouns',
+            theory: `
+                <h3>Object Pronouns</h3>
+
+                <h4>Direct Object Pronouns:</h4>
+                <ul>
+                    <li><strong>me/m'</strong> - me</li>
+                    <li><strong>te/t'</strong> - you</li>
+                    <li><strong>le/l'</strong> - him/it (m)</li>
+                    <li><strong>la/l'</strong> - her/it (f)</li>
+                    <li><strong>nous</strong> - us</li>
+                    <li><strong>vous</strong> - you</li>
+                    <li><strong>les</strong> - them</li>
+                </ul>
+
+                <h4>Indirect Object Pronouns:</h4>
+                <ul>
+                    <li><strong>me/m'</strong> - to me</li>
+                    <li><strong>te/t'</strong> - to you</li>
+                    <li><strong>lui</strong> - to him/her</li>
+                    <li><strong>nous</strong> - to us</li>
+                    <li><strong>vous</strong> - to you</li>
+                    <li><strong>leur</strong> - to them</li>
+                </ul>
+
+                <h4>Special Pronouns:</h4>
+                <ul>
+                    <li><strong>y</strong> - replaces à + place/thing</li>
+                    <li><strong>en</strong> - replaces de + noun</li>
+                </ul>
+
+                <h4>Position:</h4>
+                <p>Pronouns go BEFORE the conjugated verb.</p>
+                <p><strong>Example:</strong> Je le vois (I see him)</p>
+            `,
+            examples: [
+                'Je le vois (I see him)',
+                'Elle me donne le livre (She gives me the book)',
+                'Nous leur parlons (We speak to them)',
+                'Ils y pensent (They think about it)',
+                'J\'en ai (I have some)'
+            ],
+            exerciseIds: ['g-71', 'g-72', 'g-73', 'g-74', 'g-75', 'g-76', 'g-77', 'g-78', 'g-79', 'g-80']
+        },
+        {
+            id: 'topic-8',
+            title: 'Passé Composé',
+            description: 'The compound past tense',
+            cefrLevel: 'B1',
+            category: 'past_tense',
+            theory: `
+                <h3>Passé Composé</h3>
+                <p>Used for completed actions in the past.</p>
+
+                <h4>Formation:</h4>
+                <p><strong>avoir/être (present) + past participle</strong></p>
+
+                <h4>With AVOIR (most verbs):</h4>
+                <ul>
+                    <li>J'ai mangé (I ate)</li>
+                    <li>Tu as fini (You finished)</li>
+                    <li>Il a pris (He took)</li>
+                </ul>
+
+                <h4>With ÊTRE (movement & reflexive verbs):</h4>
+                <ul>
+                    <li>Je suis allé(e) (I went)</li>
+                    <li>Elle est venue (She came)</li>
+                    <li>Nous sommes arrivés (We arrived)</li>
+                </ul>
+
+                <h4>Agreement with ÊTRE:</h4>
+                <p>Past participle agrees with the subject:</p>
+                <ul>
+                    <li>Elle est allée (feminine: add -e)</li>
+                    <li>Ils sont arrivés (masculine plural: add -s)</li>
+                    <li>Elles sont venues (feminine plural: add -es)</li>
+                </ul>
+
+                <h4>Common Irregular Past Participles:</h4>
+                <ul>
+                    <li>avoir → eu</li>
+                    <li>être → été</li>
+                    <li>faire → fait</li>
+                    <li>prendre → pris</li>
+                    <li>voir → vu</li>
+                </ul>
+            `,
+            examples: [
+                'J\'ai mangé une pomme (I ate an apple)',
+                'Elle est allée à Paris (She went to Paris)',
+                'Nous avons fini le travail (We finished the work)',
+                'Ils sont arrivés hier (They arrived yesterday)',
+                'Tu as pris le bus (You took the bus)'
+            ],
+            exerciseIds: ['g-81', 'g-82', 'g-83', 'g-84', 'g-85', 'g-86', 'g-87', 'g-88']
+        },
+        {
+            id: 'topic-9',
+            title: 'Imparfait',
+            description: 'The imperfect past tense',
+            cefrLevel: 'B1',
+            category: 'past_tense',
+            theory: `
+                <h3>L'Imparfait (Imperfect)</h3>
+                <p>Used for ongoing, habitual, or background actions in the past.</p>
+
+                <h4>Formation:</h4>
+                <ol>
+                    <li>Take the <strong>nous</strong> form of present tense</li>
+                    <li>Remove <strong>-ons</strong></li>
+                    <li>Add imparfait endings: -ais, -ais, -ait, -ions, -iez, -aient</li>
+                </ol>
+
+                <h4>Example: PARLER</h4>
+                <p>nous parlons → parl-</p>
+                <ul>
+                    <li>je parlais</li>
+                    <li>tu parlais</li>
+                    <li>il/elle parlait</li>
+                    <li>nous parlions</li>
+                    <li>vous parliez</li>
+                    <li>ils/elles parlaient</li>
+                </ul>
+
+                <h4>Irregular: ÊTRE</h4>
+                <p>Stem: ét-</p>
+                <ul>
+                    <li>j'étais, tu étais, il était, nous étions, vous étiez, ils étaient</li>
+                </ul>
+
+                <h4>When to use:</h4>
+                <ul>
+                    <li><strong>Habitual actions:</strong> Quand j'étais jeune, je jouais au foot (When I was young, I played soccer)</li>
+                    <li><strong>Descriptions:</strong> Il faisait beau (The weather was nice)</li>
+                    <li><strong>Ongoing actions:</strong> Je mangeais quand il est arrivé (I was eating when he arrived)</li>
+                </ul>
+            `,
+            examples: [
+                'Je mangeais (I was eating / I used to eat)',
+                'Tu étais content (You were happy)',
+                'Il faisait beau (It was nice weather)',
+                'Nous allions à l\'école (We used to go to school)',
+                'Ils jouaient au tennis (They were playing / used to play tennis)'
+            ],
+            exerciseIds: ['g-89', 'g-90', 'g-91', 'g-92', 'g-93', 'g-94', 'g-95', 'g-96']
+        },
+        {
+            id: 'topic-10',
+            title: 'Conditional',
+            description: 'Expressing hypothetical situations',
+            cefrLevel: 'B1',
+            category: 'conditional',
+            theory: `
+                <h3>Le Conditionnel (Conditional)</h3>
+                <p>Used to express wishes, polite requests, and hypothetical situations.</p>
+
+                <h4>Formation:</h4>
+                <p><strong>Future stem + imparfait endings</strong></p>
+                <p>Endings: -ais, -ais, -ait, -ions, -iez, -aient</p>
+
+                <h4>Regular verbs:</h4>
+                <ul>
+                    <li><strong>Parler:</strong> je parlerais (I would speak)</li>
+                    <li><strong>Finir:</strong> je finirais (I would finish)</li>
+                </ul>
+
+                <h4>Irregular stems (same as future):</h4>
+                <ul>
+                    <li><strong>avoir</strong> → aur- → j'aurais</li>
+                    <li><strong>être</strong> → ser- → je serais</li>
+                    <li><strong>aller</strong> → ir- → j'irais</li>
+                    <li><strong>faire</strong> → fer- → je ferais</li>
+                    <li><strong>pouvoir</strong> → pourr- → je pourrais</li>
+                    <li><strong>vouloir</strong> → voudr- → je voudrais</li>
+                    <li><strong>devoir</strong> → devr- → je devrais</li>
+                </ul>
+
+                <h4>Uses:</h4>
+                <ul>
+                    <li><strong>Polite requests:</strong> Je voudrais un café (I would like a coffee)</li>
+                    <li><strong>Hypothetical:</strong> Si j'étais riche, je voyagerais (If I were rich, I would travel)</li>
+                    <li><strong>Possibility:</strong> Tu pourrais m'aider? (Could you help me?)</li>
+                </ul>
+            `,
+            examples: [
+                'Je voudrais un café (I would like a coffee)',
+                'Tu devrais étudier (You should study)',
+                'Il aimerait voyager (He would like to travel)',
+                'Nous pourrions partir (We could leave)',
+                'Vous seriez content (You would be happy)'
+            ],
+            exerciseIds: ['g-97', 'g-98', 'g-99', 'g-100', 'g-101']
+        },
+        {
+            id: 'topic-11',
+            title: 'Introduction to Subjunctive',
+            description: 'Basic subjunctive mood usage',
+            cefrLevel: 'B1',
+            category: 'subjunctive',
+            theory: `
+                <h3>Le Subjonctif (Subjunctive Mood)</h3>
+                <p>Used to express doubt, emotion, desire, necessity, or uncertainty.</p>
+
+                <h4>When to use:</h4>
+                <ul>
+                    <li><strong>After expressions of desire:</strong> Je veux que tu viennes (I want you to come)</li>
+                    <li><strong>After expressions of emotion:</strong> Je suis content que tu sois là (I'm happy you're here)</li>
+                    <li><strong>After expressions of doubt:</strong> Je doute qu'il vienne (I doubt he'll come)</li>
+                    <li><strong>After impersonal expressions:</strong> Il faut que tu études (You must study)</li>
+                </ul>
+
+                <h4>Common triggers:</h4>
+                <ul>
+                    <li>vouloir que (to want that)</li>
+                    <li>il faut que (it's necessary that)</li>
+                    <li>il est important que (it's important that)</li>
+                    <li>avoir peur que (to be afraid that)</li>
+                    <li>douter que (to doubt that)</li>
+                </ul>
+
+                <h4>Formation (regular):</h4>
+                <ol>
+                    <li>Take <strong>ils/elles</strong> form of present</li>
+                    <li>Remove <strong>-ent</strong></li>
+                    <li>Add: -e, -es, -e, -ions, -iez, -ent</li>
+                </ol>
+
+                <h4>Irregular stems:</h4>
+                <ul>
+                    <li><strong>avoir:</strong> que j'aie</li>
+                    <li><strong>être:</strong> que je sois</li>
+                    <li><strong>aller:</strong> que j'aille</li>
+                    <li><strong>faire:</strong> que je fasse</li>
+                    <li><strong>pouvoir:</strong> que je puisse</li>
+                    <li><strong>savoir:</strong> que je sache</li>
+                </ul>
+            `,
+            examples: [
+                'Je veux que tu viennes (I want you to come)',
+                'Il faut que tu études (You must study)',
+                'Il est important qu\'il sache (It\'s important that he knows)',
+                'Je doute qu\'elle ait raison (I doubt she\'s right)',
+                'J\'ai peur qu\'ils soient en retard (I\'m afraid they\'re late)'
+            ],
+            exerciseIds: ['g-102', 'g-103', 'g-104', 'g-105']
+        },
+        {
+            id: 'topic-12',
+            title: 'Advanced Subjunctive',
+            description: 'Subjunctive with conjunctions and complex structures',
+            cefrLevel: 'B2',
+            category: 'subjunctive',
+            theory: `
+                <h3>Advanced Subjunctive Usage</h3>
+
+                <h4>Conjunctions requiring subjunctive:</h4>
+                <ul>
+                    <li><strong>avant que</strong> - before</li>
+                    <li><strong>bien que</strong> - although</li>
+                    <li><strong>jusqu'à ce que</strong> - until</li>
+                    <li><strong>pourvu que</strong> - provided that</li>
+                    <li><strong>sans que</strong> - without</li>
+                    <li><strong>afin que</strong> - so that</li>
+                    <li><strong>à moins que</strong> - unless</li>
+                </ul>
+
+                <h4>Exception:</h4>
+                <p><strong>au cas où</strong> (in case) takes CONDITIONAL, not subjunctive!</p>
+
+                <h4>Subjunctive after superlatives:</h4>
+                <p>Le meilleur restaurant que je connaisse (The best restaurant I know)</p>
+
+                <h4>Subjunctive with indefinite antecedents:</h4>
+                <p>Je cherche quelqu'un qui puisse m'aider (I'm looking for someone who can help me)</p>
+
+                <h4>Fixed expressions:</h4>
+                <ul>
+                    <li><strong>Quoi qu'il fasse</strong> - Whatever he does</li>
+                    <li><strong>Où qu'il aille</strong> - Wherever he goes</li>
+                </ul>
+            `,
+            examples: [
+                'Avant qu\'il parte (Before he leaves)',
+                'Bien qu\'elle soit fatiguée (Although she\'s tired)',
+                'Jusqu\'à ce qu\'ils arrivent (Until they arrive)',
+                'Sans que je le sache (Without my knowing)',
+                'C\'est le meilleur que je connaisse (It\'s the best I know)'
+            ],
+            exerciseIds: ['g-106', 'g-107', 'g-108', 'g-109', 'g-110', 'g-111', 'g-112', 'g-113', 'g-114', 'g-115']
+        },
+        {
+            id: 'topic-13',
+            title: 'Conditional Perfect',
+            description: 'Past conditional and hypothetical past',
+            cefrLevel: 'B2',
+            category: 'conditional',
+            theory: `
+                <h3>Conditionnel Passé (Past Conditional)</h3>
+                <p>Used to express what would have happened in the past.</p>
+
+                <h4>Formation:</h4>
+                <p><strong>avoir/être (conditional) + past participle</strong></p>
+
+                <h4>Examples:</h4>
+                <ul>
+                    <li>J'aurais fait (I would have done)</li>
+                    <li>Tu serais allé (You would have gone)</li>
+                    <li>Elle aurait voulu (She would have wanted)</li>
+                </ul>
+
+                <h4>Si clauses (Type 3 - Past hypothetical):</h4>
+                <p><strong>Si + pluperfect, conditional perfect</strong></p>
+                <p>Si j'avais su, je serais venu (If I had known, I would have come)</p>
+
+                <h4>Agreement with être:</h4>
+                <ul>
+                    <li>Elle serait allée (She would have gone)</li>
+                    <li>Ils seraient venus (They would have come)</li>
+                </ul>
+
+                <h4>Common uses:</h4>
+                <ul>
+                    <li><strong>Regret:</strong> J'aurais dû étudier (I should have studied)</li>
+                    <li><strong>Reproach:</strong> Tu aurais pu m'aider (You could have helped me)</li>
+                    <li><strong>Hypothetical past:</strong> Sans toi, j'aurais échoué (Without you, I would have failed)</li>
+                </ul>
+            `,
+            examples: [
+                'J\'aurais fait le travail (I would have done the work)',
+                'Elle serait allée à Paris (She would have gone to Paris)',
+                'Si j\'avais su... (If I had known...)',
+                'Ils seraient venus (They would have come)',
+                'Nous aurions pu gagner (We could have won)'
+            ],
+            exerciseIds: ['g-116', 'g-117', 'g-118', 'g-119', 'g-120']
+        },
+        {
+            id: 'topic-14',
+            title: 'Gerunds and Infinitives',
+            description: 'Present participles and infinitive constructions',
+            cefrLevel: 'B2',
+            category: 'gerund',
+            theory: `
+                <h3>Gerunds (en + participe présent)</h3>
+
+                <h4>Formation:</h4>
+                <p><strong>en</strong> + present participle (-ant form)</p>
+                <p>To form present participle: take <strong>nous</strong> form, remove <strong>-ons</strong>, add <strong>-ant</strong></p>
+
+                <h4>Examples:</h4>
+                <ul>
+                    <li>parlons → en parlant (while speaking)</li>
+                    <li>mangeons → en mangeant (while eating)</li>
+                    <li>finissons → en finissant (while finishing)</li>
+                </ul>
+
+                <h4>Uses of gerund:</h4>
+                <ul>
+                    <li><strong>Simultaneity:</strong> En mangeant, il regarde la télé (While eating, he watches TV)</li>
+                    <li><strong>Manner:</strong> Il a réussi en travaillant dur (He succeeded by working hard)</li>
+                </ul>
+
+                <h3>Infinitive Constructions</h3>
+
+                <h4>After prepositions:</h4>
+                <ul>
+                    <li><strong>avant de</strong> + infinitive: Avant de partir (Before leaving)</li>
+                    <li><strong>après</strong> + past infinitive: Après avoir mangé (After having eaten)</li>
+                    <li><strong>sans</strong> + infinitive: Sans dire (Without saying)</li>
+                    <li><strong>pour</strong> + infinitive: Pour réussir (In order to succeed)</li>
+                </ul>
+
+                <h4>Past infinitive:</h4>
+                <p><strong>avoir/être (infinitive) + past participle</strong></p>
+                <p>Après avoir mangé (After having eaten)</p>
+                <p>Après être parti (After having left)</p>
+            `,
+            examples: [
+                'En mangeant (While eating)',
+                'Avant de partir (Before leaving)',
+                'Après avoir mangé (After having eaten)',
+                'Sans dire un mot (Without saying a word)',
+                'En travaillant dur (By working hard)'
+            ],
+            exerciseIds: ['g-121', 'g-122', 'g-123', 'g-124', 'g-125']
+        },
+        {
+            id: 'topic-15',
+            title: 'Relative Clauses',
+            description: 'Using qui, que, où, dont to connect ideas',
+            cefrLevel: 'B2',
+            category: 'relative',
+            theory: `
+                <h3>Relative Pronouns</h3>
+
+                <h4>QUI (who, which, that - subject)</h4>
+                <p>Replaces the subject of the relative clause.</p>
+                <p>L'homme <strong>qui</strong> parle (The man who speaks)</p>
+
+                <h4>QUE (whom, which, that - object)</h4>
+                <p>Replaces the direct object of the relative clause.</p>
+                <p>Le livre <strong>que</strong> je lis (The book that I read)</p>
+                <p>Note: que becomes qu' before a vowel</p>
+
+                <h4>OÙ (where, when)</h4>
+                <p>Replaces a place or time.</p>
+                <p>La ville <strong>où</strong> j'habite (The city where I live)</p>
+                <p>Le jour <strong>où</strong> je suis né (The day when I was born)</p>
+
+                <h4>DONT (whose, of which, about which)</h4>
+                <p>Replaces de + noun.</p>
+                <p>L'ami <strong>dont</strong> je t'ai parlé (The friend I told you about)</p>
+                <p>Le livre <strong>dont</strong> j'ai besoin (The book I need - avoir besoin de)</p>
+
+                <h4>CE QUI / CE QUE (what)</h4>
+                <ul>
+                    <li><strong>Ce qui</strong> - what (subject): Ce qui m'intéresse (What interests me)</li>
+                    <li><strong>Ce que</strong> - what (object): Ce que je veux (What I want)</li>
+                </ul>
+            `,
+            examples: [
+                'L\'homme qui parle (The man who speaks)',
+                'Le livre que je lis (The book that I read)',
+                'La ville où j\'habite (The city where I live)',
+                'L\'ami dont la voiture (The friend whose car)',
+                'Ce qui m\'intéresse (What interests me)'
+            ],
+            exerciseIds: ['g-126', 'g-127', 'g-128', 'g-129', 'g-130']
+        },
+        {
+            id: 'topic-16',
+            title: 'Indirect Speech',
+            description: 'Reported speech and sequence of tenses',
+            cefrLevel: 'B2',
+            category: 'indirect_speech',
+            theory: `
+                <h3>Discours Indirect (Indirect Speech)</h3>
+
+                <h4>Tense Changes:</h4>
+                <p>When reporting speech in the past, tenses shift:</p>
+
+                <table border="1" cellpadding="5">
+                    <tr><th>Direct Speech</th><th>Indirect Speech</th></tr>
+                    <tr><td>Present</td><td>→ Imparfait</td></tr>
+                    <tr><td>Passé Composé</td><td>→ Plus-que-parfait</td></tr>
+                    <tr><td>Future</td><td>→ Conditional</td></tr>
+                    <tr><td>Imperative</td><td>→ de + infinitive</td></tr>
+                </table>
+
+                <h4>Examples:</h4>
+                <ul>
+                    <li>Direct: "Je suis fatigué" → Indirect: Il a dit qu'il <strong>était</strong> fatigué</li>
+                    <li>Direct: "J'ai fini" → Indirect: Il a dit qu'il <strong>avait fini</strong></li>
+                    <li>Direct: "Je viendrai" → Indirect: Il a dit qu'il <strong>viendrait</strong></li>
+                </ul>
+
+                <h4>Time expressions change:</h4>
+                <ul>
+                    <li>aujourd'hui → ce jour-là</li>
+                    <li>demain → le lendemain</li>
+                    <li>hier → la veille</li>
+                    <li>maintenant → à ce moment-là</li>
+                </ul>
+
+                <h4>Verbs for reporting:</h4>
+                <ul>
+                    <li><strong>dire que</strong> (to say that)</li>
+                    <li><strong>demander si</strong> (to ask if)</li>
+                    <li><strong>demander + question word</strong> (to ask + what/where/etc.)</li>
+                    <li><strong>répondre que</strong> (to answer that)</li>
+                </ul>
+            `,
+            examples: [
+                'Il a dit qu\'il était fatigué (He said he was tired)',
+                'Elle m\'a demandé si je viendrais (She asked me if I would come)',
+                'Je lui ai dit que j\'avais fini (I told him I had finished)',
+                'Il a dit qu\'il partait le lendemain (He said he was leaving tomorrow)',
+                'Elle m\'a demandé où j\'habitais (She asked me where I lived)'
+            ],
+            exerciseIds: ['g-131', 'g-132', 'g-133', 'g-134', 'g-135']
+        }
     ]
 };
 
