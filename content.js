@@ -2772,6 +2772,440 @@ const FRENCH_CONTENT = {
                 { subject: 'vous', answer: 'parleriez' },
                 { subject: 'ils/elles', answer: 'parleraient' }
             ]
+        },
+
+        // POUVOIR (can/to be able) - Essential modal verb
+        {
+            id: 'ct-16',
+            verb: 'pouvoir',
+            english: 'can / to be able',
+            tense: 'présent',
+            tenseFr: 'Présent',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'peux' },
+                { subject: 'tu', answer: 'peux' },
+                { subject: 'il/elle', answer: 'peut' },
+                { subject: 'nous', answer: 'pouvons' },
+                { subject: 'vous', answer: 'pouvez' },
+                { subject: 'ils/elles', answer: 'peuvent' }
+            ]
+        },
+        {
+            id: 'ct-17',
+            verb: 'pouvoir',
+            english: 'can / to be able',
+            tense: 'imparfait',
+            tenseFr: 'Imparfait',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'pouvais' },
+                { subject: 'tu', answer: 'pouvais' },
+                { subject: 'il/elle', answer: 'pouvait' },
+                { subject: 'nous', answer: 'pouvions' },
+                { subject: 'vous', answer: 'pouviez' },
+                { subject: 'ils/elles', answer: 'pouvaient' }
+            ]
+        },
+        {
+            id: 'ct-18',
+            verb: 'pouvoir',
+            english: 'can / to be able',
+            tense: 'futur simple',
+            tenseFr: 'Futur Simple',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'pourrai' },
+                { subject: 'tu', answer: 'pourras' },
+                { subject: 'il/elle', answer: 'pourra' },
+                { subject: 'nous', answer: 'pourrons' },
+                { subject: 'vous', answer: 'pourrez' },
+                { subject: 'ils/elles', answer: 'pourront' }
+            ]
+        },
+
+        // VOULOIR (to want) - Essential modal verb
+        {
+            id: 'ct-19',
+            verb: 'vouloir',
+            english: 'to want',
+            tense: 'présent',
+            tenseFr: 'Présent',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'veux' },
+                { subject: 'tu', answer: 'veux' },
+                { subject: 'il/elle', answer: 'veut' },
+                { subject: 'nous', answer: 'voulons' },
+                { subject: 'vous', answer: 'voulez' },
+                { subject: 'ils/elles', answer: 'veulent' }
+            ]
+        },
+        {
+            id: 'ct-20',
+            verb: 'vouloir',
+            english: 'to want',
+            tense: 'imparfait',
+            tenseFr: 'Imparfait',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'voulais' },
+                { subject: 'tu', answer: 'voulais' },
+                { subject: 'il/elle', answer: 'voulait' },
+                { subject: 'nous', answer: 'voulions' },
+                { subject: 'vous', answer: 'vouliez' },
+                { subject: 'ils/elles', answer: 'voulaient' }
+            ]
+        },
+        {
+            id: 'ct-21',
+            verb: 'vouloir',
+            english: 'to want',
+            tense: 'futur simple',
+            tenseFr: 'Futur Simple',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'voudrai' },
+                { subject: 'tu', answer: 'voudras' },
+                { subject: 'il/elle', answer: 'voudra' },
+                { subject: 'nous', answer: 'voudrons' },
+                { subject: 'vous', answer: 'voudrez' },
+                { subject: 'ils/elles', answer: 'voudront' }
+            ]
+        },
+
+        // DEVOIR (must/to have to) - Essential modal verb
+        {
+            id: 'ct-22',
+            verb: 'devoir',
+            english: 'must / to have to',
+            tense: 'présent',
+            tenseFr: 'Présent',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'dois' },
+                { subject: 'tu', answer: 'dois' },
+                { subject: 'il/elle', answer: 'doit' },
+                { subject: 'nous', answer: 'devons' },
+                { subject: 'vous', answer: 'devez' },
+                { subject: 'ils/elles', answer: 'doivent' }
+            ]
+        },
+        {
+            id: 'ct-23',
+            verb: 'devoir',
+            english: 'must / to have to',
+            tense: 'imparfait',
+            tenseFr: 'Imparfait',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'devais' },
+                { subject: 'tu', answer: 'devais' },
+                { subject: 'il/elle', answer: 'devait' },
+                { subject: 'nous', answer: 'devions' },
+                { subject: 'vous', answer: 'deviez' },
+                { subject: 'ils/elles', answer: 'devaient' }
+            ]
+        },
+        {
+            id: 'ct-24',
+            verb: 'devoir',
+            english: 'must / to have to',
+            tense: 'futur simple',
+            tenseFr: 'Futur Simple',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'devrai' },
+                { subject: 'tu', answer: 'devras' },
+                { subject: 'il/elle', answer: 'devra' },
+                { subject: 'nous', answer: 'devrons' },
+                { subject: 'vous', answer: 'devrez' },
+                { subject: 'ils/elles', answer: 'devront' }
+            ]
+        },
+
+        // SAVOIR (to know) - Essential verb
+        {
+            id: 'ct-25',
+            verb: 'savoir',
+            english: 'to know',
+            tense: 'présent',
+            tenseFr: 'Présent',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'sais' },
+                { subject: 'tu', answer: 'sais' },
+                { subject: 'il/elle', answer: 'sait' },
+                { subject: 'nous', answer: 'savons' },
+                { subject: 'vous', answer: 'savez' },
+                { subject: 'ils/elles', answer: 'savent' }
+            ]
+        },
+        {
+            id: 'ct-26',
+            verb: 'savoir',
+            english: 'to know',
+            tense: 'imparfait',
+            tenseFr: 'Imparfait',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'savais' },
+                { subject: 'tu', answer: 'savais' },
+                { subject: 'il/elle', answer: 'savait' },
+                { subject: 'nous', answer: 'savions' },
+                { subject: 'vous', answer: 'saviez' },
+                { subject: 'ils/elles', answer: 'savaient' }
+            ]
+        },
+
+        // VOIR (to see) - Very common verb
+        {
+            id: 'ct-27',
+            verb: 'voir',
+            english: 'to see',
+            tense: 'présent',
+            tenseFr: 'Présent',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'vois' },
+                { subject: 'tu', answer: 'vois' },
+                { subject: 'il/elle', answer: 'voit' },
+                { subject: 'nous', answer: 'voyons' },
+                { subject: 'vous', answer: 'voyez' },
+                { subject: 'ils/elles', answer: 'voient' }
+            ]
+        },
+        {
+            id: 'ct-28',
+            verb: 'voir',
+            english: 'to see',
+            tense: 'imparfait',
+            tenseFr: 'Imparfait',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'voyais' },
+                { subject: 'tu', answer: 'voyais' },
+                { subject: 'il/elle', answer: 'voyait' },
+                { subject: 'nous', answer: 'voyions' },
+                { subject: 'vous', answer: 'voyiez' },
+                { subject: 'ils/elles', answer: 'voyaient' }
+            ]
+        },
+
+        // DIRE (to say/tell) - Very common verb
+        {
+            id: 'ct-29',
+            verb: 'dire',
+            english: 'to say / to tell',
+            tense: 'présent',
+            tenseFr: 'Présent',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'dis' },
+                { subject: 'tu', answer: 'dis' },
+                { subject: 'il/elle', answer: 'dit' },
+                { subject: 'nous', answer: 'disons' },
+                { subject: 'vous', answer: 'dites' },
+                { subject: 'ils/elles', answer: 'disent' }
+            ]
+        },
+        {
+            id: 'ct-30',
+            verb: 'dire',
+            english: 'to say / to tell',
+            tense: 'imparfait',
+            tenseFr: 'Imparfait',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'disais' },
+                { subject: 'tu', answer: 'disais' },
+                { subject: 'il/elle', answer: 'disait' },
+                { subject: 'nous', answer: 'disions' },
+                { subject: 'vous', answer: 'disiez' },
+                { subject: 'ils/elles', answer: 'disaient' }
+            ]
+        },
+
+        // METTRE (to put) - Very common verb
+        {
+            id: 'ct-31',
+            verb: 'mettre',
+            english: 'to put',
+            tense: 'présent',
+            tenseFr: 'Présent',
+            cefrLevel: 'B1',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'mets' },
+                { subject: 'tu', answer: 'mets' },
+                { subject: 'il/elle', answer: 'met' },
+                { subject: 'nous', answer: 'mettons' },
+                { subject: 'vous', answer: 'mettez' },
+                { subject: 'ils/elles', answer: 'mettent' }
+            ]
+        },
+        {
+            id: 'ct-32',
+            verb: 'mettre',
+            english: 'to put',
+            tense: 'imparfait',
+            tenseFr: 'Imparfait',
+            cefrLevel: 'B1',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'mettais' },
+                { subject: 'tu', answer: 'mettais' },
+                { subject: 'il/elle', answer: 'mettait' },
+                { subject: 'nous', answer: 'mettions' },
+                { subject: 'vous', answer: 'mettiez' },
+                { subject: 'ils/elles', answer: 'mettaient' }
+            ]
+        },
+
+        // PRENDRE (to take) - Very common verb
+        {
+            id: 'ct-33',
+            verb: 'prendre',
+            english: 'to take',
+            tense: 'présent',
+            tenseFr: 'Présent',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'prends' },
+                { subject: 'tu', answer: 'prends' },
+                { subject: 'il/elle', answer: 'prend' },
+                { subject: 'nous', answer: 'prenons' },
+                { subject: 'vous', answer: 'prenez' },
+                { subject: 'ils/elles', answer: 'prennent' }
+            ]
+        },
+        {
+            id: 'ct-34',
+            verb: 'prendre',
+            english: 'to take',
+            tense: 'imparfait',
+            tenseFr: 'Imparfait',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'prenais' },
+                { subject: 'tu', answer: 'prenais' },
+                { subject: 'il/elle', answer: 'prenait' },
+                { subject: 'nous', answer: 'prenions' },
+                { subject: 'vous', answer: 'preniez' },
+                { subject: 'ils/elles', answer: 'prenaient' }
+            ]
+        },
+
+        // VENIR (to come) - Very common verb
+        {
+            id: 'ct-35',
+            verb: 'venir',
+            english: 'to come',
+            tense: 'présent',
+            tenseFr: 'Présent',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'viens' },
+                { subject: 'tu', answer: 'viens' },
+                { subject: 'il/elle', answer: 'vient' },
+                { subject: 'nous', answer: 'venons' },
+                { subject: 'vous', answer: 'venez' },
+                { subject: 'ils/elles', answer: 'viennent' }
+            ]
+        },
+        {
+            id: 'ct-36',
+            verb: 'venir',
+            english: 'to come',
+            tense: 'imparfait',
+            tenseFr: 'Imparfait',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'venais' },
+                { subject: 'tu', answer: 'venais' },
+                { subject: 'il/elle', answer: 'venait' },
+                { subject: 'nous', answer: 'venions' },
+                { subject: 'vous', answer: 'veniez' },
+                { subject: 'ils/elles', answer: 'venaient' }
+            ]
+        },
+
+        // CONNAÎTRE (to know/be familiar with) - Essential verb
+        {
+            id: 'ct-37',
+            verb: 'connaître',
+            english: 'to know / be familiar with',
+            tense: 'présent',
+            tenseFr: 'Présent',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'connais' },
+                { subject: 'tu', answer: 'connais' },
+                { subject: 'il/elle', answer: 'connaît' },
+                { subject: 'nous', answer: 'connaissons' },
+                { subject: 'vous', answer: 'connaissez' },
+                { subject: 'ils/elles', answer: 'connaissent' }
+            ]
+        },
+        {
+            id: 'ct-38',
+            verb: 'connaître',
+            english: 'to know / be familiar with',
+            tense: 'imparfait',
+            tenseFr: 'Imparfait',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'connaissais' },
+                { subject: 'tu', answer: 'connaissais' },
+                { subject: 'il/elle', answer: 'connaissait' },
+                { subject: 'nous', answer: 'connaissions' },
+                { subject: 'vous', answer: 'connaissiez' },
+                { subject: 'ils/elles', answer: 'connaissaient' }
+            ]
         }
     ],
 
