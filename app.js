@@ -276,6 +276,13 @@ function loadNextQuestion() {
         }
     }
 
+    // Apply category filter for vocabulary if categories are selected
+    if (currentExerciseType === 'vocabulary' && selectedCategories.length > 0) {
+        availableQuestions = availableQuestions.filter(q =>
+            q.category && selectedCategories.includes(q.category)
+        );
+    }
+
     // Fallback if no questions available
     if (!availableQuestions || availableQuestions.length === 0) {
         currentQuestion = window.FrenchContent.getRandomQuestion(currentExerciseType);
@@ -366,7 +373,9 @@ function loadNextQuestion() {
     // Handle grammar
     else if (currentQuestion.explanation) {
         questionLabel.textContent = 'Complete the grammar exercise:';
-        questionText.textContent = currentQuestion.question;
+        // Remove answer from question if it's in parentheses (e.g., "some books (des livres)" → "some books")
+        const cleanQuestion = currentQuestion.question.replace(/\s*\([^)]*\)/g, '');
+        questionText.textContent = cleanQuestion;
         questionTypeDisplay.textContent = window.I18n.t('badges.grammar');
         questionTypeDisplay.className = 'badge badge-green';
     }
@@ -638,6 +647,15 @@ function switchExerciseType(type) {
             btn.classList.remove('active');
         }
     });
+
+    // Show/hide category filter for vocabulary
+    const categoryFilter = document.getElementById('categoryFilter');
+    if (type === 'vocabulary' && categoryFilter) {
+        categoryFilter.style.display = 'block';
+        initializeCategoryFilter();
+    } else if (categoryFilter) {
+        categoryFilter.style.display = 'none';
+    }
 
     // Load new question of selected type
     loadNextQuestion();
@@ -945,6 +963,82 @@ function showLevelChangeDialog() {
 
         alert(`${window.I18n.t('practice.currentLevel')}: ${currentUser.cefrLevel}`);
     }
+}
+
+/**
+ * Category Filter for Vocabulary
+ */
+let selectedCategories = []; // Track selected categories
+
+function initializeCategoryFilter() {
+    const categoryContainer = document.querySelector('.category-checkboxes');
+    if (!categoryContainer) return;
+
+    // Get all unique categories from vocabulary content
+    const allVocab = [
+        ...FRENCH_CONTENT.level1.vocabulary,
+        ...FRENCH_CONTENT.level2.vocabulary,
+        ...(FRENCH_CONTENT.level3?.vocabulary || []),
+        ...(FRENCH_CONTENT.level4?.vocabulary || []),
+        ...(FRENCH_CONTENT.level5?.vocabulary || []),
+        ...(FRENCH_CONTENT.level6?.vocabulary || []),
+        ...FRENCH_CONTENT.phrases
+    ];
+
+    const categories = [...new Set(allVocab.map(item => item.category).filter(Boolean))].sort();
+
+    // Clear existing checkboxes
+    categoryContainer.innerHTML = '';
+
+    // Create checkbox for each category
+    categories.forEach(category => {
+        const label = document.createElement('label');
+        label.style.display = 'flex';
+        label.style.alignItems = 'center';
+        label.style.cursor = 'pointer';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = category;
+        checkbox.style.marginRight = '5px';
+        checkbox.checked = selectedCategories.includes(category);
+
+        const text = document.createTextNode(category);
+
+        label.appendChild(checkbox);
+        label.appendChild(text);
+        categoryContainer.appendChild(label);
+    });
+
+    // Add event listeners to filter buttons
+    const applyBtn = document.getElementById('applyFilterBtn');
+    const clearBtn = document.getElementById('clearFilterBtn');
+
+    if (applyBtn) {
+        applyBtn.onclick = applyCategoryFilter;
+    }
+    if (clearBtn) {
+        clearBtn.onclick = clearCategoryFilter;
+    }
+}
+
+function applyCategoryFilter() {
+    const checkboxes = document.querySelectorAll('.category-checkboxes input[type="checkbox"]');
+    selectedCategories = Array.from(checkboxes)
+        .filter(cb => cb.checked)
+        .map(cb => cb.value);
+
+    // Load new question with filter applied
+    loadNextQuestion();
+}
+
+function clearCategoryFilter() {
+    selectedCategories = [];
+    const checkboxes = document.querySelectorAll('.category-checkboxes input[type="checkbox"]');
+    checkboxes.forEach(cb => cb.checked = false);
+
+    // Load new question without filter
+    loadNextQuestion();
 }
 
 /**
