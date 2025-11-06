@@ -366,7 +366,9 @@ function loadNextQuestion() {
     // Handle grammar
     else if (currentQuestion.explanation) {
         questionLabel.textContent = 'Complete the grammar exercise:';
-        questionText.textContent = currentQuestion.question;
+        // Remove answer from question if it's in parentheses (e.g., "some books (des livres)" → "some books")
+        const cleanQuestion = currentQuestion.question.replace(/\s*\([^)]*\)/g, '');
+        questionText.textContent = cleanQuestion;
         questionTypeDisplay.textContent = window.I18n.t('badges.grammar');
         questionTypeDisplay.className = 'badge badge-green';
     }

@@ -407,11 +407,19 @@ class PlacementTestEngine {
             }
         });
 
-        // Determine level: must score 70%+ on a level to be placed there
+        // Calculate overall accuracy and find highest mastered level
+        const totalCorrect = this.responses.filter(r => r.isCorrect).length;
+        const totalQuestions = this.responses.length;
+        const overallAccuracy = (totalCorrect / totalQuestions) * 100;
+
+        // Determine level based on overall performance
+        // Need at least 2 questions per level AND 70% accuracy to qualify
         const levelOrder = ['C2', 'C1', 'B2', 'B1', 'A2', 'A1'];
+
         for (const level of levelOrder) {
             const score = levelScores[level];
-            if (score.total > 0) {
+            // Require minimum 2 questions attempted at this level
+            if (score.total >= 2) {
                 const percentage = (score.correct / score.total) * 100;
                 if (percentage >= 70) {
                     return level;
@@ -419,7 +427,13 @@ class PlacementTestEngine {
             }
         }
 
-        // Default to A1 if no level met threshold
+        // Fallback: use overall accuracy to estimate level
+        if (overallAccuracy >= 90) return 'B2';
+        if (overallAccuracy >= 75) return 'B1';
+        if (overallAccuracy >= 60) return 'A2';
+        if (overallAccuracy >= 40) return 'A1';
+
+        // Very low score
         return 'A1';
     }
 
