@@ -99,6 +99,18 @@ function init() {
         viewReportBtn.addEventListener('click', showProgressReport);
     }
 
+    // Analytics Dashboard
+    const viewAnalyticsBtn = document.getElementById('viewAnalyticsBtn');
+    const closeAnalyticsBtn = document.getElementById('closeAnalyticsBtn');
+
+    if (viewAnalyticsBtn) {
+        viewAnalyticsBtn.addEventListener('click', showAnalyticsDashboard);
+    }
+
+    if (closeAnalyticsBtn) {
+        closeAnalyticsBtn.addEventListener('click', closeAnalyticsDashboard);
+    }
+
     if (changeLevelBtn) {
         changeLevelBtn.addEventListener('click', showLevelChangeDialog);
     }
@@ -789,6 +801,159 @@ function handleLevelDescriptionUpdate() {
     if (cefrLevelSelect && levelDescription) {
         const selectedLevel = cefrLevelSelect.value;
         levelDescription.textContent = window.I18n.t(`levelDescriptions.${selectedLevel}`);
+    }
+}
+
+/**
+ * Show Analytics Dashboard
+ */
+function showAnalyticsDashboard() {
+    if (!currentUser.userId || !window.AnalyticsEngine) {
+        alert('Analytics not available yet. Please start practicing first!');
+        return;
+    }
+
+    const analyticsEngine = new window.AnalyticsEngine(currentUser, currentUser.masteryData);
+    const dashboardData = analyticsEngine.getDashboardData();
+
+    const analyticsContent = document.getElementById('analyticsContent');
+    const analyticsModal = document.getElementById('analyticsModal');
+
+    if (!analyticsContent || !analyticsModal) return;
+
+    // Build HTML for analytics dashboard
+    let html = `
+        <div style="padding: 20px;">
+            <!-- Overview Section -->
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                <h3 style="margin-top: 0; color: white;">📈 Overview</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <div>
+                        <div style="font-size: 32px; font-weight: bold;">${dashboardData.overview.totalAttempts}</div>
+                        <div style="opacity: 0.9;">Total Attempts</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 32px; font-weight: bold;">${dashboardData.overview.overallAccuracy}%</div>
+                        <div style="opacity: 0.9;">Overall Accuracy</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 32px; font-weight: bold;">${dashboardData.overview.currentStreak}</div>
+                        <div style="opacity: 0.9;">Day Streak</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 32px; font-weight: bold;">${dashboardData.overview.uniqueItemsPracticed}</div>
+                        <div style="opacity: 0.9;">Items Practiced</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Strengths & Weaknesses -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; border: 2px solid #86efac;">
+                    <h4 style="color: #15803d; margin-top: 0;">💪 Your Strengths</h4>
+                    ${dashboardData.strengthsWeaknesses.strengths.length > 0 ?
+                        dashboardData.strengthsWeaknesses.strengths.map(s =>
+                            `<div style="margin: 10px 0;">
+                                <strong>${s.category}</strong><br>
+                                <span style="color: #16a34a;">${s.accuracy.toFixed(1)}% accuracy</span>
+                                <span style="color: #666;"> (${s.attempts} attempts)</span>
+                            </div>`
+                        ).join('')
+                        : '<p style="color: #666;">Keep practicing to discover your strengths!</p>'}
+                </div>
+                <div style="background: #fef2f2; padding: 15px; border-radius: 8px; border: 2px solid #fca5a5;">
+                    <h4 style="color: #991b1b; margin-top: 0;">🎯 Areas to Improve</h4>
+                    ${dashboardData.strengthsWeaknesses.weaknesses.length > 0 ?
+                        dashboardData.strengthsWeaknesses.weaknesses.map(w =>
+                            `<div style="margin: 10px 0;">
+                                <strong>${w.category}</strong><br>
+                                <span style="color: #dc2626;">${w.accuracy.toFixed(1)}% accuracy</span>
+                                <span style="color: #666;"> (${w.attempts} attempts)</span>
+                            </div>`
+                        ).join('')
+                        : '<p style="color: #666;">No weak areas yet - great job!</p>'}
+                </div>
+            </div>
+
+            <!-- Level Analytics -->
+            <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e5e7eb; margin-bottom: 20px;">
+                <h4 style="margin-top: 0;">📚 Performance by Level</h4>
+                ${Object.entries(dashboardData.levelAnalytics).map(([level, data]) => {
+                    if (data.attempts === 0) return '';
+                    const width = (data.accuracy / 100) * 100;
+                    const color = data.accuracy >= 80 ? '#10b981' : data.accuracy >= 60 ? '#f59e0b' : '#ef4444';
+                    return `
+                        <div style="margin: 15px 0;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <strong>${level}</strong>
+                                <span>${data.accuracy.toFixed(1)}% (${data.correct}/${data.attempts})</span>
+                            </div>
+                            <div style="background: #e5e7eb; height: 8px; border-radius: 4px; overflow: hidden;">
+                                <div style="background: ${color}; height: 100%; width: ${width}%; transition: width 0.3s;"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+
+            <!-- Category Performance -->
+            <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e5e7eb; margin-bottom: 20px;">
+                <h4 style="margin-top: 0;">📊 Category Performance</h4>
+                <div style="max-height: 300px; overflow-y: auto;">
+                ${Object.entries(dashboardData.categoryAnalytics)
+                    .sort((a, b) => b[1].accuracy - a[1].accuracy)
+                    .slice(0, 10)
+                    .map(([category, data]) => {
+                        const width = (data.accuracy / 100) * 100;
+                        const color = data.accuracy >= 70 ? '#10b981' : data.accuracy >= 50 ? '#f59e0b' : '#ef4444';
+                        return `
+                            <div style="margin: 12px 0;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                    <span style="font-weight: 500;">${category}</span>
+                                    <span>${data.accuracy.toFixed(1)}%</span>
+                                </div>
+                                <div style="background: #e5e7eb; height: 6px; border-radius: 3px; overflow: hidden;">
+                                    <div style="background: ${color}; height: 100%; width: ${width}%; transition: width 0.3s;"></div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+
+            <!-- Study Habits -->
+            <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e5e7eb;">
+                <h4 style="margin-top: 0;">⏰ Study Habits</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                    <div>
+                        <div style="font-size: 24px; font-weight: bold; color: #6366f1;">${dashboardData.studyHabits.avgSessionLength}</div>
+                        <div style="color: #666; font-size: 14px;">Avg. Session (min)</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 24px; font-weight: bold; color: #6366f1;">${dashboardData.studyHabits.totalSessions}</div>
+                        <div style="color: #666; font-size: 14px;">Total Sessions</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 24px; font-weight: bold; color: #6366f1;">${dashboardData.studyHabits.mostProductiveTime}</div>
+                        <div style="color: #666; font-size: 14px;">Best Time</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 24px; font-weight: bold; color: #6366f1;">${dashboardData.studyHabits.consistencyScore.toFixed(1)}%</div>
+                        <div style="color: #666; font-size: 14px;">Consistency</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    analyticsContent.innerHTML = html;
+    analyticsModal.style.display = 'block';
+}
+
+function closeAnalyticsDashboard() {
+    const analyticsModal = document.getElementById('analyticsModal');
+    if (analyticsModal) {
+        analyticsModal.style.display = 'none';
     }
 }
 
