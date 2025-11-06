@@ -825,6 +825,12 @@ function handleLanguageChange(event) {
 function updateUILanguage() {
     const t = window.I18n.t;
 
+    // Sync language dropdown with current language
+    const interfaceLanguageSelect = document.getElementById('interfaceLanguage');
+    if (interfaceLanguageSelect) {
+        interfaceLanguageSelect.value = window.I18n.getCurrentLanguage();
+    }
+
     // Welcome screen
     const welcomeTitle = document.getElementById('welcomeTitle');
     const welcomeSubtitle = document.getElementById('welcomeSubtitle');
@@ -858,7 +864,7 @@ function updateUILanguage() {
     document.getElementById('allTypesLabel').textContent = t('practice.allTypes');
     document.getElementById('saveProgressLabel').textContent = t('practice.saveProgress');
     document.getElementById('viewReportLabel').textContent = t('practice.viewReport');
-    document.getElementById('changeLevelLabel').textContent = t('practice.changeLanguage');
+    document.getElementById('changeLevelLabel').textContent = t('practice.changeLevel');
 
     // Progress labels
     document.getElementById('levelProgressTitle').textContent = t('progress.levelGoal');

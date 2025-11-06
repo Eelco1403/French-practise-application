@@ -55,6 +55,7 @@ const TRANSLATIONS = {
             saveProgress: 'Save Progress',
             viewReport: 'View Progress Report',
             changeLanguage: 'Change Language',
+            changeLevel: 'Change Level',
             levelProgress: 'Level Progress',
             currentLevel: 'Current Level'
         },
@@ -178,6 +179,7 @@ const TRANSLATIONS = {
             saveProgress: 'Voortgang Opslaan',
             viewReport: 'Bekijk Voortgangsrapport',
             changeLanguage: 'Verander Taal',
+            changeLevel: 'Verander Niveau',
             levelProgress: 'Niveau Voortgang',
             currentLevel: 'Huidig Niveau'
         },
@@ -301,6 +303,7 @@ const TRANSLATIONS = {
             saveProgress: 'Sauvegarder les Progrès',
             viewReport: 'Voir le Rapport de Progrès',
             changeLanguage: 'Changer la Langue',
+            changeLevel: 'Changer de Niveau',
             levelProgress: 'Progrès du Niveau',
             currentLevel: 'Niveau Actuel'
         },
@@ -424,6 +427,7 @@ const TRANSLATIONS = {
             saveProgress: 'Fortschritt Speichern',
             viewReport: 'Fortschrittsbericht Anzeigen',
             changeLanguage: 'Sprache Ändern',
+            changeLevel: 'Niveau Ändern',
             levelProgress: 'Niveaufortschritt',
             currentLevel: 'Aktuelles Niveau'
         },
