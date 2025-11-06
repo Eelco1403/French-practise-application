@@ -129,6 +129,12 @@ function init() {
         });
     }
 
+    // Placement Test event listener
+    const placementTestBtn = document.getElementById('placementTestBtn');
+    if (placementTestBtn) {
+        placementTestBtn.addEventListener('click', startPlacementTest);
+    }
+
     // Try to load existing user from localStorage
     const savedUserId = localStorage.getItem('currentUserId');
     if (savedUserId) {
@@ -811,6 +817,89 @@ function showLevelChangeDialog() {
 
         alert(`${window.I18n.t('practice.currentLevel')}: ${currentUser.cefrLevel}`);
     }
+}
+
+/**
+ * Start Placement Test
+ */
+function startPlacementTest() {
+    if (!window.PlacementTestEngine) {
+        alert('Placement test module not loaded');
+        return;
+    }
+
+    const confirmStart = confirm('Take a placement test to determine your French level?\n\nThis will take about 10-15 minutes and test your knowledge across all CEFR levels.');
+
+    if (!confirmStart) return;
+
+    const testEngine = new window.PlacementTestEngine();
+    const firstQuestion = testEngine.start();
+
+    if (!firstQuestion) {
+        alert('Error starting placement test');
+        return;
+    }
+
+    // Simple placement test implementation
+    let testCompleted = false;
+    let questionsAnswered = 0;
+    const maxQuestions = 15; // Limit test to 15 questions
+
+    function askNextQuestion() {
+        const question = testEngine.getCurrentQuestion();
+
+        if (!question || questionsAnswered >= maxQuestions) {
+            // Test complete
+            const results = testEngine.getResults();
+            const message = `Placement Test Complete!\n\n` +
+                `Level: ${results.level}\n` +
+                `Questions: ${results.totalQuestions}\n` +
+                `Correct: ${results.correctAnswers}\n` +
+                `Accuracy: ${results.accuracy}%\n\n` +
+                `Your recommended starting level is ${results.level}.`;
+
+            alert(message);
+
+            // Update user level
+            currentUser.cefrLevel = results.level;
+            document.getElementById('cefrLevel').value = results.level;
+            document.getElementById('currentLevelValue').textContent = results.level;
+
+            // Save the new level
+            if (currentUser.userId) {
+                window.ReportingSystem.saveUserLevel(currentUser.userId, results.level);
+            }
+
+            return;
+        }
+
+        const userAnswer = prompt(
+            `Placement Test (${questionsAnswered + 1}/${maxQuestions})\n\n` +
+            `${question.question}\n\n` +
+            `Options:\n` +
+            question.options.map((opt, idx) => `${idx + 1}. ${opt}`).join('\n') +
+            `\n\nEnter the number of your answer (1-${question.options.length}):`
+        );
+
+        if (userAnswer === null) {
+            // User cancelled
+            alert('Placement test cancelled');
+            return;
+        }
+
+        const answerIndex = parseInt(userAnswer) - 1;
+        if (answerIndex >= 0 && answerIndex < question.options.length) {
+            const selectedAnswer = question.options[answerIndex];
+            testEngine.submitAnswer(question.id, selectedAnswer);
+            questionsAnswered++;
+            askNextQuestion();
+        } else {
+            alert('Invalid answer. Please try again.');
+            askNextQuestion();
+        }
+    }
+
+    askNextQuestion();
 }
 
 // Initialize app when DOM is ready
