@@ -2375,7 +2375,10 @@ function getAllContent() {
         ...(FRENCH_CONTENT.level6?.vocabulary || []),
         ...FRENCH_CONTENT.phrases,
         ...FRENCH_CONTENT.grammar,
-        ...FRENCH_CONTENT.conjugation
+        ...FRENCH_CONTENT.conjugation,
+        ...(FRENCH_CONTENT.reading || []),
+        ...(FRENCH_CONTENT.dialogues || []),
+        ...(FRENCH_CONTENT.writing || [])
     ];
     return allItems;
 }
@@ -2399,6 +2402,12 @@ function getContentByType(exerciseType) {
             return FRENCH_CONTENT.grammar;
         case 'conjugation':
             return FRENCH_CONTENT.conjugation;
+        case 'reading':
+            return FRENCH_CONTENT.reading || [];
+        case 'dialogue':
+            return FRENCH_CONTENT.dialogues || [];
+        case 'writing':
+            return FRENCH_CONTENT.writing || [];
         case 'all':
         default:
             return getAllContent();
