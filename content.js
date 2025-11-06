@@ -2489,6 +2489,290 @@ const FRENCH_CONTENT = {
                 { question: 'Selon B, quelle est la différence importante?', answer: 'imiter n\'est pas posséder', type: 'comprehension', alternatives: ['imiter et posséder', 'imitating is not possessing'] }
             ]
         }
+    ],
+
+    // Conjugation Tables - Full verb conjugations (all 6 forms at once)
+    // Each table groups 6 conjugation items for practice
+    conjugationTables: [
+        // A1 Level - Essential verbs in Présent
+        {
+            id: 'ct-1',
+            verb: 'être',
+            english: 'to be',
+            tense: 'présent',
+            tenseFr: 'Présent',
+            cefrLevel: 'A1',
+            difficulty: 1,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'suis' },
+                { subject: 'tu', answer: 'es' },
+                { subject: 'il/elle', answer: 'est' },
+                { subject: 'nous', answer: 'sommes' },
+                { subject: 'vous', answer: 'êtes' },
+                { subject: 'ils/elles', answer: 'sont' }
+            ]
+        },
+        {
+            id: 'ct-2',
+            verb: 'avoir',
+            english: 'to have',
+            tense: 'présent',
+            tenseFr: 'Présent',
+            cefrLevel: 'A1',
+            difficulty: 1,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'ai' },
+                { subject: 'tu', answer: 'as' },
+                { subject: 'il/elle', answer: 'a' },
+                { subject: 'nous', answer: 'avons' },
+                { subject: 'vous', answer: 'avez' },
+                { subject: 'ils/elles', answer: 'ont' }
+            ]
+        },
+        {
+            id: 'ct-3',
+            verb: 'aller',
+            english: 'to go',
+            tense: 'présent',
+            tenseFr: 'Présent',
+            cefrLevel: 'A1',
+            difficulty: 1,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'vais' },
+                { subject: 'tu', answer: 'vas' },
+                { subject: 'il/elle', answer: 'va' },
+                { subject: 'nous', answer: 'allons' },
+                { subject: 'vous', answer: 'allez' },
+                { subject: 'ils/elles', answer: 'vont' }
+            ]
+        },
+        {
+            id: 'ct-4',
+            verb: 'parler',
+            english: 'to speak',
+            tense: 'présent',
+            tenseFr: 'Présent',
+            cefrLevel: 'A1',
+            difficulty: 1,
+            category: 'er-verb',
+            forms: [
+                { subject: 'je', answer: 'parle' },
+                { subject: 'tu', answer: 'parles' },
+                { subject: 'il/elle', answer: 'parle' },
+                { subject: 'nous', answer: 'parlons' },
+                { subject: 'vous', answer: 'parlez' },
+                { subject: 'ils/elles', answer: 'parlent' }
+            ]
+        },
+        {
+            id: 'ct-5',
+            verb: 'faire',
+            english: 'to do/make',
+            tense: 'présent',
+            tenseFr: 'Présent',
+            cefrLevel: 'A1',
+            difficulty: 1,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'fais' },
+                { subject: 'tu', answer: 'fais' },
+                { subject: 'il/elle', answer: 'fait' },
+                { subject: 'nous', answer: 'faisons' },
+                { subject: 'vous', answer: 'faites' },
+                { subject: 'ils/elles', answer: 'font' }
+            ]
+        },
+
+        // A2 Level - Passé Composé
+        {
+            id: 'ct-6',
+            verb: 'parler',
+            english: 'to speak',
+            tense: 'passé composé',
+            tenseFr: 'Passé Composé',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'er-verb',
+            forms: [
+                { subject: 'je', answer: 'ai parlé' },
+                { subject: 'tu', answer: 'as parlé' },
+                { subject: 'il/elle', answer: 'a parlé' },
+                { subject: 'nous', answer: 'avons parlé' },
+                { subject: 'vous', answer: 'avez parlé' },
+                { subject: 'ils/elles', answer: 'ont parlé' }
+            ]
+        },
+        {
+            id: 'ct-7',
+            verb: 'aller',
+            english: 'to go',
+            tense: 'passé composé',
+            tenseFr: 'Passé Composé',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'suis allé(e)' },
+                { subject: 'tu', answer: 'es allé(e)' },
+                { subject: 'il/elle', answer: 'est allé(e)' },
+                { subject: 'nous', answer: 'sommes allé(e)s' },
+                { subject: 'vous', answer: 'êtes allé(e)(s)' },
+                { subject: 'ils/elles', answer: 'sont allé(e)s' }
+            ]
+        },
+
+        // A2 Level - Imparfait
+        {
+            id: 'ct-8',
+            verb: 'être',
+            english: 'to be',
+            tense: 'imparfait',
+            tenseFr: 'Imparfait',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'étais' },
+                { subject: 'tu', answer: 'étais' },
+                { subject: 'il/elle', answer: 'était' },
+                { subject: 'nous', answer: 'étions' },
+                { subject: 'vous', answer: 'étiez' },
+                { subject: 'ils/elles', answer: 'étaient' }
+            ]
+        },
+        {
+            id: 'ct-9',
+            verb: 'parler',
+            english: 'to speak',
+            tense: 'imparfait',
+            tenseFr: 'Imparfait',
+            cefrLevel: 'A2',
+            difficulty: 2,
+            category: 'er-verb',
+            forms: [
+                { subject: 'je', answer: 'parlais' },
+                { subject: 'tu', answer: 'parlais' },
+                { subject: 'il/elle', answer: 'parlait' },
+                { subject: 'nous', answer: 'parlions' },
+                { subject: 'vous', answer: 'parliez' },
+                { subject: 'ils/elles', answer: 'parlaient' }
+            ]
+        },
+
+        // B1 Level - Futur Simple
+        {
+            id: 'ct-10',
+            verb: 'être',
+            english: 'to be',
+            tense: 'futur simple',
+            tenseFr: 'Futur Simple',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'serai' },
+                { subject: 'tu', answer: 'seras' },
+                { subject: 'il/elle', answer: 'sera' },
+                { subject: 'nous', answer: 'serons' },
+                { subject: 'vous', answer: 'serez' },
+                { subject: 'ils/elles', answer: 'seront' }
+            ]
+        },
+        {
+            id: 'ct-11',
+            verb: 'avoir',
+            english: 'to have',
+            tense: 'futur simple',
+            tenseFr: 'Futur Simple',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'aurai' },
+                { subject: 'tu', answer: 'auras' },
+                { subject: 'il/elle', answer: 'aura' },
+                { subject: 'nous', answer: 'aurons' },
+                { subject: 'vous', answer: 'aurez' },
+                { subject: 'ils/elles', answer: 'auront' }
+            ]
+        },
+        {
+            id: 'ct-12',
+            verb: 'parler',
+            english: 'to speak',
+            tense: 'futur simple',
+            tenseFr: 'Futur Simple',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'er-verb',
+            forms: [
+                { subject: 'je', answer: 'parlerai' },
+                { subject: 'tu', answer: 'parleras' },
+                { subject: 'il/elle', answer: 'parlera' },
+                { subject: 'nous', answer: 'parlerons' },
+                { subject: 'vous', answer: 'parlerez' },
+                { subject: 'ils/elles', answer: 'parleront' }
+            ]
+        },
+
+        // B1 Level - Conditionnel
+        {
+            id: 'ct-13',
+            verb: 'être',
+            english: 'to be',
+            tense: 'conditionnel',
+            tenseFr: 'Conditionnel',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'serais' },
+                { subject: 'tu', answer: 'serais' },
+                { subject: 'il/elle', answer: 'serait' },
+                { subject: 'nous', answer: 'serions' },
+                { subject: 'vous', answer: 'seriez' },
+                { subject: 'ils/elles', answer: 'seraient' }
+            ]
+        },
+        {
+            id: 'ct-14',
+            verb: 'avoir',
+            english: 'to have',
+            tense: 'conditionnel',
+            tenseFr: 'Conditionnel',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'irregular',
+            forms: [
+                { subject: 'je', answer: 'aurais' },
+                { subject: 'tu', answer: 'aurais' },
+                { subject: 'il/elle', answer: 'aurait' },
+                { subject: 'nous', answer: 'aurions' },
+                { subject: 'vous', answer: 'auriez' },
+                { subject: 'ils/elles', answer: 'auraient' }
+            ]
+        },
+        {
+            id: 'ct-15',
+            verb: 'parler',
+            english: 'to speak',
+            tense: 'conditionnel',
+            tenseFr: 'Conditionnel',
+            cefrLevel: 'B1',
+            difficulty: 3,
+            category: 'er-verb',
+            forms: [
+                { subject: 'je', answer: 'parlerais' },
+                { subject: 'tu', answer: 'parlerais' },
+                { subject: 'il/elle', answer: 'parlerait' },
+                { subject: 'nous', answer: 'parlerions' },
+                { subject: 'vous', answer: 'parleriez' },
+                { subject: 'ils/elles', answer: 'parleraient' }
+            ]
+        }
     ]
 };
 
@@ -2544,6 +2828,8 @@ function getContentByType(exerciseType) {
             return FRENCH_CONTENT.grammar;
         case 'conjugation':
             return FRENCH_CONTENT.conjugation;
+        case 'conjugation-table':
+            return FRENCH_CONTENT.conjugationTables || [];
         case 'reading':
             return FRENCH_CONTENT.reading || [];
         case 'dialogue':
