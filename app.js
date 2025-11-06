@@ -1769,7 +1769,7 @@ function startTopicPractice() {
     currentTopicExerciseIndex = 0;
 
     // Get all exercises for this topic from the grammar array
-    const allGrammar = FRENCH_CONTENT.level1.grammar || [];
+    const allGrammar = FRENCH_CONTENT.grammar || [];
     currentTopicExercises = allGrammar.filter(ex =>
         currentTopic.exerciseIds.includes(ex.id)
     );
