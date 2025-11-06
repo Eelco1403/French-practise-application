@@ -262,6 +262,49 @@ function advanceToNext() {
         }
     }
 
+    // Check if current question is a dialogue with more questions
+    if (currentQuestion && currentQuestion.turns && currentQuestion.questions && currentQuestion.questions.length > 0) {
+        currentQuestion.currentQuestionIndex++;
+
+        // If there are more questions, display the next one
+        if (currentQuestion.currentQuestionIndex < currentQuestion.questions.length) {
+            const currentQ = currentQuestion.questions[currentQuestion.currentQuestionIndex];
+            const questionText = document.getElementById('questionText');
+
+            const dialogueHTML = currentQuestion.turns.map((turn, idx) =>
+                `<div style="margin:10px 0;">
+                    <strong>Speaker ${turn.speaker}:</strong> ${turn.text}<br>
+                    <em style="color:#666;">(${turn.translation})</em>
+                </div>`
+            ).join('');
+
+            questionText.innerHTML = `<div style="background:#f5f5f5;padding:15px;border-radius:8px;margin-bottom:15px;">
+                <strong>${currentQuestion.title}</strong><br><br>
+                ${dialogueHTML}
+            </div>
+            <div style="margin-top:20px;">
+                <strong>Question ${currentQuestion.currentQuestionIndex + 1}/${currentQuestion.questions.length}:</strong><br>
+                ${currentQ.question}
+            </div>`;
+
+            answerInput.value = '';
+            answerInput.focus();
+
+            // Hide feedback
+            feedback.classList.add('hidden');
+            feedback.classList.remove('correct', 'incorrect');
+
+            // Enable input and submit button
+            answerInput.disabled = false;
+            submitBtn.disabled = false;
+
+            // Track question start time
+            currentUser.questionStartTime = Date.now();
+
+            return; // Don't load a new question
+        }
+    }
+
     // Otherwise, load a completely new question
     loadNextQuestion();
 }
@@ -367,13 +410,30 @@ function loadNextQuestion() {
             </div>`
         ).join('');
 
-        questionText.innerHTML = `<div style="background:#f5f5f5;padding:15px;border-radius:8px;">
-            <strong>${currentQuestion.title}</strong><br><br>
-            ${dialogueHTML}
-        </div>`;
+        // If dialogue has comprehension questions, show them
+        if (currentQuestion.questions && currentQuestion.questions.length > 0) {
+            if (!currentQuestion.currentQuestionIndex) {
+                currentQuestion.currentQuestionIndex = 0;
+            }
 
-        // For dialogues, just mark as viewed (no answer required)
-        answerInput.placeholder = 'Type "done" when you\'ve reviewed this dialogue';
+            const currentQ = currentQuestion.questions[currentQuestion.currentQuestionIndex];
+            questionText.innerHTML = `<div style="background:#f5f5f5;padding:15px;border-radius:8px;margin-bottom:15px;">
+                <strong>${currentQuestion.title}</strong><br><br>
+                ${dialogueHTML}
+            </div>
+            <div style="margin-top:20px;">
+                <strong>Question ${currentQuestion.currentQuestionIndex + 1}/${currentQuestion.questions.length}:</strong><br>
+                ${currentQ.question}
+            </div>`;
+            answerInput.placeholder = 'Type your answer...';
+        } else {
+            // For dialogues without questions, just mark as viewed
+            questionText.innerHTML = `<div style="background:#f5f5f5;padding:15px;border-radius:8px;">
+                <strong>${currentQuestion.title}</strong><br><br>
+                ${dialogueHTML}
+            </div>`;
+            answerInput.placeholder = 'Type "done" when you\'ve reviewed this dialogue';
+        }
     }
     // Handle conjugation
     else if (currentQuestion.verb) {
@@ -450,10 +510,29 @@ function checkAnswer() {
             }
         }
     }
-    // Handle dialogue practice (always correct if user types "done")
+    // Handle dialogue practice
     else if (currentQuestion.turns) {
-        correctAnswer = 'done';
-        isCorrect = userAnswer.toLowerCase() === 'done';
+        // If dialogue has comprehension questions
+        if (currentQuestion.questions && currentQuestion.questions.length > 0) {
+            const currentQ = currentQuestion.questions[currentQuestion.currentQuestionIndex];
+            correctAnswer = currentQ.answer;
+
+            isCorrect = window.UtilityFunctions.validateAnswer(userAnswer, correctAnswer);
+
+            // Check alternatives
+            if (!isCorrect && currentQ.alternatives) {
+                for (const alt of currentQ.alternatives) {
+                    if (window.UtilityFunctions.validateAnswer(userAnswer, alt)) {
+                        isCorrect = true;
+                        break;
+                    }
+                }
+            }
+        } else {
+            // For dialogues without questions, just check for "done"
+            correctAnswer = 'done';
+            isCorrect = userAnswer.toLowerCase() === 'done';
+        }
     }
     // Handle conjugation
     else if (currentQuestion.verb) {
