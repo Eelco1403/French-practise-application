@@ -19,6 +19,27 @@ let currentQuestion = null;
 let currentExerciseType = 'vocabulary'; // 'vocabulary', 'grammar', 'conjugation', or 'all'
 let currentReport = null; // Stores generated report for export
 
+/**
+ * Get source word in appropriate language based on UI language
+ * Falls back to English if translation not available
+ */
+function getSourceWord(vocabItem) {
+    const lang = window.I18n ? window.I18n.getCurrentLanguage() : 'en';
+
+    // Map UI language codes to vocabulary field names
+    const languageMap = {
+        'en': 'english',
+        'nl': 'dutch',
+        'de': 'german',
+        'fr': 'english' // If UI is in French, show English->French
+    };
+
+    const fieldName = languageMap[lang] || 'english';
+
+    // Return the word in requested language, fallback to English if not available
+    return vocabItem[fieldName] || vocabItem.english || vocabItem.french;
+}
+
 // DOM Elements
 const userSetupScreen = document.getElementById('userSetup');
 const practiceScreen = document.getElementById('practiceScreen');
@@ -520,7 +541,7 @@ function loadNextQuestion() {
     // Handle vocabulary
     else {
         questionLabel.textContent = 'Translate to French:';
-        questionText.textContent = currentQuestion.english;
+        questionText.textContent = getSourceWord(currentQuestion);
         questionTypeDisplay.textContent = window.I18n.t('badges.vocabulary');
         questionTypeDisplay.className = 'badge badge-blue';
     }

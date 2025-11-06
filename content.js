@@ -8,30 +8,30 @@ const FRENCH_CONTENT = {
     level1: {
         vocabulary: [
             // Greetings
-            { id: 'v-1', english: 'hello', french: 'bonjour', category: 'greetings', difficulty: 1, cefrLevel: 'A1' },
-            { id: 'v-2', english: 'goodbye', french: 'au revoir', category: 'greetings', difficulty: 1, cefrLevel: 'A1' },
-            { id: 'v-3', english: 'thank you', french: 'merci', category: 'greetings', difficulty: 1, cefrLevel: 'A1' },
-            { id: 'v-4', english: 'please', french: 's\'il vous plaît', category: 'greetings', difficulty: 1, cefrLevel: 'A1' },
-            { id: 'v-5', english: 'excuse me', french: 'excusez-moi', category: 'greetings', difficulty: 1, cefrLevel: 'A1' },
-            { id: 'v-6', english: 'yes', french: 'oui', category: 'greetings', difficulty: 1, cefrLevel: 'A1' },
-            { id: 'v-7', english: 'no', french: 'non', category: 'greetings', difficulty: 1, cefrLevel: 'A1' },
+            { id: 'v-1', english: 'hello', dutch: 'hallo', german: 'hallo', french: 'bonjour', category: 'greetings', difficulty: 1, cefrLevel: 'A1' },
+            { id: 'v-2', english: 'goodbye', dutch: 'tot ziens', german: 'auf Wiedersehen', french: 'au revoir', category: 'greetings', difficulty: 1, cefrLevel: 'A1' },
+            { id: 'v-3', english: 'thank you', dutch: 'dank je', german: 'danke', french: 'merci', category: 'greetings', difficulty: 1, cefrLevel: 'A1' },
+            { id: 'v-4', english: 'please', dutch: 'alstublieft', german: 'bitte', french: 's\'il vous plaît', category: 'greetings', difficulty: 1, cefrLevel: 'A1' },
+            { id: 'v-5', english: 'excuse me', dutch: 'pardon', german: 'entschuldigung', french: 'excusez-moi', category: 'greetings', difficulty: 1, cefrLevel: 'A1' },
+            { id: 'v-6', english: 'yes', dutch: 'ja', german: 'ja', french: 'oui', category: 'greetings', difficulty: 1, cefrLevel: 'A1' },
+            { id: 'v-7', english: 'no', dutch: 'nee', german: 'nein', french: 'non', category: 'greetings', difficulty: 1, cefrLevel: 'A1' },
 
-            // Common Nouns
-            { id: 'v-8', english: 'water', french: 'eau', category: 'food', difficulty: 1, cefrLevel: 'A1' },
-            { id: 'v-9', english: 'bread', french: 'pain', category: 'food', difficulty: 1, cefrLevel: 'A1' },
-            { id: 'v-10', english: 'wine', french: 'vin', category: 'food', difficulty: 1, cefrLevel: 'A1' },
-            { id: 'v-11', english: 'coffee', french: 'café', category: 'food', difficulty: 1, cefrLevel: 'A1' },
-            { id: 'v-12', english: 'tea', french: 'thé', category: 'food', difficulty: 1, cefrLevel: 'A1' },
-            { id: 'v-13', english: 'milk', french: 'lait', category: 'food', difficulty: 1, cefrLevel: 'A1' },
-            { id: 'v-14', english: 'cheese', french: 'fromage', category: 'food', difficulty: 1, cefrLevel: 'A1' },
-            { id: 'v-15', english: 'meat', french: 'viande', category: 'food', difficulty: 1, cefrLevel: 'A1' },
+            // Common Nouns - Food
+            { id: 'v-8', english: 'water', dutch: 'water', german: 'Wasser', french: 'eau', category: 'food', difficulty: 1, cefrLevel: 'A1' },
+            { id: 'v-9', english: 'bread', dutch: 'brood', german: 'Brot', french: 'pain', category: 'food', difficulty: 1, cefrLevel: 'A1' },
+            { id: 'v-10', english: 'wine', dutch: 'wijn', german: 'Wein', french: 'vin', category: 'food', difficulty: 1, cefrLevel: 'A1' },
+            { id: 'v-11', english: 'coffee', dutch: 'koffie', german: 'Kaffee', french: 'café', category: 'food', difficulty: 1, cefrLevel: 'A1' },
+            { id: 'v-12', english: 'tea', dutch: 'thee', german: 'Tee', french: 'thé', category: 'food', difficulty: 1, cefrLevel: 'A1' },
+            { id: 'v-13', english: 'milk', dutch: 'melk', german: 'Milch', french: 'lait', category: 'food', difficulty: 1, cefrLevel: 'A1' },
+            { id: 'v-14', english: 'cheese', dutch: 'kaas', german: 'Käse', french: 'fromage', category: 'food', difficulty: 1, cefrLevel: 'A1' },
+            { id: 'v-15', english: 'meat', dutch: 'vlees', german: 'Fleisch', french: 'viande', category: 'food', difficulty: 1, cefrLevel: 'A1' },
 
             // Family
-            { id: 'v-16', english: 'mother', french: 'mère', category: 'family', difficulty: 1, cefrLevel: 'A1' },
-            { id: 'v-17', english: 'father', french: 'père', category: 'family', difficulty: 1, cefrLevel: 'A1' },
-            { id: 'v-18', english: 'sister', french: 'sœur', category: 'family', difficulty: 1, cefrLevel: 'A1' },
-            { id: 'v-19', english: 'brother', french: 'frère', category: 'family', difficulty: 1, cefrLevel: 'A1' },
-            { id: 'v-20', english: 'child', french: 'enfant', category: 'family', difficulty: 1, cefrLevel: 'A1' },
+            { id: 'v-16', english: 'mother', dutch: 'moeder', german: 'Mutter', french: 'mère', category: 'family', difficulty: 1, cefrLevel: 'A1' },
+            { id: 'v-17', english: 'father', dutch: 'vader', german: 'Vater', french: 'père', category: 'family', difficulty: 1, cefrLevel: 'A1' },
+            { id: 'v-18', english: 'sister', dutch: 'zus', german: 'Schwester', french: 'sœur', category: 'family', difficulty: 1, cefrLevel: 'A1' },
+            { id: 'v-19', english: 'brother', dutch: 'broer', german: 'Bruder', french: 'frère', category: 'family', difficulty: 1, cefrLevel: 'A1' },
+            { id: 'v-20', english: 'child', dutch: 'kind', german: 'Kind', french: 'enfant', category: 'family', difficulty: 1, cefrLevel: 'A1' },
 
             // Numbers
             { id: 'v-21', english: 'one', french: 'un', category: 'numbers', difficulty: 1, cefrLevel: 'A1' },
