@@ -246,6 +246,13 @@ function startPractice() {
  * Advance to next item (handles multi-question reading passages)
  */
 function advanceToNext() {
+    // Handle verb practice mode
+    if (currentVerbConjugations && currentVerbConjugations.length > 0 &&
+        document.getElementById('verbPracticeView').style.display !== 'none') {
+        nextVerbQuestion();
+        return;
+    }
+
     // Handle topic practice mode
     if (topicPracticeMode) {
         nextTopicExercise();
@@ -568,6 +575,13 @@ function loadNextQuestion() {
  * Check user's answer
  */
 function checkAnswer() {
+    // Handle verb practice mode
+    if (currentVerbConjugations && currentVerbConjugations.length > 0 &&
+        document.getElementById('verbPracticeView').style.display !== 'none') {
+        handleVerbPracticeSubmit();
+        return;
+    }
+
     // Handle topic practice mode
     if (topicPracticeMode) {
         handleTopicPracticeSubmit();
@@ -961,15 +975,35 @@ function switchExerciseType(type) {
 
         if (questionCard) questionCard.style.display = 'block';
         if (progressSection) progressSection.style.display = 'block';
-    } else {
+    } else if (type === 'conjugation') {
+        // Show verb practice selector for conjugation
+        const verbPracticeSelector = document.getElementById('verbPracticeSelector');
         if (categoryFilter) categoryFilter.style.display = 'none';
         if (grammarTopicSelector) grammarTopicSelector.style.display = 'none';
+        if (verbPracticeSelector) {
+            verbPracticeSelector.style.display = 'block';
+            initializeVerbPracticeSelector();
+
+            // Show verb list view by default
+            document.getElementById('verbListView').style.display = 'block';
+            document.getElementById('verbDetailView').style.display = 'none';
+            document.getElementById('verbPracticeView').style.display = 'none';
+            document.getElementById('backToVerbsBtn').style.display = 'none';
+
+            if (questionCard) questionCard.style.display = 'block';
+            if (progressSection) progressSection.style.display = 'block';
+        }
+    } else {
+        const verbPracticeSelector = document.getElementById('verbPracticeSelector');
+        if (categoryFilter) categoryFilter.style.display = 'none';
+        if (grammarTopicSelector) grammarTopicSelector.style.display = 'none';
+        if (verbPracticeSelector) verbPracticeSelector.style.display = 'none';
         if (questionCard) questionCard.style.display = 'block';
         if (progressSection) progressSection.style.display = 'block';
     }
 
-    // Load new question of selected type (unless grammar topic mode)
-    if (type !== 'grammar') {
+    // Load new question of selected type (unless grammar topic or conjugation mode)
+    if (type !== 'grammar' && type !== 'conjugation') {
         loadNextQuestion();
     }
 }
@@ -1932,6 +1966,322 @@ function handleTopicPracticeSubmit() {
 function nextTopicExercise() {
     currentTopicExerciseIndex++;
     loadNextTopicQuestion();
+}
+
+/**
+ * ============================================================
+ * VERB PRACTICE SELECTOR FUNCTIONS
+ * ============================================================
+ */
+
+// Global variables for verb practice
+let currentSelectedVerb = null;
+let currentVerbConjugations = [];
+let currentVerbPracticeIndex = 0;
+
+/**
+ * Initialize the verb practice selector
+ */
+function initializeVerbPracticeSelector() {
+    const verbsContainer = document.getElementById('verbsContainer');
+    if (!verbsContainer) return;
+
+    // Get all conjugation tables and group by verb
+    const allConjugations = FRENCH_CONTENT.conjugationTables || [];
+    const verbGroups = {};
+
+    // Group conjugations by verb
+    allConjugations.forEach(conj => {
+        const verbName = conj.verb;
+        if (!verbGroups[verbName]) {
+            verbGroups[verbName] = {
+                verb: verbName,
+                english: conj.english,
+                cefrLevel: conj.cefrLevel,
+                conjugations: []
+            };
+        }
+        verbGroups[verbName].conjugations.push(conj);
+    });
+
+    // Convert to array and group by CEFR level
+    const verbsArray = Object.values(verbGroups);
+    const levelGroups = {
+        'A1': [], 'A2': [], 'B1': [], 'B2': [], 'C1': [], 'C2': []
+    };
+
+    verbsArray.forEach(verb => {
+        // Use the lowest CEFR level from all conjugations
+        const level = verb.cefrLevel || 'A1';
+        if (levelGroups[level]) {
+            levelGroups[level].push(verb);
+        }
+    });
+
+    // Clear container
+    verbsContainer.innerHTML = '';
+
+    // Create sections for each CEFR level
+    Object.keys(levelGroups).forEach(level => {
+        const verbs = levelGroups[level];
+        if (verbs.length === 0) return;
+
+        // Create level group
+        const levelGroup = document.createElement('div');
+        levelGroup.className = 'verb-level-group';
+
+        const levelTitle = document.createElement('h4');
+        levelTitle.className = 'verb-level-group-title';
+        levelTitle.textContent = `${level} Level (${verbs.length} verbs)`;
+        levelGroup.appendChild(levelTitle);
+
+        const verbGrid = document.createElement('div');
+        verbGrid.className = 'verbs-grid';
+
+        verbs.forEach(verb => {
+            const card = createVerbCard(verb);
+            verbGrid.appendChild(card);
+        });
+
+        levelGroup.appendChild(verbGrid);
+        verbsContainer.appendChild(levelGroup);
+    });
+
+    // Setup event listeners
+    setupVerbPracticeEventListeners();
+}
+
+/**
+ * Create a verb card element
+ */
+function createVerbCard(verb) {
+    const card = document.createElement('div');
+    card.className = 'verb-card';
+
+    const header = document.createElement('div');
+    header.className = 'verb-card-header';
+
+    const title = document.createElement('h4');
+    title.className = 'verb-card-title';
+    title.textContent = verb.verb;
+    header.appendChild(title);
+
+    const levelBadge = document.createElement('span');
+    levelBadge.className = 'badge badge-blue';
+    levelBadge.textContent = verb.cefrLevel;
+    header.appendChild(levelBadge);
+
+    card.appendChild(header);
+
+    const english = document.createElement('p');
+    english.className = 'verb-card-english';
+    english.textContent = verb.english;
+    card.appendChild(english);
+
+    const info = document.createElement('div');
+    info.className = 'verb-card-info';
+
+    const tenseCount = document.createElement('span');
+    tenseCount.className = 'verb-tense-count';
+    tenseCount.textContent = `${verb.conjugations.length} tenses`;
+    info.appendChild(tenseCount);
+
+    card.appendChild(info);
+
+    // Click handler to show verb details
+    card.addEventListener('click', () => showVerbDetails(verb));
+
+    return card;
+}
+
+/**
+ * Show verb details with all available tenses
+ */
+function showVerbDetails(verb) {
+    currentSelectedVerb = verb;
+    currentVerbConjugations = verb.conjugations;
+
+    // Hide verb list, show verb detail
+    document.getElementById('verbListView').style.display = 'none';
+    document.getElementById('verbDetailView').style.display = 'block';
+    document.getElementById('verbPracticeView').style.display = 'none';
+    document.getElementById('backToVerbsBtn').style.display = 'block';
+
+    // Set verb info
+    document.getElementById('verbName').textContent = verb.verb;
+    document.getElementById('verbLevel').textContent = verb.cefrLevel;
+    document.getElementById('verbEnglish').textContent = verb.english;
+
+    // Display available tenses
+    const tensesList = document.getElementById('verbTensesList');
+    tensesList.innerHTML = '';
+
+    verb.conjugations.forEach(conj => {
+        const tenseItem = document.createElement('div');
+        tenseItem.className = 'verb-tense-item';
+
+        const icon = document.createElement('span');
+        icon.className = 'verb-tense-icon';
+        icon.textContent = '🔄';
+        tenseItem.appendChild(icon);
+
+        const name = document.createElement('span');
+        name.className = 'verb-tense-name';
+        name.textContent = conj.tenseFr || conj.tense;
+        tenseItem.appendChild(name);
+
+        tensesList.appendChild(tenseItem);
+    });
+}
+
+/**
+ * Show verb list
+ */
+function showVerbList() {
+    document.getElementById('verbListView').style.display = 'block';
+    document.getElementById('verbDetailView').style.display = 'none';
+    document.getElementById('verbPracticeView').style.display = 'none';
+    document.getElementById('backToVerbsBtn').style.display = 'none';
+    document.querySelector('.question-card').style.display = 'block';
+}
+
+/**
+ * Start verb practice mode
+ */
+function startVerbPractice() {
+    if (!currentSelectedVerb || currentVerbConjugations.length === 0) return;
+
+    currentVerbPracticeIndex = 0;
+    currentExerciseType = 'conjugation-table';
+
+    // Hide detail view, show practice view
+    document.getElementById('verbDetailView').style.display = 'none';
+    document.getElementById('verbPracticeView').style.display = 'block';
+    document.querySelector('.question-card').style.display = 'block';
+
+    // Update practice header
+    document.getElementById('verbPracticeTitle').textContent =
+        `Practicing: ${currentSelectedVerb.verb} (${currentSelectedVerb.english})`;
+    document.getElementById('verbPracticeProgress').textContent =
+        `Tense 1 of ${currentVerbConjugations.length}`;
+
+    // Load first question
+    loadNextVerbQuestion();
+}
+
+/**
+ * Load next question for verb practice
+ */
+function loadNextVerbQuestion() {
+    if (currentVerbPracticeIndex >= currentVerbConjugations.length) {
+        // Completed all tenses for this verb
+        alert(`Congratulations! You've practiced all ${currentVerbConjugations.length} tenses of "${currentSelectedVerb.verb}".`);
+        showVerbDetails(currentSelectedVerb);
+        return;
+    }
+
+    const conjugation = currentVerbConjugations[currentVerbPracticeIndex];
+
+    // Pick a random form from this conjugation
+    const forms = conjugation.forms || [];
+    const randomForm = forms[Math.floor(Math.random() * forms.length)];
+
+    // Create a question
+    currentQuestion = {
+        id: `${conjugation.id}-${randomForm.subject}`,
+        type: 'conjugation-table',
+        verb: conjugation.verb,
+        tense: conjugation.tenseFr || conjugation.tense,
+        subject: randomForm.subject,
+        answer: randomForm.answer,
+        alternatives: [],
+        explanation: `${conjugation.verb} conjugated with ${randomForm.subject} in ${conjugation.tenseFr || conjugation.tense}`
+    };
+
+    displayVerbQuestion(currentQuestion);
+    updateVerbPracticeProgress();
+}
+
+/**
+ * Display verb practice question
+ */
+function displayVerbQuestion(question) {
+    document.getElementById('questionType').textContent = 'Conjugation';
+    document.querySelector('.question-label').textContent =
+        `Conjugate "${question.verb}" (${question.tense}):`;
+    document.getElementById('questionText').textContent = question.subject;
+
+    const answerInput = document.getElementById('answerInput');
+    answerInput.value = '';
+    answerInput.disabled = false;
+    answerInput.focus();
+
+    document.getElementById('submitBtn').style.display = 'inline-block';
+    document.getElementById('nextBtn').style.display = 'none';
+    document.getElementById('feedback').classList.add('hidden');
+}
+
+/**
+ * Update verb practice progress
+ */
+function updateVerbPracticeProgress() {
+    const currentTense = currentVerbPracticeIndex + 1;
+    const totalTenses = currentVerbConjugations.length;
+    document.getElementById('verbPracticeProgress').textContent =
+        `Tense ${currentTense} of ${totalTenses}`;
+}
+
+/**
+ * Handle verb practice answer submission
+ */
+function handleVerbPracticeSubmit() {
+    const answerInput = document.getElementById('answerInput');
+    const userAnswer = answerInput.value.trim();
+
+    // Validate answer
+    const isCorrect = window.Utils.validateAnswer(userAnswer, currentQuestion.answer, currentQuestion.alternatives);
+
+    // Update mastery data
+    if (currentUser && currentUser.masteryData) {
+        window.AssessmentSystem.recordAnswer(
+            currentUser.masteryData,
+            currentQuestion.id,
+            isCorrect
+        );
+    }
+
+    // Show feedback
+    showFeedback(isCorrect, currentQuestion.answer, currentQuestion.explanation);
+
+    // Disable input
+    answerInput.disabled = true;
+    document.getElementById('submitBtn').style.display = 'none';
+}
+
+/**
+ * Move to next verb practice question
+ */
+function nextVerbQuestion() {
+    currentVerbPracticeIndex++;
+    loadNextVerbQuestion();
+}
+
+/**
+ * Setup event listeners for verb practice
+ */
+function setupVerbPracticeEventListeners() {
+    const backToVerbsBtn = document.getElementById('backToVerbsBtn');
+    const startVerbPracticeBtn = document.getElementById('startVerbPracticeBtn');
+
+    if (backToVerbsBtn) {
+        backToVerbsBtn.removeEventListener('click', showVerbList);
+        backToVerbsBtn.addEventListener('click', showVerbList);
+    }
+
+    if (startVerbPracticeBtn) {
+        startVerbPracticeBtn.removeEventListener('click', startVerbPractice);
+        startVerbPracticeBtn.addEventListener('click', startVerbPractice);
+    }
 }
 
 // Initialize app when DOM is ready
