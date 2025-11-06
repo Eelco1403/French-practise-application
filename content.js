@@ -1258,6 +1258,62 @@ const FRENCH_CONTENT = {
         { id: 'c-46', verb: 'faire', english: 'to do/make', subject: 'nous', tense: 'present', answer: 'faisons', question: 'nous (faire)', difficulty: 1, category: 'irregular', cefrLevel: 'A1' },
         { id: 'c-47', verb: 'faire', english: 'to do/make', subject: 'vous', tense: 'present', answer: 'faites', question: 'vous (faire)', difficulty: 1, category: 'irregular', cefrLevel: 'A1' },
         { id: 'c-48', verb: 'faire', english: 'to do/make', subject: 'ils/elles', tense: 'present', answer: 'font', question: 'ils/elles (faire)', difficulty: 1, category: 'irregular', cefrLevel: 'A1' },
+
+        // Passé Composé (Past Composite) - 12 exercises
+        { id: 'c-49', verb: 'être', english: 'to be', subject: 'j\'', tense: 'passé composé', answer: 'ai été', question: 'j\' (être - passé composé)', difficulty: 2, category: 'irregular', cefrLevel: 'A2' },
+        { id: 'c-50', verb: 'avoir', english: 'to have', subject: 'j\'', tense: 'passé composé', answer: 'ai eu', question: 'j\' (avoir - passé composé)', difficulty: 2, category: 'irregular', cefrLevel: 'A2' },
+        { id: 'c-51', verb: 'aller', english: 'to go', subject: 'je', tense: 'passé composé', answer: 'suis allé(e)', question: 'je (aller - passé composé)', difficulty: 2, category: 'irregular', cefrLevel: 'A2' },
+        { id: 'c-52', verb: 'faire', english: 'to do/make', subject: 'j\'', tense: 'passé composé', answer: 'ai fait', question: 'j\' (faire - passé composé)', difficulty: 2, category: 'irregular', cefrLevel: 'A2' },
+        { id: 'c-53', verb: 'manger', english: 'to eat', subject: 'j\'', tense: 'passé composé', answer: 'ai mangé', question: 'j\' (manger - passé composé)', difficulty: 2, category: 'er-verb', cefrLevel: 'A2' },
+        { id: 'c-54', verb: 'parler', english: 'to speak', subject: 'tu', tense: 'passé composé', answer: 'as parlé', question: 'tu (parler - passé composé)', difficulty: 2, category: 'er-verb', cefrLevel: 'A2' },
+        { id: 'c-55', verb: 'finir', english: 'to finish', subject: 'il/elle', tense: 'passé composé', answer: 'a fini', question: 'il/elle (finir - passé composé)', difficulty: 2, category: 'ir-verb', cefrLevel: 'A2' },
+        { id: 'c-56', verb: 'venir', english: 'to come', subject: 'je', tense: 'passé composé', answer: 'suis venu(e)', question: 'je (venir - passé composé)', difficulty: 3, category: 'irregular', cefrLevel: 'B1' },
+        { id: 'c-57', verb: 'prendre', english: 'to take', subject: 'nous', tense: 'passé composé', answer: 'avons pris', question: 'nous (prendre - passé composé)', difficulty: 3, category: 'irregular', cefrLevel: 'B1' },
+        { id: 'c-58', verb: 'voir', english: 'to see', subject: 'vous', tense: 'passé composé', answer: 'avez vu', question: 'vous (voir - passé composé)', difficulty: 3, category: 'irregular', cefrLevel: 'B1' },
+        { id: 'c-59', verb: 'pouvoir', english: 'can/to be able', subject: 'ils/elles', tense: 'passé composé', answer: 'ont pu', question: 'ils/elles (pouvoir - passé composé)', difficulty: 3, category: 'irregular', cefrLevel: 'B1' },
+        { id: 'c-60', verb: 'vouloir', english: 'to want', subject: 'j\'', tense: 'passé composé', answer: 'ai voulu', question: 'j\' (vouloir - passé composé)', difficulty: 3, category: 'irregular', cefrLevel: 'B1' },
+
+        // Imparfait (Imperfect) - 12 exercises
+        { id: 'c-61', verb: 'être', english: 'to be', subject: 'j\'', tense: 'imparfait', answer: 'étais', question: 'j\' (être - imparfait)', difficulty: 2, category: 'irregular', cefrLevel: 'A2' },
+        { id: 'c-62', verb: 'avoir', english: 'to have', subject: 'tu', tense: 'imparfait', answer: 'avais', question: 'tu (avoir - imparfait)', difficulty: 2, category: 'irregular', cefrLevel: 'A2' },
+        { id: 'c-63', verb: 'aller', english: 'to go', subject: 'il/elle', tense: 'imparfait', answer: 'allait', question: 'il/elle (aller - imparfait)', difficulty: 2, category: 'irregular', cefrLevel: 'A2' },
+        { id: 'c-64', verb: 'faire', english: 'to do/make', subject: 'nous', tense: 'imparfait', answer: 'faisions', question: 'nous (faire - imparfait)', difficulty: 2, category: 'irregular', cefrLevel: 'A2' },
+        { id: 'c-65', verb: 'manger', english: 'to eat', subject: 'je', tense: 'imparfait', answer: 'mangeais', question: 'je (manger - imparfait)', difficulty: 2, category: 'er-verb', cefrLevel: 'A2' },
+        { id: 'c-66', verb: 'parler', english: 'to speak', subject: 'vous', tense: 'imparfait', answer: 'parliez', question: 'vous (parler - imparfait)', difficulty: 2, category: 'er-verb', cefrLevel: 'A2' },
+        { id: 'c-67', verb: 'finir', english: 'to finish', subject: 'ils/elles', tense: 'imparfait', answer: 'finissaient', question: 'ils/elles (finir - imparfait)', difficulty: 2, category: 'ir-verb', cefrLevel: 'A2' },
+        { id: 'c-68', verb: 'venir', english: 'to come', subject: 'je', tense: 'imparfait', answer: 'venais', question: 'je (venir - imparfait)', difficulty: 3, category: 'irregular', cefrLevel: 'B1' },
+        { id: 'c-69', verb: 'prendre', english: 'to take', subject: 'tu', tense: 'imparfait', answer: 'prenais', question: 'tu (prendre - imparfait)', difficulty: 3, category: 'irregular', cefrLevel: 'B1' },
+        { id: 'c-70', verb: 'voir', english: 'to see', subject: 'il/elle', tense: 'imparfait', answer: 'voyait', question: 'il/elle (voir - imparfait)', difficulty: 3, category: 'irregular', cefrLevel: 'B1' },
+        { id: 'c-71', verb: 'pouvoir', english: 'can/to be able', subject: 'nous', tense: 'imparfait', answer: 'pouvions', question: 'nous (pouvoir - imparfait)', difficulty: 3, category: 'irregular', cefrLevel: 'B1' },
+        { id: 'c-72', verb: 'vouloir', english: 'to want', subject: 'vous', tense: 'imparfait', answer: 'vouliez', question: 'vous (vouloir - imparfait)', difficulty: 3, category: 'irregular', cefrLevel: 'B1' },
+
+        // Futur Simple (Future) - 12 exercises
+        { id: 'c-73', verb: 'être', english: 'to be', subject: 'je', tense: 'futur', answer: 'serai', question: 'je (être - futur)', difficulty: 2, category: 'irregular', cefrLevel: 'A2' },
+        { id: 'c-74', verb: 'avoir', english: 'to have', subject: 'tu', tense: 'futur', answer: 'auras', question: 'tu (avoir - futur)', difficulty: 2, category: 'irregular', cefrLevel: 'A2' },
+        { id: 'c-75', verb: 'aller', english: 'to go', subject: 'il/elle', tense: 'futur', answer: 'ira', question: 'il/elle (aller - futur)', difficulty: 2, category: 'irregular', cefrLevel: 'A2' },
+        { id: 'c-76', verb: 'faire', english: 'to do/make', subject: 'nous', tense: 'futur', answer: 'ferons', question: 'nous (faire - futur)', difficulty: 2, category: 'irregular', cefrLevel: 'A2' },
+        { id: 'c-77', verb: 'manger', english: 'to eat', subject: 'je', tense: 'futur', answer: 'mangerai', question: 'je (manger - futur)', difficulty: 2, category: 'er-verb', cefrLevel: 'A2' },
+        { id: 'c-78', verb: 'parler', english: 'to speak', subject: 'vous', tense: 'futur', answer: 'parlerez', question: 'vous (parler - futur)', difficulty: 2, category: 'er-verb', cefrLevel: 'A2' },
+        { id: 'c-79', verb: 'finir', english: 'to finish', subject: 'ils/elles', tense: 'futur', answer: 'finiront', question: 'ils/elles (finir - futur)', difficulty: 2, category: 'ir-verb', cefrLevel: 'A2' },
+        { id: 'c-80', verb: 'venir', english: 'to come', subject: 'je', tense: 'futur', answer: 'viendrai', question: 'je (venir - futur)', difficulty: 3, category: 'irregular', cefrLevel: 'B1' },
+        { id: 'c-81', verb: 'prendre', english: 'to take', subject: 'tu', tense: 'futur', answer: 'prendras', question: 'tu (prendre - futur)', difficulty: 3, category: 'irregular', cefrLevel: 'B1' },
+        { id: 'c-82', verb: 'voir', english: 'to see', subject: 'il/elle', tense: 'futur', answer: 'verra', question: 'il/elle (voir - futur)', difficulty: 3, category: 'irregular', cefrLevel: 'B1' },
+        { id: 'c-83', verb: 'pouvoir', english: 'can/to be able', subject: 'nous', tense: 'futur', answer: 'pourrons', question: 'nous (pouvoir - futur)', difficulty: 3, category: 'irregular', cefrLevel: 'B1' },
+        { id: 'c-84', verb: 'vouloir', english: 'to want', subject: 'vous', tense: 'futur', answer: 'voudrez', question: 'vous (vouloir - futur)', difficulty: 3, category: 'irregular', cefrLevel: 'B1' },
+
+        // Conditionnel (Conditional) - 12 exercises
+        { id: 'c-85', verb: 'être', english: 'to be', subject: 'je', tense: 'conditionnel', answer: 'serais', question: 'je (être - conditionnel)', difficulty: 3, category: 'irregular', cefrLevel: 'B1' },
+        { id: 'c-86', verb: 'avoir', english: 'to have', subject: 'tu', tense: 'conditionnel', answer: 'aurais', question: 'tu (avoir - conditionnel)', difficulty: 3, category: 'irregular', cefrLevel: 'B1' },
+        { id: 'c-87', verb: 'aller', english: 'to go', subject: 'il/elle', tense: 'conditionnel', answer: 'irait', question: 'il/elle (aller - conditionnel)', difficulty: 3, category: 'irregular', cefrLevel: 'B1' },
+        { id: 'c-88', verb: 'faire', english: 'to do/make', subject: 'nous', tense: 'conditionnel', answer: 'ferions', question: 'nous (faire - conditionnel)', difficulty: 3, category: 'irregular', cefrLevel: 'B1' },
+        { id: 'c-89', verb: 'manger', english: 'to eat', subject: 'je', tense: 'conditionnel', answer: 'mangerais', question: 'je (manger - conditionnel)', difficulty: 3, category: 'er-verb', cefrLevel: 'B1' },
+        { id: 'c-90', verb: 'parler', english: 'to speak', subject: 'vous', tense: 'conditionnel', answer: 'parleriez', question: 'vous (parler - conditionnel)', difficulty: 3, category: 'er-verb', cefrLevel: 'B1' },
+        { id: 'c-91', verb: 'finir', english: 'to finish', subject: 'ils/elles', tense: 'conditionnel', answer: 'finiraient', question: 'ils/elles (finir - conditionnel)', difficulty: 3, category: 'ir-verb', cefrLevel: 'B1' },
+        { id: 'c-92', verb: 'venir', english: 'to come', subject: 'je', tense: 'conditionnel', answer: 'viendrais', question: 'je (venir - conditionnel)', difficulty: 4, category: 'irregular', cefrLevel: 'B2' },
+        { id: 'c-93', verb: 'prendre', english: 'to take', subject: 'tu', tense: 'conditionnel', answer: 'prendrais', question: 'tu (prendre - conditionnel)', difficulty: 4, category: 'irregular', cefrLevel: 'B2' },
+        { id: 'c-94', verb: 'voir', english: 'to see', subject: 'il/elle', tense: 'conditionnel', answer: 'verrait', question: 'il/elle (voir - conditionnel)', difficulty: 4, category: 'irregular', cefrLevel: 'B2' },
+        { id: 'c-95', verb: 'pouvoir', english: 'can/to be able', subject: 'nous', tense: 'conditionnel', answer: 'pourrions', question: 'nous (pouvoir - conditionnel)', difficulty: 4, category: 'irregular', cefrLevel: 'B2' },
+        { id: 'c-96', verb: 'vouloir', english: 'to want', subject: 'vous', tense: 'conditionnel', answer: 'voudriez', question: 'vous (vouloir - conditionnel)', difficulty: 4, category: 'irregular', cefrLevel: 'B2' },
     ],
 
     // Reading Comprehension Passages
@@ -2223,6 +2279,74 @@ const FRENCH_CONTENT = {
         { id: 'w-73', prompt: 'Essay: Ethical implications of genetic engineering (150 words)', type: 'essay', cefrLevel: 'B2', difficulty: 4, category: 'ethics', sampleAnswer: 'L\'ingénierie génétique soulève des questions éthiques profondes. La technologie CRISPR permet désormais de modifier le génome humain avec précision. Si les applications thérapeutiques semblent légitimes pour guérir des maladies héréditaires, la frontière avec l\'eugénisme est ténue. Où tracer la ligne entre soin et amélioration? La sélection d\'embryons selon des critères non médicaux pose problème. Elle pourrait accentuer les inégalités sociales en créant une élite génétiquement "supérieure". De plus, les modifications germinales transmissibles aux générations futures impliquent une responsabilité énorme. Nous n\'en comprenons pas toutes les conséquences à long terme. Le consentement est également problématique: peut-on décider pour des générations non encore nées? Un cadre réglementaire international strict semble nécessaire. Le progrès scientifique ne doit pas précéder la réflexion éthique.' },
         { id: 'w-74', prompt: 'Analysis: Compare two political systems (150 words)', type: 'essay', cefrLevel: 'B2', difficulty: 4, category: 'politics', sampleAnswer: 'Les systèmes présidentiel et parlementaire présentent des différences structurelles fondamentales. Dans un système présidentiel, le chef d\'État est élu directement et dispose de pouvoirs exécutifs importants, indépendants du législatif. Cette séparation stricte offre stabilité et leadership fort, mais peut créer des blocages institutionnels. Le système parlementaire fusionne exécutif et législatif: le gouvernement émane du parlement et lui est responsable. Cette configuration favorise la cohérence politique mais peut engendrer une instabilité gouvernementale. Le présidentiel protège mieux contre les majorités parlementaires abusives, tandis que le parlementaire assure une meilleure représentativité. Les États-Unis incarnent le modèle présidentiel, le Royaume-Uni le parlementaire. La France combine les deux avec son système semi-présidentiel. Aucun système n\'est intrinsèquement supérieur; leur efficacité dépend du contexte culturel et historique national.' },
         { id: 'w-75', prompt: 'Essay: Climate change solutions (150 words)', type: 'essay', cefrLevel: 'B2', difficulty: 4, category: 'environment', sampleAnswer: 'Face à l\'urgence climatique, des solutions multiples doivent être déployées simultanément. La transition énergétique vers les renouvelables constitue la priorité absolue. L\'éolien et le solaire deviennent compétitifs économiquement. L\'électrification des transports doit s\'accélérer avec des infrastructures de recharge adéquates. L\'agriculture régénérative peut transformer ce secteur de source d\'émissions en puits de carbone. La rénovation énergétique des bâtiments offre un potentiel considérable. Les solutions technologiques comme la capture de CO2 sont prometteuses mais insuffisantes seules. Un changement comportemental est indispensable: consommation raisonnée, alimentation moins carnée, mobilité douce. Les politiques publiques doivent inciter ces transitions par la fiscalité écologique et la régulation. L\'engagement des entreprises via la finance verte accélère le changement. L\'éducation sensibilise les générations futures. La lutte climatique nécessite une approche systémique combinant technologie, politique et sociétal.' }
+    ],
+
+    // Dialogue Practice - Conversational scenarios (13 dialogues)
+    dialogues: [
+        // A1 Level - Basic greetings (5 dialogues)
+        { id: 'd-1', title: 'Meeting someone', cefrLevel: 'A1', difficulty: 1, category: 'greetings', turns: [
+            { speaker: 'A', text: 'Bonjour!', translation: 'Hello!' },
+            { speaker: 'B', text: 'Bonjour! Comment allez-vous?', translation: 'Hello! How are you?' },
+            { speaker: 'A', text: 'Je vais bien, merci. Et vous?', translation: 'I\'m fine, thank you. And you?' },
+            { speaker: 'B', text: 'Très bien, merci!', translation: 'Very well, thank you!' }
+        ]},
+        { id: 'd-2', title: 'Introducing yourself', cefrLevel: 'A1', difficulty: 1, category: 'introduction', turns: [
+            { speaker: 'A', text: 'Je m\'appelle Marie.', translation: 'My name is Marie.' },
+            { speaker: 'B', text: 'Moi, c\'est Pierre. Enchanté!', translation: 'I\'m Pierre. Nice to meet you!' }
+        ]},
+        { id: 'd-3', title: 'At the café', cefrLevel: 'A1', difficulty: 1, category: 'shopping', turns: [
+            { speaker: 'A', text: 'Bonjour, un café s\'il vous plaît.', translation: 'Hello, a coffee please.' },
+            { speaker: 'B', text: 'Ça fait 2 euros.', translation: 'That\'s 2 euros.' }
+        ]},
+        { id: 'd-4', title: 'Asking directions', cefrLevel: 'A1', difficulty: 1, category: 'directions', turns: [
+            { speaker: 'A', text: 'Pardon, où est la gare?', translation: 'Excuse me, where is the train station?' },
+            { speaker: 'B', text: 'C\'est tout droit.', translation: 'It\'s straight ahead.' }
+        ]},
+        { id: 'd-5', title: 'Buying something', cefrLevel: 'A1', difficulty: 1, category: 'shopping', turns: [
+            { speaker: 'A', text: 'Combien ça coûte?', translation: 'How much does it cost?' },
+            { speaker: 'B', text: 'Quinze euros.', translation: 'Fifteen euros.' }
+        ]},
+
+        // A2 Level (3 dialogues)
+        { id: 'd-6', title: 'Making plans', cefrLevel: 'A2', difficulty: 2, category: 'social', turns: [
+            { speaker: 'A', text: 'Tu es libre samedi?', translation: 'Are you free Saturday?' },
+            { speaker: 'B', text: 'Oui, pourquoi?', translation: 'Yes, why?' },
+            { speaker: 'A', text: 'On pourrait aller au cinéma.', translation: 'We could go to the cinema.' }
+        ]},
+        { id: 'd-7', title: 'At restaurant', cefrLevel: 'A2', difficulty: 2, category: 'food', turns: [
+            { speaker: 'A', text: 'Vous avez choisi?', translation: 'Have you chosen?' },
+            { speaker: 'B', text: 'Oui, je prends le menu du jour.', translation: 'Yes, I\'ll have the daily menu.' }
+        ]},
+        { id: 'd-8', title: 'Hobbies', cefrLevel: 'A2', difficulty: 2, category: 'hobbies', turns: [
+            { speaker: 'A', text: 'Qu\'aimes-tu faire?', translation: 'What do you like to do?' },
+            { speaker: 'B', text: 'J\'aime lire et faire du sport.', translation: 'I like reading and sports.' }
+        ]},
+
+        // B1 Level (2 dialogues)
+        { id: 'd-9', title: 'Job interview', cefrLevel: 'B1', difficulty: 3, category: 'work', turns: [
+            { speaker: 'A', text: 'Parlez-moi de votre expérience.', translation: 'Tell me about your experience.' },
+            { speaker: 'B', text: 'J\'ai travaillé trois ans comme développeur web.', translation: 'I worked three years as a web developer.' }
+        ]},
+        { id: 'd-10', title: 'Travel plans', cefrLevel: 'B1', difficulty: 3, category: 'travel', turns: [
+            { speaker: 'A', text: 'Où vas-tu en vacances?', translation: 'Where are you going on vacation?' },
+            { speaker: 'B', text: 'J\'hésite entre l\'Espagne et l\'Italie.', translation: 'I\'m hesitating between Spain and Italy.' }
+        ]},
+
+        // B2 Level (2 dialogues)
+        { id: 'd-11', title: 'Remote work debate', cefrLevel: 'B2', difficulty: 4, category: 'work', turns: [
+            { speaker: 'A', text: 'Que penses-tu du télétravail?', translation: 'What do you think about remote work?' },
+            { speaker: 'B', text: 'C\'est intéressant mais comporte des risques d\'isolement.', translation: 'It\'s interesting but carries risks of isolation.' }
+        ]},
+        { id: 'd-12', title: 'Environmental policy', cefrLevel: 'B2', difficulty: 4, category: 'environment', turns: [
+            { speaker: 'A', text: 'Comment réduire les émissions de CO2?', translation: 'How to reduce CO2 emissions?' },
+            { speaker: 'B', text: 'Il faut investir massivement dans les énergies renouvelables.', translation: 'We must invest massively in renewable energies.' }
+        ]},
+
+        // C1 Level (1 dialogue)
+        { id: 'd-13', title: 'AI philosophy', cefrLevel: 'C1', difficulty: 5, category: 'philosophy', turns: [
+            { speaker: 'A', text: 'L\'IA peut-elle avoir une conscience?', translation: 'Can AI have consciousness?' },
+            { speaker: 'B', text: 'Question philosophique complexe. Imiter n\'est pas posséder.', translation: 'Complex philosophical question. Imitating is not possessing.' }
+        ]}
     ]
 };
 
