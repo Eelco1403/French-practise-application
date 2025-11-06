@@ -435,12 +435,72 @@ function loadNextQuestion() {
             answerInput.placeholder = 'Type "done" when you\'ve reviewed this dialogue';
         }
     }
-    // Handle conjugation
+    // Handle conjugation table (full 6-form table)
+    else if (currentQuestion.forms && Array.isArray(currentQuestion.forms)) {
+        questionLabel.textContent = 'Complete the conjugation table:';
+        questionTypeDisplay.textContent = '🔄 Conjugation Table';
+        questionTypeDisplay.className = 'badge badge-purple';
+
+        // Hide regular answer input, we'll use custom inputs
+        answerInput.style.display = 'none';
+        submitBtn.style.display = 'none';
+
+        // Create conjugation table HTML
+        const tableHTML = `
+            <div style="background:#f5f5f5;padding:20px;border-radius:8px;">
+                <h3 style="margin-top:0;">${currentQuestion.verb} (${currentQuestion.english})</h3>
+                <p><strong>Tense:</strong> ${currentQuestion.tenseFr || currentQuestion.tense}</p>
+                <div style="display:grid;grid-template-columns:1fr 2fr;gap:15px;margin-top:20px;">
+                    ${currentQuestion.forms.map((form, idx) => `
+                        <div style="display:contents;">
+                            <label style="font-weight:bold;align-self:center;">${form.subject}</label>
+                            <input
+                                type="text"
+                                id="conj-input-${idx}"
+                                class="conj-table-input input-field"
+                                placeholder="Enter conjugation..."
+                                autocomplete="off"
+                                style="width:100%;"
+                            >
+                        </div>
+                    `).join('')}
+                </div>
+                <button id="submitTableBtn" class="btn btn-primary btn-large" style="margin-top:20px;width:100%;">
+                    Check All Answers
+                </button>
+            </div>
+        `;
+
+        questionText.innerHTML = tableHTML;
+
+        // Add event listener to submit button
+        setTimeout(() => {
+            const submitTableBtn = document.getElementById('submitTableBtn');
+            if (submitTableBtn) {
+                submitTableBtn.addEventListener('click', checkConjugationTable);
+
+                // Also allow Enter key on last input to submit
+                const lastInput = document.getElementById(`conj-input-${currentQuestion.forms.length - 1}`);
+                if (lastInput) {
+                    lastInput.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') {
+                            checkConjugationTable();
+                        }
+                    });
+                }
+            }
+        }, 10);
+    }
+    // Handle conjugation (single form)
     else if (currentQuestion.verb) {
         questionLabel.textContent = 'Conjugate the verb:';
         questionText.textContent = currentQuestion.question;
         questionTypeDisplay.textContent = window.I18n.t('badges.conjugation');
         questionTypeDisplay.className = 'badge badge-purple';
+
+        // Ensure regular inputs are visible
+        answerInput.style.display = '';
+        submitBtn.style.display = '';
     }
     // Handle grammar
     else if (currentQuestion.explanation) {
@@ -647,6 +707,104 @@ function showFeedback(isCorrect, answerText) {
 }
 
 /**
+ * Check conjugation table answers (all 6 forms)
+ */
+function checkConjugationTable() {
+    if (!currentQuestion || !currentQuestion.forms) return;
+
+    const submitTableBtn = document.getElementById('submitTableBtn');
+    if (submitTableBtn) {
+        submitTableBtn.disabled = true;
+    }
+
+    // Collect all user answers
+    const userAnswers = currentQuestion.forms.map((form, idx) => {
+        const input = document.getElementById(`conj-input-${idx}`);
+        return input ? input.value.trim() : '';
+    });
+
+    // Check each answer
+    const results = currentQuestion.forms.map((form, idx) => {
+        const userAnswer = userAnswers[idx];
+        const isCorrect = window.UtilityFunctions.validateAnswer(userAnswer, form.answer);
+        return { subject: form.subject, userAnswer, correctAnswer: form.answer, isCorrect };
+    });
+
+    const allCorrect = results.every(r => r.isCorrect);
+    const correctCount = results.filter(r => r.isCorrect).length;
+
+    // Visual feedback for each input
+    results.forEach((result, idx) => {
+        const input = document.getElementById(`conj-input-${idx}`);
+        if (input) {
+            input.style.borderColor = result.isCorrect ? '#10b981' : '#ef4444';
+            input.style.borderWidth = '2px';
+            input.disabled = true;
+        }
+    });
+
+    // Show overall feedback
+    const feedbackHTML = `
+        <div style="margin-top:20px;padding:15px;background:${allCorrect ? '#d1fae5' : '#fee2e2'};border-radius:8px;">
+            <p style="font-size:18px;font-weight:bold;margin:0 0 10px 0;">
+                ${allCorrect ? '✓ Perfect! All correct!' : `${correctCount}/6 correct`}
+            </p>
+            ${!allCorrect ? `
+                <div style="margin-top:10px;">
+                    <strong>Corrections:</strong>
+                    ${results.filter(r => !r.isCorrect).map(r =>
+                        `<div style="margin:5px 0;">
+                            <strong>${r.subject}:</strong> You wrote "${r.userAnswer}" → Correct: <strong>${r.correctAnswer}</strong>
+                        </div>`
+                    ).join('')}
+                </div>
+            ` : ''}
+            <button id="nextTableBtn" class="btn btn-secondary" style="margin-top:15px;width:100%;">
+                Next Table
+            </button>
+        </div>
+    `;
+
+    const tableContainer = questionText.querySelector('div');
+    if (tableContainer) {
+        const feedbackDiv = document.createElement('div');
+        feedbackDiv.innerHTML = feedbackHTML;
+        tableContainer.appendChild(feedbackDiv);
+
+        // Add next button event listener
+        setTimeout(() => {
+            const nextTableBtn = document.getElementById('nextTableBtn');
+            if (nextTableBtn) {
+                nextTableBtn.addEventListener('click', () => {
+                    // Update stats
+                    if (allCorrect) {
+                        currentUser.sessionStats.correct++;
+                    }
+                    currentUser.sessionStats.total++;
+                    updateStatsDisplay();
+
+                    // Track mastery for the verb/tense
+                    if (currentUser.userId && window.AssessmentSystem) {
+                        window.AssessmentSystem.updateMastery(
+                            currentUser.userId,
+                            currentQuestion.id,
+                            allCorrect,
+                            currentUser.masteryData
+                        );
+                        updateProgressDisplay();
+                    }
+
+                    // Reset inputs and load next question
+                    answerInput.style.display = '';
+                    submitBtn.style.display = '';
+                    loadNextQuestion();
+                });
+            }
+        }, 10);
+    }
+}
+
+/**
  * Update session statistics display
  */
 function updateStatsDisplay() {
@@ -727,7 +885,12 @@ function updateLevelProgress() {
  * Switch exercise type
  */
 function switchExerciseType(type) {
-    currentExerciseType = type;
+    // Use conjugation tables instead of individual conjugations
+    if (type === 'conjugation') {
+        currentExerciseType = 'conjugation-table';
+    } else {
+        currentExerciseType = type;
+    }
 
     // Update button states
     const exerciseTypeBtns = document.querySelectorAll('.exercise-type-btn');
