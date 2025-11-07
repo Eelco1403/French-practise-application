@@ -966,27 +966,47 @@ function showFeedbackModal(isCorrect, answerText, attempts = 1, maxAttempts = 3,
 
     // Show modal
     modal.style.display = 'flex';
+    console.log('[showFeedbackModal] Modal displayed -', isCorrect ? 'CORRECT' : 'MAX ATTEMPTS');
 
     // Close button handler
     closeBtn.onclick = function() {
+        console.log('[showFeedbackModal] Close button clicked');
         modal.style.display = 'none';
         // If correct or final attempt, advance automatically
         if (isCorrect || isFinalAttempt) {
+            console.log('[showFeedbackModal] Advancing to next question');
             advanceToNext();
         }
     };
 
-    // Allow Enter key to close
+    // Allow Enter key to close (but with slight delay to prevent immediate triggering)
+    // Remove any existing enter handler first
+    if (modal.dataset.enterHandlerActive) {
+        console.log('[showFeedbackModal] Removing previous Enter handler');
+        document.removeEventListener('keydown', modal.currentEnterHandler);
+    }
+
     const enterHandler = function(e) {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && modal.style.display === 'flex') {
+            console.log('[showFeedbackModal] Enter key pressed - closing modal');
+            e.preventDefault(); // Prevent any other actions
             modal.style.display = 'none';
-            document.removeEventListener('keypress', enterHandler);
+            document.removeEventListener('keydown', enterHandler);
+            modal.dataset.enterHandlerActive = '';
             if (isCorrect || isFinalAttempt) {
+                console.log('[showFeedbackModal] Advancing to next question');
                 advanceToNext();
             }
         }
     };
-    document.addEventListener('keypress', enterHandler);
+
+    // Add handler after a short delay to prevent immediate triggering from submission Enter
+    setTimeout(() => {
+        modal.currentEnterHandler = enterHandler;
+        modal.dataset.enterHandlerActive = 'true';
+        document.addEventListener('keydown', enterHandler);
+        console.log('[showFeedbackModal] Enter handler activated');
+    }, 100);
 }
 
 /**
@@ -1744,21 +1764,19 @@ function showLevelChangeDialog() {
 let selectedCategories = []; // Track selected categories
 
 function initializeCategoryFilter() {
+    console.log('[initializeCategoryFilter] Starting category filter initialization');
     const categoryContainer = document.querySelector('.category-checkboxes');
-    if (!categoryContainer) return;
+    if (!categoryContainer) {
+        console.error('[initializeCategoryFilter] Category container not found!');
+        return;
+    }
 
-    // Get all unique categories from vocabulary content
-    const allVocab = [
-        ...FRENCH_CONTENT.level1.vocabulary,
-        ...FRENCH_CONTENT.level2.vocabulary,
-        ...(FRENCH_CONTENT.level3?.vocabulary || []),
-        ...(FRENCH_CONTENT.level4?.vocabulary || []),
-        ...(FRENCH_CONTENT.level5?.vocabulary || []),
-        ...(FRENCH_CONTENT.level6?.vocabulary || []),
-        ...FRENCH_CONTENT.phrases
-    ];
+    // Get all unique categories from vocabulary content using the API
+    const allVocab = window.FrenchContent.getContentByType('vocabulary') || [];
+    console.log('[initializeCategoryFilter] Found', allVocab.length, 'vocabulary items');
 
     const categories = [...new Set(allVocab.map(item => item.category).filter(Boolean))].sort();
+    console.log('[initializeCategoryFilter] Found', categories.length, 'unique categories:', categories);
 
     // Clear existing checkboxes
     categoryContainer.innerHTML = '';
@@ -1910,7 +1928,9 @@ let topicPracticeMode = false;
  * Initialize Grammar Topic Selector
  */
 function initializeGrammarTopicSelector() {
-    const grammarTopics = FRENCH_CONTENT.grammarTopics || [];
+    console.log('[initializeGrammarTopicSelector] Starting grammar topic initialization');
+    const grammarTopics = window.FrenchContent.grammarTopics || [];
+    console.log('[initializeGrammarTopicSelector] Found', grammarTopics.length, 'topics');
     const container = document.getElementById('grammarTopicsContainer');
 
     if (!container) return;
@@ -2091,10 +2111,12 @@ function startTopicPractice() {
     currentTopicExerciseIndex = 0;
 
     // Get all exercises for this topic from the grammar array
-    const allGrammar = FRENCH_CONTENT.grammar || [];
+    const allGrammar = window.FrenchContent.getContentByType('grammar') || [];
+    console.log('[startTopicPractice] Found', allGrammar.length, 'grammar exercises');
     currentTopicExercises = allGrammar.filter(ex =>
         currentTopic.exerciseIds.includes(ex.id)
     );
+    console.log('[startTopicPractice] Filtered to', currentTopicExercises.length, 'exercises for this topic');
 
     if (currentTopicExercises.length === 0) {
         alert('No exercises available for this topic.');
@@ -2250,11 +2272,16 @@ let currentVerbPracticeIndex = 0;
  * Initialize the verb practice selector
  */
 function initializeVerbPracticeSelector() {
+    console.log('[initializeVerbPracticeSelector] Starting verb practice initialization');
     const verbsContainer = document.getElementById('verbsContainer');
-    if (!verbsContainer) return;
+    if (!verbsContainer) {
+        console.error('[initializeVerbPracticeSelector] verbsContainer not found in HTML!');
+        return;
+    }
 
     // Get all conjugation tables and group by verb
-    const allConjugations = FRENCH_CONTENT.conjugationTables || [];
+    const allConjugations = window.FrenchContent.getContentByType('conjugation-table') || [];
+    console.log('[initializeVerbPracticeSelector] Found', allConjugations.length, 'conjugation tables');
     const verbGroups = {};
 
     // Group conjugations by verb
