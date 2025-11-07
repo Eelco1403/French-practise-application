@@ -11,13 +11,19 @@ let currentUser = {
     masteryData: {},
     sessionStats: {
         correct: 0,
-        total: 0
+        total: 0,
+        mistakes: 0 // Track total mistakes across all attempts
     }
 };
 
 let currentQuestion = null;
 let currentExerciseType = 'vocabulary'; // 'vocabulary', 'grammar', 'conjugation', or 'all'
 let currentReport = null; // Stores generated report for export
+
+// Retry Logic Configuration
+const MAX_ATTEMPTS = 3; // Maximum attempts before showing answer and moving on
+let currentAttempts = 0; // Track attempts for current question
+let questionAnsweredCorrectly = false; // Track if current question was answered correctly
 
 /**
  * Get source word in appropriate language based on UI language
@@ -347,6 +353,19 @@ function advanceToNext() {
  * Load next question
  */
 function loadNextQuestion() {
+    // Reset retry logic for new question
+    currentAttempts = 0;
+    questionAnsweredCorrectly = false;
+
+    // Hide feedback from previous question
+    feedback.classList.add('hidden');
+
+    // Re-enable input and submit button
+    answerInput.disabled = false;
+    submitBtn.disabled = false;
+    answerInput.value = '';
+    answerInput.focus();
+
     // Get all questions for current exercise type and level
     let availableQuestions = [];
 
@@ -432,15 +451,15 @@ function loadNextQuestion() {
         </div>`;
     }
     // Handle dialogue practice
-    else if (currentQuestion.turns) {
+    else if (currentQuestion.turns && Array.isArray(currentQuestion.turns)) {
         questionLabel.textContent = 'Dialogue Practice:';
         questionTypeDisplay.textContent = '💬 Dialogue';
         questionTypeDisplay.className = 'badge badge-teal';
 
         const dialogueHTML = currentQuestion.turns.map((turn, idx) =>
             `<div style="margin:10px 0;">
-                <strong>Speaker ${turn.speaker}:</strong> ${turn.text}<br>
-                <em style="color:#666;">(${turn.translation})</em>
+                <strong>Speaker ${turn.speaker || 'Unknown'}:</strong> ${turn.text || ''}<br>
+                <em style="color:#666;">(${turn.translation || ''})</em>
             </div>`
         ).join('');
 
@@ -514,13 +533,15 @@ function loadNextQuestion() {
                 submitTableBtn.addEventListener('click', checkConjugationTable);
 
                 // Also allow Enter key on last input to submit
-                const lastInput = document.getElementById(`conj-input-${currentQuestion.forms.length - 1}`);
-                if (lastInput) {
-                    lastInput.addEventListener('keypress', (e) => {
-                        if (e.key === 'Enter') {
-                            checkConjugationTable();
-                        }
-                    });
+                if (currentQuestion.forms && currentQuestion.forms.length > 0) {
+                    const lastInput = document.getElementById(`conj-input-${currentQuestion.forms.length - 1}`);
+                    if (lastInput) {
+                        lastInput.addEventListener('keypress', (e) => {
+                            if (e.key === 'Enter') {
+                                checkConjugationTable();
+                            }
+                        });
+                    }
                 }
             }
         }, 10);
@@ -657,66 +678,145 @@ function checkAnswer() {
         isCorrect = window.UtilityFunctions.validateAnswer(userAnswer, correctAnswer);
     }
 
-    // Record attempt in mastery system
-    currentUser.masteryData = window.AssessmentSystem.recordAttempt(
-        currentUser.masteryData,
-        currentQuestion.id,
-        isCorrect
-    );
+    // Increment attempt counter
+    currentAttempts++;
 
-    // Update spaced repetition metadata
-    if (!currentUser.masteryData[currentQuestion.id].spacedRepetition) {
-        currentUser.masteryData[currentQuestion.id].spacedRepetition =
-            window.SpacedRepetitionEngine.initializeSpacedRepetition(currentQuestion.id);
-    }
+    // Handle correct answer
+    if (isCorrect) {
+        questionAnsweredCorrectly = true;
 
-    // Calculate response time (if available)
-    const responseTime = currentUser.questionStartTime ?
-        Date.now() - currentUser.questionStartTime : null;
-
-    // Update SR data based on performance
-    currentUser.masteryData[currentQuestion.id].spacedRepetition =
-        window.SpacedRepetitionEngine.updateSpacedRepetition(
-            currentUser.masteryData[currentQuestion.id].spacedRepetition,
-            isCorrect,
-            responseTime
+        // Record attempt in mastery system (only record once when correct)
+        currentUser.masteryData = window.AssessmentSystem.recordAttempt(
+            currentUser.masteryData,
+            currentQuestion.id,
+            true
         );
 
-    // Save progress (including SR data)
-    window.AssessmentSystem.saveProgress(currentUser.userId, currentUser.masteryData);
-    window.SpacedRepetitionEngine.saveSpacedRepetitionData(currentUser.userId, currentUser.masteryData);
+        // Update spaced repetition metadata
+        if (!currentUser.masteryData[currentQuestion.id].spacedRepetition) {
+            currentUser.masteryData[currentQuestion.id].spacedRepetition =
+                window.SpacedRepetitionEngine.initializeSpacedRepetition(currentQuestion.id);
+        }
 
-    // Update session stats
-    currentUser.sessionStats.total++;
-    if (isCorrect) {
+        // Calculate response time (if available)
+        const responseTime = currentUser.questionStartTime ?
+            Date.now() - currentUser.questionStartTime : null;
+
+        // Update SR data based on performance
+        currentUser.masteryData[currentQuestion.id].spacedRepetition =
+            window.SpacedRepetitionEngine.updateSpacedRepetition(
+                currentUser.masteryData[currentQuestion.id].spacedRepetition,
+                true,
+                responseTime
+            );
+
+        // Save progress (including SR data)
+        window.AssessmentSystem.saveProgress(currentUser.userId, currentUser.masteryData);
+        window.SpacedRepetitionEngine.saveSpacedRepetitionData(currentUser.userId, currentUser.masteryData);
+
+        // Update session stats (only count as 1 total regardless of attempts)
+        if (currentAttempts === 1) {
+            currentUser.sessionStats.total++;
+        }
         currentUser.sessionStats.correct++;
+
+        // Update stats display
+        updateStatsDisplay();
+
+        // Show feedback
+        showFeedback(isCorrect, correctAnswer, currentAttempts, MAX_ATTEMPTS);
+
+        // Disable input and submit button
+        answerInput.disabled = true;
+        submitBtn.disabled = true;
+
+        // Update progress display
+        updateProgressDisplay();
     }
+    // Handle incorrect answer
+    else {
+        // Track mistake
+        currentUser.sessionStats.mistakes++;
 
-    // Update stats display
-    updateStatsDisplay();
+        // Check if max attempts reached
+        if (currentAttempts >= MAX_ATTEMPTS) {
+            // Max attempts reached - record as incorrect and move on
+            currentUser.masteryData = window.AssessmentSystem.recordAttempt(
+                currentUser.masteryData,
+                currentQuestion.id,
+                false
+            );
 
-    // Show feedback
-    showFeedback(isCorrect, correctAnswer);
+            // Update spaced repetition metadata
+            if (!currentUser.masteryData[currentQuestion.id].spacedRepetition) {
+                currentUser.masteryData[currentQuestion.id].spacedRepetition =
+                    window.SpacedRepetitionEngine.initializeSpacedRepetition(currentQuestion.id);
+            }
 
-    // Disable input and submit button
-    answerInput.disabled = true;
-    submitBtn.disabled = true;
+            // Calculate response time (if available)
+            const responseTime = currentUser.questionStartTime ?
+                Date.now() - currentUser.questionStartTime : null;
 
-    // Update progress display
-    updateProgressDisplay();
+            // Update SR data based on performance
+            currentUser.masteryData[currentQuestion.id].spacedRepetition =
+                window.SpacedRepetitionEngine.updateSpacedRepetition(
+                    currentUser.masteryData[currentQuestion.id].spacedRepetition,
+                    false,
+                    responseTime
+                );
+
+            // Save progress
+            window.AssessmentSystem.saveProgress(currentUser.userId, currentUser.masteryData);
+            window.SpacedRepetitionEngine.saveSpacedRepetitionData(currentUser.userId, currentUser.masteryData);
+
+            // Update session stats (count as total only on first attempt)
+            if (currentAttempts === MAX_ATTEMPTS) {
+                currentUser.sessionStats.total++;
+            }
+
+            // Update stats display
+            updateStatsDisplay();
+
+            // Show final feedback with correct answer
+            showFeedback(isCorrect, correctAnswer, currentAttempts, MAX_ATTEMPTS, true);
+
+            // Disable input and submit button
+            answerInput.disabled = true;
+            submitBtn.disabled = true;
+
+            // Update progress display
+            updateProgressDisplay();
+        } else {
+            // Still have attempts left - allow retry
+            showFeedback(isCorrect, correctAnswer, currentAttempts, MAX_ATTEMPTS, false);
+
+            // Clear input to encourage fresh attempt
+            answerInput.value = '';
+            answerInput.focus();
+
+            // Don't disable input - allow retry
+            // Don't show next button yet
+        }
+    }
 }
 
 /**
- * Show feedback to user
+ * Show feedback to user with retry attempt tracking
  */
-function showFeedback(isCorrect, answerText) {
+function showFeedback(isCorrect, answerText, attempts = 1, maxAttempts = 3, isFinalAttempt = false) {
     feedback.classList.remove('hidden');
 
     if (isCorrect) {
         feedback.classList.add('correct');
         feedback.classList.remove('incorrect');
         feedbackIcon.textContent = '✓';
-        feedbackMessage.textContent = 'Correct! Well done!';
+
+        // Show attempt info if it took multiple tries
+        if (attempts > 1) {
+            feedbackMessage.textContent = `Correct! (Attempt ${attempts}/${maxAttempts})`;
+        } else {
+            feedbackMessage.textContent = 'Correct! Well done!';
+        }
 
         // Show explanation for grammar exercises
         if (currentQuestion.explanation) {
@@ -741,15 +841,24 @@ function showFeedback(isCorrect, answerText) {
         feedback.classList.add('incorrect');
         feedback.classList.remove('correct');
         feedbackIcon.textContent = '✗';
-        feedbackMessage.textContent = 'Not quite right.';
 
-        // Show correct answer and explanation
-        let feedbackText = `The correct answer is: ${answerText}`;
-        if (currentQuestion.explanation) {
-            feedbackText += `\n${currentQuestion.explanation}`;
+        // Check if more attempts available
+        if (isFinalAttempt) {
+            feedbackMessage.textContent = `Maximum attempts reached (${attempts}/${maxAttempts})`;
+
+            // Show correct answer and explanation
+            let feedbackText = `The correct answer is: ${answerText}`;
+            if (currentQuestion.explanation) {
+                feedbackText += `\n${currentQuestion.explanation}`;
+            }
+            correctAnswer.textContent = feedbackText;
+            correctAnswer.style.color = '#ef4444';
+        } else {
+            const remainingAttempts = maxAttempts - attempts;
+            feedbackMessage.textContent = `Not quite right. (Attempt ${attempts}/${maxAttempts} - ${remainingAttempts} ${remainingAttempts === 1 ? 'try' : 'tries'} remaining)`;
+            correctAnswer.textContent = 'Try again!';
+            correctAnswer.style.color = '#f59e0b'; // Orange color for retry
         }
-        correctAnswer.textContent = feedbackText;
-        correctAnswer.style.color = '#ef4444';
     }
 }
 
@@ -832,12 +941,12 @@ function checkConjugationTable() {
 
                     // Track mastery for the verb/tense
                     if (currentUser.userId && window.AssessmentSystem) {
-                        window.AssessmentSystem.updateMastery(
-                            currentUser.userId,
+                        currentUser.masteryData = window.AssessmentSystem.recordAttempt(
+                            currentUser.masteryData,
                             currentQuestion.id,
-                            allCorrect,
-                            currentUser.masteryData
+                            allCorrect
                         );
+                        window.AssessmentSystem.saveProgress(currentUser.userId, currentUser.masteryData);
                         updateProgressDisplay();
                     }
 
