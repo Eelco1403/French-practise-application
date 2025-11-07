@@ -116,7 +116,34 @@ const TRANSLATIONS = {
             levelUp: 'Congratulations! You are ready for the next level!',
             keepPracticing: 'Keep practicing to improve your mastery.',
             sessionResumed: 'Session resumed successfully.',
-            errorLoading: 'Error loading data. Please try again.'
+            errorLoading: 'Error loading data. Please try again.',
+            noContentAvailable: 'No Content Available',
+            noExercisesFor: 'Sorry, there are no {type} exercises available yet.',
+            tryDifferentType: 'Please try a different exercise type or contact support.',
+            maxAttemptsReached: 'Maximum attempts reached ({current}/{max})',
+            attemptCounter: 'Attempt {current}/{max} - {remaining} {triesText} remaining',
+            tryAgain: 'Try again!',
+            tryText: 'try',
+            triesText: 'tries',
+            closeAccents: 'Close! At level {level}, accent marks are required. Correct answer: {answer}',
+            accentHelperLabel: 'Accent Helper (click to insert):',
+            switchUser: 'Switch User',
+            addNewUser: '+ Add New User',
+            resetUserData: 'Reset Current User Data',
+            noUsersFound: 'No users found',
+            confirmReset: 'Are you sure you want to reset all progress for {name}?',
+            confirmResetDetails: 'This will:\n- Clear all exercise history\n- Reset all mastery levels to 0%\n- Delete all statistics\n\nThis action cannot be undone!',
+            userDataReset: 'All progress for {name} has been reset.',
+            userNotFound: 'User not found!',
+            answerPlaceholder: 'Type your answer...',
+            checkAnswer: 'Check Answer',
+            nextQuestion: 'Next Question',
+            correctWellDone: 'Correct! Well done!',
+            correctOnAttempt: 'Correct! (Attempt {attempt}/{max})',
+            incorrectAnswer: 'Not quite right.',
+            correctAnswerIs: 'The correct answer is: {answer}',
+            remainingQuestions: 'Great! {count} more question(s) about this passage.',
+            completedPassage: 'Perfect! You\'ve completed all questions for this passage.'
         },
 
         // Exercise Type Badges
@@ -240,7 +267,34 @@ const TRANSLATIONS = {
             levelUp: 'Gefeliciteerd! Je bent klaar voor het volgende niveau!',
             keepPracticing: 'Blijf oefenen om je beheersing te verbeteren.',
             sessionResumed: 'Sessie succesvol hervat.',
-            errorLoading: 'Fout bij laden van gegevens. Probeer het opnieuw.'
+            errorLoading: 'Fout bij laden van gegevens. Probeer het opnieuw.',
+            noContentAvailable: 'Geen Inhoud Beschikbaar',
+            noExercisesFor: 'Sorry, er zijn nog geen {type} oefeningen beschikbaar.',
+            tryDifferentType: 'Probeer een ander oefentype of neem contact op met ondersteuning.',
+            maxAttemptsReached: 'Maximum pogingen bereikt ({current}/{max})',
+            attemptCounter: 'Poging {current}/{max} - nog {remaining} {triesText}',
+            tryAgain: 'Probeer het opnieuw!',
+            tryText: 'poging',
+            triesText: 'pogingen',
+            closeAccents: 'Bijna! Op niveau {level} zijn accenttekens vereist. Juiste antwoord: {answer}',
+            accentHelperLabel: 'Accenthulp (klik om in te voegen):',
+            switchUser: 'Wissel Gebruiker',
+            addNewUser: '+ Nieuwe Gebruiker Toevoegen',
+            resetUserData: 'Gebruikersgegevens Resetten',
+            noUsersFound: 'Geen gebruikers gevonden',
+            confirmReset: 'Weet je zeker dat je alle voortgang voor {name} wilt resetten?',
+            confirmResetDetails: 'Dit zal:\n- Alle oefengeschiedenis wissen\n- Alle beheersingsniveaus resetten naar 0%\n- Alle statistieken verwijderen\n\nDeze actie kan niet ongedaan worden gemaakt!',
+            userDataReset: 'Alle voortgang voor {name} is gereset.',
+            userNotFound: 'Gebruiker niet gevonden!',
+            answerPlaceholder: 'Typ je antwoord...',
+            checkAnswer: 'Controleer Antwoord',
+            nextQuestion: 'Volgende Vraag',
+            correctWellDone: 'Correct! Goed gedaan!',
+            correctOnAttempt: 'Correct! (Poging {attempt}/{max})',
+            incorrectAnswer: 'Niet helemaal juist.',
+            correctAnswerIs: 'Het juiste antwoord is: {answer}',
+            remainingQuestions: 'Geweldig! Nog {count} vraag/vragen over deze passage.',
+            completedPassage: 'Perfect! Je hebt alle vragen voor deze passage voltooid.'
         },
 
         // Oefentype Badges
@@ -364,7 +418,34 @@ const TRANSLATIONS = {
             levelUp: 'Félicitations! Vous êtes prêt pour le niveau suivant!',
             keepPracticing: 'Continuez à pratiquer pour améliorer votre maîtrise.',
             sessionResumed: 'Session reprise avec succès.',
-            errorLoading: 'Erreur de chargement des données. Veuillez réessayer.'
+            errorLoading: 'Erreur de chargement des données. Veuillez réessayer.',
+            noContentAvailable: 'Aucun Contenu Disponible',
+            noExercisesFor: 'Désolé, il n\'y a pas encore d\'exercices {type} disponibles.',
+            tryDifferentType: 'Veuillez essayer un autre type d\'exercice ou contactez le support.',
+            maxAttemptsReached: 'Nombre maximum de tentatives atteint ({current}/{max})',
+            attemptCounter: 'Tentative {current}/{max} - {remaining} {triesText} restante(s)',
+            tryAgain: 'Réessayez!',
+            tryText: 'tentative',
+            triesText: 'tentatives',
+            closeAccents: 'Presque! Au niveau {level}, les accents sont obligatoires. Réponse correcte: {answer}',
+            accentHelperLabel: 'Aide aux accents (cliquez pour insérer):',
+            switchUser: 'Changer d\'Utilisateur',
+            addNewUser: '+ Ajouter un Nouvel Utilisateur',
+            resetUserData: 'Réinitialiser les Données de l\'Utilisateur',
+            noUsersFound: 'Aucun utilisateur trouvé',
+            confirmReset: 'Êtes-vous sûr de vouloir réinitialiser tous les progrès de {name}?',
+            confirmResetDetails: 'Cela va:\n- Effacer tout l\'historique des exercices\n- Réinitialiser tous les niveaux de maîtrise à 0%\n- Supprimer toutes les statistiques\n\nCette action ne peut pas être annulée!',
+            userDataReset: 'Tous les progrès de {name} ont été réinitialisés.',
+            userNotFound: 'Utilisateur non trouvé!',
+            answerPlaceholder: 'Tapez votre réponse...',
+            checkAnswer: 'Vérifier la Réponse',
+            nextQuestion: 'Question Suivante',
+            correctWellDone: 'Correct! Bien joué!',
+            correctOnAttempt: 'Correct! (Tentative {attempt}/{max})',
+            incorrectAnswer: 'Pas tout à fait correct.',
+            correctAnswerIs: 'La réponse correcte est: {answer}',
+            remainingQuestions: 'Super! {count} question(s) de plus sur ce passage.',
+            completedPassage: 'Parfait! Vous avez terminé toutes les questions pour ce passage.'
         },
 
         // Badges de type d'exercice
@@ -488,7 +569,34 @@ const TRANSLATIONS = {
             levelUp: 'Herzlichen Glückwunsch! Du bist bereit für das nächste Niveau!',
             keepPracticing: 'Übe weiter, um deine Beherrschung zu verbessern.',
             sessionResumed: 'Sitzung erfolgreich fortgesetzt.',
-            errorLoading: 'Fehler beim Laden der Daten. Bitte versuche es erneut.'
+            errorLoading: 'Fehler beim Laden der Daten. Bitte versuche es erneut.',
+            noContentAvailable: 'Kein Inhalt Verfügbar',
+            noExercisesFor: 'Entschuldigung, es sind noch keine {type} Übungen verfügbar.',
+            tryDifferentType: 'Bitte versuchen Sie einen anderen Übungstyp oder kontaktieren Sie den Support.',
+            maxAttemptsReached: 'Maximale Versuche erreicht ({current}/{max})',
+            attemptCounter: 'Versuch {current}/{max} - {remaining} {triesText} übrig',
+            tryAgain: 'Versuchen Sie es nochmal!',
+            tryText: 'Versuch',
+            triesText: 'Versuche',
+            closeAccents: 'Fast! Auf Niveau {level} sind Akzentzeichen erforderlich. Richtige Antwort: {answer}',
+            accentHelperLabel: 'Akzenthilfe (klicken zum Einfügen):',
+            switchUser: 'Benutzer Wechseln',
+            addNewUser: '+ Neuen Benutzer Hinzufügen',
+            resetUserData: 'Benutzerdaten Zurücksetzen',
+            noUsersFound: 'Keine Benutzer gefunden',
+            confirmReset: 'Sind Sie sicher, dass Sie alle Fortschritte für {name} zurücksetzen möchten?',
+            confirmResetDetails: 'Dies wird:\n- Alle Übungshistorie löschen\n- Alle Beherrschungsstufen auf 0% zurücksetzen\n- Alle Statistiken löschen\n\nDiese Aktion kann nicht rückgängig gemacht werden!',
+            userDataReset: 'Alle Fortschritte für {name} wurden zurückgesetzt.',
+            userNotFound: 'Benutzer nicht gefunden!',
+            answerPlaceholder: 'Gib deine Antwort ein...',
+            checkAnswer: 'Antwort Überprüfen',
+            nextQuestion: 'Nächste Frage',
+            correctWellDone: 'Richtig! Gut gemacht!',
+            correctOnAttempt: 'Richtig! (Versuch {attempt}/{max})',
+            incorrectAnswer: 'Nicht ganz richtig.',
+            correctAnswerIs: 'Die richtige Antwort ist: {answer}',
+            remainingQuestions: 'Großartig! {count} weitere Frage(n) zu diesem Text.',
+            completedPassage: 'Perfekt! Du hast alle Fragen zu diesem Text beantwortet.'
         },
 
         // Übungstyp-Abzeichen
@@ -507,9 +615,15 @@ const TRANSLATIONS = {
 let currentLanguage = 'en';
 
 /**
- * Get translated text
+ * Get translated text with optional variable interpolation
+ * @param {string} key - Translation key (e.g., 'messages.confirmReset')
+ * @param {Object} vars - Variables to interpolate (e.g., {name: 'John', count: 5})
+ * @returns {string} Translated and interpolated text
+ *
+ * Example: t('messages.confirmReset', {name: 'John'})
+ *          Returns: "Are you sure you want to reset all progress for John?"
  */
-function t(key) {
+function t(key, vars = {}) {
     const keys = key.split('.');
     let value = TRANSLATIONS[currentLanguage];
 
@@ -520,6 +634,13 @@ function t(key) {
             console.warn(`Translation missing: ${key} for language ${currentLanguage}`);
             return key;
         }
+    }
+
+    // Interpolate variables if provided
+    if (typeof value === 'string' && Object.keys(vars).length > 0) {
+        return value.replace(/\{(\w+)\}/g, (match, varName) => {
+            return vars[varName] !== undefined ? vars[varName] : match;
+        });
     }
 
     return value;

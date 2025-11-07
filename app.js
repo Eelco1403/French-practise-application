@@ -180,6 +180,9 @@ function init() {
     // User Management event listeners
     initializeUserManagement();
 
+    // Skills Grid event listeners
+    initializeSkillsGrid();
+
     // Try to load existing user from localStorage
     const savedUserId = localStorage.getItem('currentUserId');
     if (savedUserId) {
@@ -409,7 +412,26 @@ function loadNextQuestion() {
 
     // Fallback if no questions available
     if (!availableQuestions || availableQuestions.length === 0) {
-        currentQuestion = window.FrenchContent.getRandomQuestion(currentExerciseType);
+        // Try to get any question without level filtering as last resort
+        const allQuestionsForType = window.FrenchContent.getContentByType(currentExerciseType);
+
+        if (!allQuestionsForType || allQuestionsForType.length === 0) {
+            // No content available for this exercise type at all
+            questionText.innerHTML = `
+                <div style="padding: 20px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; color: #991b1b;">
+                    <h3 style="margin-top: 0;">⚠️ No Content Available</h3>
+                    <p>Sorry, there are no ${currentExerciseType} exercises available yet.</p>
+                    <p>Please try a different exercise type or contact support.</p>
+                </div>
+            `;
+            answerInput.style.display = 'none';
+            submitBtn.style.display = 'none';
+            return;
+        } else {
+            // Content exists but not for user's level - show message and use random question
+            console.warn(`No ${currentExerciseType} exercises found for level ${currentUser.cefrLevel}. Using questions from other levels.`);
+            currentQuestion = allQuestionsForType[Math.floor(Math.random() * allQuestionsForType.length)];
+        }
     } else {
         // Use spaced repetition to prioritize questions
         const prioritizedQuestions = window.SpacedRepetitionEngine.prioritizeQuestions(
@@ -444,6 +466,10 @@ function loadNextQuestion() {
     // Update UI based on question type
     const questionLabel = document.querySelector('.question-label');
     const questionTypeDisplay = document.getElementById('questionType');
+
+    // Ensure regular answer inputs are visible by default (will be hidden for special types like conjugation tables)
+    answerInput.style.display = '';
+    submitBtn.style.display = '';
 
     // Handle reading comprehension passages
     if (currentQuestion.passage && currentQuestion.questions) {
@@ -829,9 +855,9 @@ function showFeedback(isCorrect, answerText, attempts = 1, maxAttempts = 3, isFi
 
         // Show attempt info if it took multiple tries
         if (attempts > 1) {
-            feedbackMessage.textContent = `Correct! (Attempt ${attempts}/${maxAttempts})`;
+            feedbackMessage.textContent = window.I18n.t('messages.correctOnAttempt', {attempt: attempts, max: maxAttempts});
         } else {
-            feedbackMessage.textContent = 'Correct! Well done!';
+            feedbackMessage.textContent = window.I18n.t('messages.correctWellDone');
         }
 
         // Show explanation for grammar exercises
@@ -843,10 +869,10 @@ function showFeedback(isCorrect, answerText, attempts = 1, maxAttempts = 3, isFi
         else if (currentQuestion.passage && currentQuestion.questions) {
             const remaining = currentQuestion.questions.length - currentQuestion.currentQuestionIndex - 1;
             if (remaining > 0) {
-                correctAnswer.textContent = `Great! ${remaining} more question(s) about this passage.`;
+                correctAnswer.textContent = window.I18n.t('messages.remainingQuestions', {count: remaining});
                 correctAnswer.style.color = '#10b981';
             } else {
-                correctAnswer.textContent = 'Perfect! You\'ve completed all questions for this passage.';
+                correctAnswer.textContent = window.I18n.t('messages.completedPassage');
                 correctAnswer.style.color = '#10b981';
             }
         }
@@ -860,10 +886,10 @@ function showFeedback(isCorrect, answerText, attempts = 1, maxAttempts = 3, isFi
 
         // Check if more attempts available
         if (isFinalAttempt) {
-            feedbackMessage.textContent = `Maximum attempts reached (${attempts}/${maxAttempts})`;
+            feedbackMessage.textContent = window.I18n.t('messages.maxAttemptsReached', {current: attempts, max: maxAttempts});
 
             // Show correct answer and explanation
-            let feedbackText = `The correct answer is: ${answerText}`;
+            let feedbackText = window.I18n.t('messages.correctAnswerIs', {answer: answerText});
             if (currentQuestion.explanation) {
                 feedbackText += `\n${currentQuestion.explanation}`;
             }
@@ -871,8 +897,9 @@ function showFeedback(isCorrect, answerText, attempts = 1, maxAttempts = 3, isFi
             correctAnswer.style.color = '#ef4444';
         } else {
             const remainingAttempts = maxAttempts - attempts;
-            feedbackMessage.textContent = `Not quite right. (Attempt ${attempts}/${maxAttempts} - ${remainingAttempts} ${remainingAttempts === 1 ? 'try' : 'tries'} remaining)`;
-            correctAnswer.textContent = 'Try again!';
+            const triesText = remainingAttempts === 1 ? window.I18n.t('messages.tryText') : window.I18n.t('messages.triesText');
+            feedbackMessage.textContent = window.I18n.t('messages.attemptCounter', {current: attempts, max: maxAttempts, remaining: remainingAttempts, triesText: triesText});
+            correctAnswer.textContent = window.I18n.t('messages.tryAgain');
             correctAnswer.style.color = '#f59e0b'; // Orange color for retry
         }
     }
@@ -1255,6 +1282,20 @@ function updateUILanguage() {
     document.getElementById('exportJSONLabel').textContent = t('report.downloadPDF');
     document.getElementById('exportCSVLabel').textContent = t('report.downloadCSV');
     document.getElementById('printLabel').textContent = t('report.printReport');
+
+    // Accent Helper
+    const accentHelperLabel = document.getElementById('accentHelperLabel');
+    if (accentHelperLabel) accentHelperLabel.textContent = t('messages.accentHelperLabel');
+
+    // User Management
+    const userDropdownHeader = document.getElementById('userDropdownHeader');
+    if (userDropdownHeader) userDropdownHeader.textContent = t('messages.switchUser');
+
+    const addNewUserLabel = document.getElementById('addNewUserLabel');
+    if (addNewUserLabel) addNewUserLabel.textContent = t('messages.addNewUser');
+
+    const resetUserDataLabel = document.getElementById('resetUserDataLabel');
+    if (resetUserDataLabel) resetUserDataLabel.textContent = t('messages.resetUserData');
 }
 
 /**
@@ -2211,6 +2252,17 @@ function createVerbCard(verb) {
     tenseCount.textContent = `${verb.conjugations.length} tenses`;
     info.appendChild(tenseCount);
 
+    // Calculate overall mastery for this verb
+    const verbMastery = calculateVerbMastery(verb);
+    if (verbMastery.attempted > 0) {
+        const masterySpan = document.createElement('span');
+        masterySpan.className = 'verb-mastery';
+        masterySpan.textContent = `${verbMastery.percentage}% mastered`;
+        masterySpan.style.color = verbMastery.percentage >= 75 ? '#10b981' : verbMastery.percentage >= 50 ? '#f59e0b' : '#ef4444';
+        masterySpan.style.fontWeight = '600';
+        info.appendChild(masterySpan);
+    }
+
     card.appendChild(info);
 
     // Click handler to show verb details
@@ -2220,7 +2272,40 @@ function createVerbCard(verb) {
 }
 
 /**
- * Show verb details with all available tenses
+ * Calculate overall mastery for a verb across all tenses
+ */
+function calculateVerbMastery(verb) {
+    if (!currentUser || !currentUser.masteryData) {
+        return { percentage: 0, attempted: 0, mastered: 0 };
+    }
+
+    let totalAttempted = 0;
+    let totalMastered = 0;
+    let totalPercentage = 0;
+
+    verb.conjugations.forEach(conj => {
+        const mastery = currentUser.masteryData[conj.id];
+        if (mastery && mastery.timesAttempted > 0) {
+            totalAttempted++;
+            totalPercentage += mastery.masteryPercentage;
+            if (mastery.stage === 'mastered' || mastery.stage === 'solid') {
+                totalMastered++;
+            }
+        }
+    });
+
+    const percentage = totalAttempted > 0 ? Math.round(totalPercentage / totalAttempted) : 0;
+
+    return {
+        percentage,
+        attempted: totalAttempted,
+        mastered: totalMastered,
+        total: verb.conjugations.length
+    };
+}
+
+/**
+ * Show verb details with all available tenses and mastery by tense
  */
 function showVerbDetails(verb) {
     currentSelectedVerb = verb;
@@ -2237,23 +2322,87 @@ function showVerbDetails(verb) {
     document.getElementById('verbLevel').textContent = verb.cefrLevel;
     document.getElementById('verbEnglish').textContent = verb.english;
 
-    // Display available tenses
+    // Display available tenses with mastery information
     const tensesList = document.getElementById('verbTensesList');
     tensesList.innerHTML = '';
 
     verb.conjugations.forEach(conj => {
         const tenseItem = document.createElement('div');
         tenseItem.className = 'verb-tense-item';
+        tenseItem.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 12px; margin: 8px 0; background: #f9fafb; border-radius: 8px; cursor: pointer; transition: background 0.2s;';
+
+        // Add hover effect
+        tenseItem.onmouseover = () => tenseItem.style.background = '#e5e7eb';
+        tenseItem.onmouseout = () => tenseItem.style.background = '#f9fafb';
+
+        const leftSide = document.createElement('div');
+        leftSide.style.display = 'flex';
+        leftSide.style.alignItems = 'center';
+        leftSide.style.gap = '10px';
 
         const icon = document.createElement('span');
         icon.className = 'verb-tense-icon';
         icon.textContent = '🔄';
-        tenseItem.appendChild(icon);
+        icon.style.fontSize = '1.2em';
+        leftSide.appendChild(icon);
 
         const name = document.createElement('span');
         name.className = 'verb-tense-name';
         name.textContent = conj.tenseFr || conj.tense;
-        tenseItem.appendChild(name);
+        name.style.fontWeight = '600';
+        name.style.color = '#374151';
+        leftSide.appendChild(name);
+
+        tenseItem.appendChild(leftSide);
+
+        // Add mastery information
+        const mastery = currentUser.masteryData?.[conj.id];
+        if (mastery && mastery.timesAttempted > 0) {
+            const masteryInfo = document.createElement('div');
+            masteryInfo.style.display = 'flex';
+            masteryInfo.style.alignItems = 'center';
+            masteryInfo.style.gap = '12px';
+
+            // Progress bar
+            const progressContainer = document.createElement('div');
+            progressContainer.style.cssText = 'width: 100px; height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden;';
+
+            const progressBar = document.createElement('div');
+            const percentage = Math.round(mastery.masteryPercentage);
+            progressBar.style.cssText = `width: ${percentage}%; height: 100%; background: ${percentage >= 75 ? '#10b981' : percentage >= 50 ? '#f59e0b' : '#ef4444'}; transition: width 0.3s;`;
+            progressContainer.appendChild(progressBar);
+            masteryInfo.appendChild(progressContainer);
+
+            // Percentage label
+            const percentageLabel = document.createElement('span');
+            percentageLabel.textContent = `${percentage}%`;
+            percentageLabel.style.cssText = `font-weight: 600; font-size: 0.9em; color: ${percentage >= 75 ? '#10b981' : percentage >= 50 ? '#f59e0b' : '#ef4444'};`;
+            masteryInfo.appendChild(percentageLabel);
+
+            // Stage badge
+            const stageBadge = document.createElement('span');
+            stageBadge.textContent = mastery.stage;
+            stageBadge.style.cssText = 'padding: 4px 8px; border-radius: 6px; font-size: 0.75em; font-weight: 600; text-transform: uppercase;';
+
+            const stageColors = {
+                learning: { bg: '#fef2f2', text: '#991b1b' },
+                developing: { bg: '#fef3c7', text: '#92400e' },
+                mastered: { bg: '#d1fae5', text: '#065f46' },
+                solid: { bg: '#dbeafe', text: '#1e3a8a' }
+            };
+            const colors = stageColors[mastery.stage] || stageColors.learning;
+            stageBadge.style.background = colors.bg;
+            stageBadge.style.color = colors.text;
+            masteryInfo.appendChild(stageBadge);
+
+            tenseItem.appendChild(masteryInfo);
+        } else {
+            const notPracticed = document.createElement('span');
+            notPracticed.textContent = 'Not practiced yet';
+            notPracticed.style.color = '#9ca3af';
+            notPracticed.style.fontSize = '0.9em';
+            tenseItem.appendChild(notPracticed);
+        }
 
         tensesList.appendChild(tenseItem);
     });
@@ -2653,6 +2802,239 @@ function resetCurrentUserData() {
 
     // Load next question
     loadNextQuestion();
+}
+
+/**
+ * Initialize Skills Grid functionality
+ * Handles toggling between summary and detailed views, and filtering skills
+ */
+function initializeSkillsGrid() {
+    const showSummaryBtn = document.getElementById('showSummaryBtn');
+    const showDetailedBtn = document.getElementById('showDetailedBtn');
+    const progressSummary = document.getElementById('progressSummary');
+    const skillsGrid = document.getElementById('skillsGrid');
+
+    if (!showSummaryBtn || !showDetailedBtn) return;
+
+    // Toggle to summary view
+    showSummaryBtn.addEventListener('click', () => {
+        progressSummary.style.display = 'grid';
+        skillsGrid.style.display = 'none';
+        showSummaryBtn.classList.add('active');
+        showDetailedBtn.classList.remove('active');
+    });
+
+    // Toggle to detailed view
+    showDetailedBtn.addEventListener('click', () => {
+        progressSummary.style.display = 'none';
+        skillsGrid.style.display = 'block';
+        showSummaryBtn.classList.remove('active');
+        showDetailedBtn.classList.add('active');
+
+        // Populate skills grid
+        populateSkillsGrid();
+    });
+
+    // Filter buttons
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Update active state
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Filter skills
+            const filter = btn.getAttribute('data-filter');
+            filterSkills(filter);
+        });
+    });
+}
+
+/**
+ * Populate skills grid with mastery cards
+ */
+function populateSkillsGrid(filter = 'all') {
+    const container = document.getElementById('skillsCardsContainer');
+    const noSkillsMessage = document.getElementById('noSkillsMessage');
+
+    if (!container) return;
+
+    // Get all items with mastery data
+    const masteryData = currentUser.masteryData || {};
+    const allContent = window.FrenchContent.getAllContent();
+
+    // Build skills array with mastery info
+    const skills = [];
+    Object.keys(masteryData).forEach(itemId => {
+        const item = allContent.find(c => c.id === itemId);
+        if (item && masteryData[itemId]) {
+            const mastery = masteryData[itemId];
+            skills.push({
+                id: itemId,
+                item: item,
+                mastery: mastery
+            });
+        }
+    });
+
+    // Sort by mastery percentage (lowest first to prioritize practice)
+    skills.sort((a, b) => a.mastery.masteryPercentage - b.mastery.masteryPercentage);
+
+    // Filter if needed
+    let filteredSkills = skills;
+    if (filter !== 'all') {
+        filteredSkills = skills.filter(s => s.mastery.stage === filter);
+    }
+
+    // Show/hide no skills message
+    if (filteredSkills.length === 0) {
+        container.style.display = 'none';
+        noSkillsMessage.style.display = 'block';
+        return;
+    } else {
+        container.style.display = 'grid';
+        noSkillsMessage.style.display = 'none';
+    }
+
+    // Build HTML for skills
+    container.innerHTML = filteredSkills.map(skill => createSkillCard(skill)).join('');
+
+    // Add click handlers to skill cards
+    const skillCards = container.querySelectorAll('.skill-card');
+    skillCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const skillId = card.getAttribute('data-skill-id');
+            showSkillDetails(skillId);
+        });
+    });
+}
+
+/**
+ * Create HTML for a skill card
+ */
+function createSkillCard(skill) {
+    const { item, mastery } = skill;
+    const percentage = Math.round(mastery.masteryPercentage);
+    const stage = mastery.stage;
+
+    // Color coding by mastery level
+    const colorMap = {
+        learning: { bg: '#fef2f2', border: '#fca5a5', text: '#991b1b', icon: '📚' },
+        developing: { bg: '#fef3c7', border: '#fbbf24', text: '#92400e', icon: '📈' },
+        mastered: { bg: '#d1fae5', border: '#6ee7b7', text: '#065f46', icon: '✓' },
+        solid: { bg: '#dbeafe', border: '#60a5fa', text: '#1e3a8a', icon: '⭐' }
+    };
+
+    const colors = colorMap[stage] || colorMap.learning;
+
+    // Get word/skill name and translation
+    let skillName = item.french || item.verb || item.title || 'Unknown';
+    let translation = item.english || item.question || '';
+
+    // Determine type badge
+    let typeBadge = '';
+    if (item.verb) typeBadge = '🔄 Conjugation';
+    else if (item.passage) typeBadge = '📖 Reading';
+    else if (item.turns) typeBadge = '💬 Dialogue';
+    else if (item.explanation) typeBadge = '📝 Grammar';
+    else typeBadge = '📚 Vocabulary';
+
+    return `
+        <div class="skill-card" data-skill-id="${skill.id}" style="
+            background: ${colors.bg};
+            border: 2px solid ${colors.border};
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        " onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 6px 12px rgba(0,0,0,0.15)';"
+           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+
+            <!-- Header with icon and stage -->
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+                <div style="font-size: 2em;">${colors.icon}</div>
+                <div style="
+                    background: ${colors.border};
+                    color: white;
+                    padding: 4px 10px;
+                    border-radius: 12px;
+                    font-size: 0.75em;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                ">${stage}</div>
+            </div>
+
+            <!-- Skill name and translation -->
+            <div style="margin-bottom: 12px;">
+                <div style="font-size: 1.2em; font-weight: 700; color: ${colors.text}; margin-bottom: 4px;">
+                    ${skillName}
+                </div>
+                <div style="font-size: 0.9em; color: #6b7280;">
+                    ${translation}
+                </div>
+            </div>
+
+            <!-- Type badge -->
+            <div style="font-size: 0.8em; color: #6b7280; margin-bottom: 12px;">
+                ${typeBadge}
+            </div>
+
+            <!-- Progress bar -->
+            <div style="margin-bottom: 8px;">
+                <div style="background: #e5e7eb; height: 8px; border-radius: 4px; overflow: hidden;">
+                    <div style="
+                        background: ${colors.border};
+                        height: 100%;
+                        width: ${percentage}%;
+                        transition: width 0.3s;
+                    "></div>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div style="display: flex; justify-content: space-between; font-size: 0.85em; color: #6b7280;">
+                <span><strong>${percentage}%</strong> mastery</span>
+                <span>${mastery.timesCorrect}/${mastery.timesAttempted} correct</span>
+            </div>
+        </div>
+    `;
+}
+
+/**
+ * Filter skills by mastery level
+ */
+function filterSkills(filter) {
+    populateSkillsGrid(filter);
+}
+
+/**
+ * Show detailed information about a skill
+ */
+function showSkillDetails(skillId) {
+    const mastery = currentUser.masteryData[skillId];
+    const allContent = window.FrenchContent.getAllContent();
+    const item = allContent.find(c => c.id === skillId);
+
+    if (!item || !mastery) return;
+
+    const percentage = Math.round(mastery.masteryPercentage);
+    const stage = mastery.stage;
+
+    let skillName = item.french || item.verb || item.title || 'Unknown';
+    let translation = item.english || item.question || '';
+
+    const details = `
+        <strong>Skill:</strong> ${skillName}<br>
+        <strong>Translation:</strong> ${translation}<br>
+        <strong>Mastery:</strong> ${percentage}% (${stage})<br>
+        <strong>Attempts:</strong> ${mastery.timesAttempted}<br>
+        <strong>Correct:</strong> ${mastery.timesCorrect}<br>
+        <strong>First practiced:</strong> ${new Date(mastery.firstAttemptDate).toLocaleDateString()}<br>
+        ${mastery.lastAttemptDate ? `<strong>Last practiced:</strong> ${new Date(mastery.lastAttemptDate).toLocaleDateString()}` : ''}
+    `;
+
+    alert(details);
 }
 
 /**
