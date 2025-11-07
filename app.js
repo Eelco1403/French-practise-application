@@ -372,6 +372,8 @@ function advanceToNext() {
  * Load next question
  */
 function loadNextQuestion() {
+    console.log('[loadNextQuestion] Starting with exerciseType:', currentExerciseType, 'cefrLevel:', currentUser.cefrLevel);
+
     // Reset retry logic for new question
     currentAttempts = 0;
     questionAnsweredCorrectly = false;
@@ -388,19 +390,31 @@ function loadNextQuestion() {
     // Get all questions for current exercise type and level
     let availableQuestions = [];
 
-    if (currentExerciseType === 'all') {
-        availableQuestions = window.FrenchContent.getItemsUpToCefrLevel(currentUser.cefrLevel);
-    } else {
-        availableQuestions = window.FrenchContent.getContentByType(currentExerciseType);
-        // Filter by CEFR level
-        const levelOrder = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
-        const maxLevelIndex = levelOrder.indexOf(currentUser.cefrLevel);
-        if (maxLevelIndex !== -1) {
-            availableQuestions = availableQuestions.filter(q => {
-                const qLevelIndex = levelOrder.indexOf(q.cefrLevel);
-                return qLevelIndex !== -1 && qLevelIndex <= maxLevelIndex;
-            });
+    try {
+        if (currentExerciseType === 'all') {
+            console.log('[loadNextQuestion] Loading mixed exercises');
+            availableQuestions = window.FrenchContent.getItemsUpToCefrLevel(currentUser.cefrLevel);
+        } else {
+            console.log('[loadNextQuestion] Loading exercises for type:', currentExerciseType);
+            availableQuestions = window.FrenchContent.getContentByType(currentExerciseType);
+            console.log('[loadNextQuestion] Found', availableQuestions ? availableQuestions.length : 0, 'total exercises');
+
+            // Filter by CEFR level
+            const levelOrder = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+            const maxLevelIndex = levelOrder.indexOf(currentUser.cefrLevel);
+            if (maxLevelIndex !== -1) {
+                const beforeFilter = availableQuestions.length;
+                availableQuestions = availableQuestions.filter(q => {
+                    const qLevelIndex = levelOrder.indexOf(q.cefrLevel);
+                    return qLevelIndex !== -1 && qLevelIndex <= maxLevelIndex;
+                });
+                console.log('[loadNextQuestion] After level filtering:', beforeFilter, '→', availableQuestions.length);
+            }
         }
+    } catch (error) {
+        console.error('[loadNextQuestion] Error loading content:', error);
+        questionText.innerHTML = `<div style="color: red; padding: 20px;">Error loading exercises: ${error.message}</div>`;
+        return;
     }
 
     // Apply category filter for vocabulary if categories are selected
@@ -638,6 +652,8 @@ function loadNextQuestion() {
  * Check user's answer
  */
 function checkAnswer() {
+    console.log('[checkAnswer] Validating answer for question:', currentQuestion ? currentQuestion.id : 'none');
+
     // Handle verb practice mode
     if (currentVerbConjugations && currentVerbConjugations.length > 0 &&
         document.getElementById('verbPracticeView').style.display !== 'none') {
@@ -651,12 +667,20 @@ function checkAnswer() {
         return;
     }
 
+    if (!currentQuestion) {
+        console.error('[checkAnswer] No current question!');
+        showFeedbackModal('⚠️', 'No question loaded', 'Please select an exercise type first');
+        return;
+    }
+
     const userAnswer = answerInput.value.trim();
 
     if (!userAnswer) {
-        alert('Please enter an answer');
+        showFeedbackModal('⚠️', 'Please enter an answer', '');
         return;
     }
+
+    console.log('[checkAnswer] User answer:', userAnswer);
 
     // Get the correct answer based on question type
     let correctAnswer;
@@ -722,10 +746,12 @@ function checkAnswer() {
 
     // Increment attempt counter
     currentAttempts++;
+    console.log('[checkAnswer] Attempt', currentAttempts, 'of', MAX_ATTEMPTS, '- Result:', isCorrect ? 'CORRECT' : 'INCORRECT');
 
     // Handle correct answer
     if (isCorrect) {
         questionAnsweredCorrectly = true;
+        console.log('[checkAnswer] Answer is CORRECT!');
 
         // Record attempt in mastery system (only record once when correct)
         currentUser.masteryData = window.AssessmentSystem.recordAttempt(
@@ -782,9 +808,12 @@ function checkAnswer() {
     else {
         // Track mistake
         currentUser.sessionStats.mistakes++;
+        console.log('[checkAnswer] Incorrect answer. Total mistakes:', currentUser.sessionStats.mistakes);
 
         // Check if max attempts reached
         if (currentAttempts >= MAX_ATTEMPTS) {
+            console.log('[checkAnswer] MAX ATTEMPTS REACHED - showing answer and Next button');
+
             // Max attempts reached - record as incorrect and move on
             currentUser.masteryData = window.AssessmentSystem.recordAttempt(
                 currentUser.masteryData,
@@ -836,6 +865,9 @@ function checkAnswer() {
             nextBtn.style.display = 'inline-block';
         } else {
             // Still have attempts left - allow retry
+            const remainingAttempts = MAX_ATTEMPTS - currentAttempts;
+            console.log('[checkAnswer] Incorrect, but', remainingAttempts, 'attempts remaining');
+
             showFeedback(isCorrect, correctAnswer, currentAttempts, MAX_ATTEMPTS, false);
 
             // Clear input to encourage fresh attempt
@@ -1136,6 +1168,11 @@ function updateLevelProgress() {
  * Switch exercise type
  */
 function switchExerciseType(type) {
+    console.log('[switchExerciseType] Switching to type:', type);
+
+    // Store original type before transformation
+    const originalType = type;
+
     // Use conjugation tables instead of individual conjugations
     if (type === 'conjugation') {
         currentExerciseType = 'conjugation-table';
@@ -1146,7 +1183,7 @@ function switchExerciseType(type) {
     // Update button states
     const exerciseTypeBtns = document.querySelectorAll('.exercise-type-btn');
     exerciseTypeBtns.forEach(btn => {
-        if (btn.dataset.type === type) {
+        if (btn.dataset.type === originalType) {
             btn.classList.add('active');
         } else {
             btn.classList.remove('active');
@@ -1158,56 +1195,68 @@ function switchExerciseType(type) {
     const grammarTopicSelector = document.getElementById('grammarTopicSelector');
     const questionCard = document.querySelector('.question-card');
     const progressSection = document.querySelector('.progress-section');
+    const verbPracticeSelector = document.getElementById('verbPracticeSelector');
 
-    if (type === 'vocabulary' && categoryFilter) {
+    // Hide all special selectors by default
+    if (categoryFilter) categoryFilter.style.display = 'none';
+    if (grammarTopicSelector) grammarTopicSelector.style.display = 'none';
+    if (verbPracticeSelector) verbPracticeSelector.style.display = 'none';
+
+    // Show appropriate selector based on type
+    if (originalType === 'vocabulary' && categoryFilter) {
         categoryFilter.style.display = 'block';
         initializeCategoryFilter();
-        if (grammarTopicSelector) grammarTopicSelector.style.display = 'none';
         if (questionCard) questionCard.style.display = 'block';
         if (progressSection) progressSection.style.display = 'block';
-    } else if (type === 'grammar' && grammarTopicSelector) {
+
+        // Load vocabulary question immediately
+        console.log('[switchExerciseType] Loading vocabulary question');
+        loadNextQuestion();
+
+    } else if (originalType === 'grammar' && grammarTopicSelector) {
         // Show grammar topic selector
-        if (categoryFilter) categoryFilter.style.display = 'none';
         grammarTopicSelector.style.display = 'block';
         initializeGrammarTopicSelector();
 
         // Show topics grid view by default
-        document.getElementById('topicsGridView').style.display = 'block';
-        document.getElementById('lessonView').style.display = 'none';
-        document.getElementById('practiceView').style.display = 'none';
-        document.getElementById('backToTopicsBtn').style.display = 'none';
+        const topicsGridView = document.getElementById('topicsGridView');
+        const lessonView = document.getElementById('lessonView');
+        const practiceView = document.getElementById('practiceView');
+        const backToTopicsBtn = document.getElementById('backToTopicsBtn');
+
+        if (topicsGridView) topicsGridView.style.display = 'block';
+        if (lessonView) lessonView.style.display = 'none';
+        if (practiceView) practiceView.style.display = 'none';
+        if (backToTopicsBtn) backToTopicsBtn.style.display = 'none';
 
         if (questionCard) questionCard.style.display = 'block';
         if (progressSection) progressSection.style.display = 'block';
-    } else if (type === 'conjugation') {
+
+    } else if (originalType === 'conjugation' && verbPracticeSelector) {
         // Show verb practice selector for conjugation
-        const verbPracticeSelector = document.getElementById('verbPracticeSelector');
-        if (categoryFilter) categoryFilter.style.display = 'none';
-        if (grammarTopicSelector) grammarTopicSelector.style.display = 'none';
-        if (verbPracticeSelector) {
-            verbPracticeSelector.style.display = 'block';
-            initializeVerbPracticeSelector();
+        verbPracticeSelector.style.display = 'block';
+        initializeVerbPracticeSelector();
 
-            // Show verb list view by default
-            document.getElementById('verbListView').style.display = 'block';
-            document.getElementById('verbDetailView').style.display = 'none';
-            document.getElementById('verbPracticeView').style.display = 'none';
-            document.getElementById('backToVerbsBtn').style.display = 'none';
+        // Show verb list view by default
+        const verbListView = document.getElementById('verbListView');
+        const verbDetailView = document.getElementById('verbDetailView');
+        const verbPracticeView = document.getElementById('verbPracticeView');
+        const backToVerbsBtn = document.getElementById('backToVerbsBtn');
 
-            if (questionCard) questionCard.style.display = 'block';
-            if (progressSection) progressSection.style.display = 'block';
-        }
-    } else {
-        const verbPracticeSelector = document.getElementById('verbPracticeSelector');
-        if (categoryFilter) categoryFilter.style.display = 'none';
-        if (grammarTopicSelector) grammarTopicSelector.style.display = 'none';
-        if (verbPracticeSelector) verbPracticeSelector.style.display = 'none';
+        if (verbListView) verbListView.style.display = 'block';
+        if (verbDetailView) verbDetailView.style.display = 'none';
+        if (verbPracticeView) verbPracticeView.style.display = 'none';
+        if (backToVerbsBtn) backToVerbsBtn.style.display = 'none';
+
         if (questionCard) questionCard.style.display = 'block';
         if (progressSection) progressSection.style.display = 'block';
-    }
 
-    // Load new question of selected type (unless grammar topic or conjugation mode)
-    if (type !== 'grammar' && type !== 'conjugation') {
+    } else {
+        // For reading, dialogue, and all types - load question immediately
+        if (questionCard) questionCard.style.display = 'block';
+        if (progressSection) progressSection.style.display = 'block';
+
+        console.log('[switchExerciseType] Loading question for type:', originalType);
         loadNextQuestion();
     }
 }
