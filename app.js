@@ -774,6 +774,9 @@ function checkAnswer() {
 
         // Update progress display
         updateProgressDisplay();
+
+        // Show Next button to advance
+        nextBtn.style.display = 'inline-block';
     }
     // Handle incorrect answer
     else {
@@ -828,6 +831,9 @@ function checkAnswer() {
 
             // Update progress display
             updateProgressDisplay();
+
+            // Show Next button to advance after max attempts
+            nextBtn.style.display = 'inline-block';
         } else {
             // Still have attempts left - allow retry
             showFeedback(isCorrect, correctAnswer, currentAttempts, MAX_ATTEMPTS, false);
@@ -844,65 +850,111 @@ function checkAnswer() {
 
 /**
  * Show feedback to user with retry attempt tracking
+ * Uses modal to prevent scrolling issues
  */
 function showFeedback(isCorrect, answerText, attempts = 1, maxAttempts = 3, isFinalAttempt = false) {
+    // Use modal for final feedback (correct answer or max attempts)
+    if (isCorrect || isFinalAttempt) {
+        showFeedbackModal(isCorrect, answerText, attempts, maxAttempts, isFinalAttempt);
+        return;
+    }
+
+    // For retry attempts, use regular feedback (no modal needed)
     feedback.classList.remove('hidden');
+    feedback.classList.add('incorrect');
+    feedback.classList.remove('correct');
+    feedbackIcon.textContent = '✗';
+
+    const remainingAttempts = maxAttempts - attempts;
+    const triesText = remainingAttempts === 1 ? window.I18n.t('messages.tryText') : window.I18n.t('messages.triesText');
+    feedbackMessage.textContent = window.I18n.t('messages.attemptCounter', {current: attempts, max: maxAttempts, remaining: remainingAttempts, triesText: triesText});
+    correctAnswer.textContent = window.I18n.t('messages.tryAgain');
+    correctAnswer.style.color = '#f59e0b'; // Orange color for retry
+}
+
+/**
+ * Show feedback in modal (prevents scrolling issues)
+ */
+function showFeedbackModal(isCorrect, answerText, attempts = 1, maxAttempts = 3, isFinalAttempt = false) {
+    const modal = document.getElementById('feedbackModal');
+    const icon = document.getElementById('feedbackModalIcon');
+    const message = document.getElementById('feedbackModalMessage');
+    const answer = document.getElementById('feedbackModalAnswer');
+    const closeBtn = document.getElementById('feedbackModalClose');
+
+    if (!modal) return;
 
     if (isCorrect) {
-        feedback.classList.add('correct');
-        feedback.classList.remove('incorrect');
-        feedbackIcon.textContent = '✓';
+        icon.textContent = '✅';
+        icon.style.color = '#10b981';
 
         // Show attempt info if it took multiple tries
         if (attempts > 1) {
-            feedbackMessage.textContent = window.I18n.t('messages.correctOnAttempt', {attempt: attempts, max: maxAttempts});
+            message.textContent = window.I18n.t('messages.correctOnAttempt', {attempt: attempts, max: maxAttempts});
         } else {
-            feedbackMessage.textContent = window.I18n.t('messages.correctWellDone');
+            message.textContent = window.I18n.t('messages.correctWellDone');
         }
 
         // Show explanation for grammar exercises
         if (currentQuestion.explanation) {
-            correctAnswer.textContent = currentQuestion.explanation;
-            correctAnswer.style.color = '#10b981';
+            answer.textContent = currentQuestion.explanation;
+            answer.style.color = '#10b981';
+            answer.style.display = 'block';
         }
         // Show info for reading comprehension
         else if (currentQuestion.passage && currentQuestion.questions) {
             const remaining = currentQuestion.questions.length - currentQuestion.currentQuestionIndex - 1;
             if (remaining > 0) {
-                correctAnswer.textContent = window.I18n.t('messages.remainingQuestions', {count: remaining});
-                correctAnswer.style.color = '#10b981';
+                answer.textContent = window.I18n.t('messages.remainingQuestions', {count: remaining});
+                answer.style.color = '#10b981';
+                answer.style.display = 'block';
             } else {
-                correctAnswer.textContent = window.I18n.t('messages.completedPassage');
-                correctAnswer.style.color = '#10b981';
+                answer.textContent = window.I18n.t('messages.completedPassage');
+                answer.style.color = '#10b981';
+                answer.style.display = 'block';
             }
         }
         else {
-            correctAnswer.textContent = '';
+            answer.style.display = 'none';
         }
-    } else {
-        feedback.classList.add('incorrect');
-        feedback.classList.remove('correct');
-        feedbackIcon.textContent = '✗';
+    } else if (isFinalAttempt) {
+        icon.textContent = '❌';
+        icon.style.color = '#ef4444';
+        message.textContent = window.I18n.t('messages.maxAttemptsReached', {current: attempts, max: maxAttempts});
 
-        // Check if more attempts available
-        if (isFinalAttempt) {
-            feedbackMessage.textContent = window.I18n.t('messages.maxAttemptsReached', {current: attempts, max: maxAttempts});
-
-            // Show correct answer and explanation
-            let feedbackText = window.I18n.t('messages.correctAnswerIs', {answer: answerText});
-            if (currentQuestion.explanation) {
-                feedbackText += `\n${currentQuestion.explanation}`;
-            }
-            correctAnswer.textContent = feedbackText;
-            correctAnswer.style.color = '#ef4444';
-        } else {
-            const remainingAttempts = maxAttempts - attempts;
-            const triesText = remainingAttempts === 1 ? window.I18n.t('messages.tryText') : window.I18n.t('messages.triesText');
-            feedbackMessage.textContent = window.I18n.t('messages.attemptCounter', {current: attempts, max: maxAttempts, remaining: remainingAttempts, triesText: triesText});
-            correctAnswer.textContent = window.I18n.t('messages.tryAgain');
-            correctAnswer.style.color = '#f59e0b'; // Orange color for retry
+        // Show correct answer and explanation
+        let feedbackText = window.I18n.t('messages.correctAnswerIs', {answer: answerText});
+        if (currentQuestion.explanation) {
+            feedbackText += `\n\n${currentQuestion.explanation}`;
         }
+        answer.textContent = feedbackText;
+        answer.style.color = '#ef4444';
+        answer.style.display = 'block';
     }
+
+    // Show modal
+    modal.style.display = 'flex';
+
+    // Close button handler
+    closeBtn.onclick = function() {
+        modal.style.display = 'none';
+        // If correct or final attempt, advance automatically
+        if (isCorrect || isFinalAttempt) {
+            advanceToNext();
+        }
+    };
+
+    // Allow Enter key to close
+    const enterHandler = function(e) {
+        if (e.key === 'Enter') {
+            modal.style.display = 'none';
+            document.removeEventListener('keypress', enterHandler);
+            if (isCorrect || isFinalAttempt) {
+                advanceToNext();
+            }
+        }
+    };
+    document.addEventListener('keypress', enterHandler);
 }
 
 /**
