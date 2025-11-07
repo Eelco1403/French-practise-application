@@ -298,7 +298,15 @@
             <!-- Progress Overview -->
             <div class="progress-section">
                 <h3>Your Progress</h3>
-                <div class="progress-grid">
+
+                <!-- Toggle between summary and detailed view -->
+                <div style="margin-bottom: 15px; display: flex; gap: 10px;">
+                    <button id="showSummaryBtn" class="btn btn-secondary btn-small active">Summary View</button>
+                    <button id="showDetailedBtn" class="btn btn-secondary btn-small">Detailed Skills Grid</button>
+                </div>
+
+                <!-- Summary View (existing progress cards) -->
+                <div id="progressSummary" class="progress-grid">
                     <div class="progress-card">
                         <div class="progress-icon learning">📚</div>
                         <div class="progress-info">
@@ -326,6 +334,29 @@
                             <span class="progress-label">Solid</span>
                             <span id="solidCount" class="progress-number">0</span>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Detailed Skills Grid View (initially hidden) -->
+                <div id="skillsGrid" style="display: none;">
+                    <!-- Filter controls -->
+                    <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                        <label style="font-weight: 600;">Filter by mastery:</label>
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="learning">Learning</button>
+                        <button class="filter-btn" data-filter="developing">Developing</button>
+                        <button class="filter-btn" data-filter="mastered">Mastered</button>
+                        <button class="filter-btn" data-filter="solid">Solid</button>
+                    </div>
+
+                    <!-- Skills cards container -->
+                    <div id="skillsCardsContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px;">
+                        <!-- Skills will be dynamically populated here -->
+                    </div>
+
+                    <div id="noSkillsMessage" style="display: none; text-align: center; padding: 40px; color: #9ca3af;">
+                        <p>No skills match the selected filter.</p>
+                        <p style="font-size: 0.9em;">Start practicing to see your progress!</p>
                     </div>
                 </div>
             </div>
