@@ -409,7 +409,26 @@ function loadNextQuestion() {
 
     // Fallback if no questions available
     if (!availableQuestions || availableQuestions.length === 0) {
-        currentQuestion = window.FrenchContent.getRandomQuestion(currentExerciseType);
+        // Try to get any question without level filtering as last resort
+        const allQuestionsForType = window.FrenchContent.getContentByType(currentExerciseType);
+
+        if (!allQuestionsForType || allQuestionsForType.length === 0) {
+            // No content available for this exercise type at all
+            questionText.innerHTML = `
+                <div style="padding: 20px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; color: #991b1b;">
+                    <h3 style="margin-top: 0;">⚠️ No Content Available</h3>
+                    <p>Sorry, there are no ${currentExerciseType} exercises available yet.</p>
+                    <p>Please try a different exercise type or contact support.</p>
+                </div>
+            `;
+            answerInput.style.display = 'none';
+            submitBtn.style.display = 'none';
+            return;
+        } else {
+            // Content exists but not for user's level - show message and use random question
+            console.warn(`No ${currentExerciseType} exercises found for level ${currentUser.cefrLevel}. Using questions from other levels.`);
+            currentQuestion = allQuestionsForType[Math.floor(Math.random() * allQuestionsForType.length)];
+        }
     } else {
         // Use spaced repetition to prioritize questions
         const prioritizedQuestions = window.SpacedRepetitionEngine.prioritizeQuestions(
@@ -444,6 +463,10 @@ function loadNextQuestion() {
     // Update UI based on question type
     const questionLabel = document.querySelector('.question-label');
     const questionTypeDisplay = document.getElementById('questionType');
+
+    // Ensure regular answer inputs are visible by default (will be hidden for special types like conjugation tables)
+    answerInput.style.display = '';
+    submitBtn.style.display = '';
 
     // Handle reading comprehension passages
     if (currentQuestion.passage && currentQuestion.questions) {
@@ -829,9 +852,9 @@ function showFeedback(isCorrect, answerText, attempts = 1, maxAttempts = 3, isFi
 
         // Show attempt info if it took multiple tries
         if (attempts > 1) {
-            feedbackMessage.textContent = `Correct! (Attempt ${attempts}/${maxAttempts})`;
+            feedbackMessage.textContent = window.I18n.t('messages.correctOnAttempt', {attempt: attempts, max: maxAttempts});
         } else {
-            feedbackMessage.textContent = 'Correct! Well done!';
+            feedbackMessage.textContent = window.I18n.t('messages.correctWellDone');
         }
 
         // Show explanation for grammar exercises
@@ -843,10 +866,10 @@ function showFeedback(isCorrect, answerText, attempts = 1, maxAttempts = 3, isFi
         else if (currentQuestion.passage && currentQuestion.questions) {
             const remaining = currentQuestion.questions.length - currentQuestion.currentQuestionIndex - 1;
             if (remaining > 0) {
-                correctAnswer.textContent = `Great! ${remaining} more question(s) about this passage.`;
+                correctAnswer.textContent = window.I18n.t('messages.remainingQuestions', {count: remaining});
                 correctAnswer.style.color = '#10b981';
             } else {
-                correctAnswer.textContent = 'Perfect! You\'ve completed all questions for this passage.';
+                correctAnswer.textContent = window.I18n.t('messages.completedPassage');
                 correctAnswer.style.color = '#10b981';
             }
         }
@@ -860,10 +883,10 @@ function showFeedback(isCorrect, answerText, attempts = 1, maxAttempts = 3, isFi
 
         // Check if more attempts available
         if (isFinalAttempt) {
-            feedbackMessage.textContent = `Maximum attempts reached (${attempts}/${maxAttempts})`;
+            feedbackMessage.textContent = window.I18n.t('messages.maxAttemptsReached', {current: attempts, max: maxAttempts});
 
             // Show correct answer and explanation
-            let feedbackText = `The correct answer is: ${answerText}`;
+            let feedbackText = window.I18n.t('messages.correctAnswerIs', {answer: answerText});
             if (currentQuestion.explanation) {
                 feedbackText += `\n${currentQuestion.explanation}`;
             }
@@ -871,8 +894,9 @@ function showFeedback(isCorrect, answerText, attempts = 1, maxAttempts = 3, isFi
             correctAnswer.style.color = '#ef4444';
         } else {
             const remainingAttempts = maxAttempts - attempts;
-            feedbackMessage.textContent = `Not quite right. (Attempt ${attempts}/${maxAttempts} - ${remainingAttempts} ${remainingAttempts === 1 ? 'try' : 'tries'} remaining)`;
-            correctAnswer.textContent = 'Try again!';
+            const triesText = remainingAttempts === 1 ? window.I18n.t('messages.tryText') : window.I18n.t('messages.triesText');
+            feedbackMessage.textContent = window.I18n.t('messages.attemptCounter', {current: attempts, max: maxAttempts, remaining: remainingAttempts, triesText: triesText});
+            correctAnswer.textContent = window.I18n.t('messages.tryAgain');
             correctAnswer.style.color = '#f59e0b'; // Orange color for retry
         }
     }
@@ -1255,6 +1279,20 @@ function updateUILanguage() {
     document.getElementById('exportJSONLabel').textContent = t('report.downloadPDF');
     document.getElementById('exportCSVLabel').textContent = t('report.downloadCSV');
     document.getElementById('printLabel').textContent = t('report.printReport');
+
+    // Accent Helper
+    const accentHelperLabel = document.getElementById('accentHelperLabel');
+    if (accentHelperLabel) accentHelperLabel.textContent = t('messages.accentHelperLabel');
+
+    // User Management
+    const userDropdownHeader = document.getElementById('userDropdownHeader');
+    if (userDropdownHeader) userDropdownHeader.textContent = t('messages.switchUser');
+
+    const addNewUserLabel = document.getElementById('addNewUserLabel');
+    if (addNewUserLabel) addNewUserLabel.textContent = t('messages.addNewUser');
+
+    const resetUserDataLabel = document.getElementById('resetUserDataLabel');
+    if (resetUserDataLabel) resetUserDataLabel.textContent = t('messages.resetUserData');
 }
 
 /**
