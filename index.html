@@ -62,7 +62,25 @@
             <div class="user-info">
                 <div class="user-name">
                     <span class="label">Student:</span>
-                    <span id="displayName">-</span>
+                    <div class="user-dropdown" style="position: relative; display: inline-block;">
+                        <button id="userDropdownBtn" class="user-dropdown-btn" style="background: none; border: 1px solid #d1d5db; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 1em; display: flex; align-items: center; gap: 8px;">
+                            <span id="displayName">-</span>
+                            <span id="displayLevel" style="font-size: 0.85em; color: #6b7280;">(A1)</span>
+                            <span style="font-size: 0.8em;">▼</span>
+                        </button>
+                        <div id="userDropdownMenu" class="user-dropdown-menu" style="display: none; position: absolute; top: 100%; left: 0; background: white; border: 1px solid #d1d5db; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); min-width: 250px; z-index: 1000; margin-top: 5px;">
+                            <div style="padding: 12px 16px; border-bottom: 1px solid #e5e7eb; font-weight: bold; color: #374151;">
+                                Switch User
+                            </div>
+                            <div id="userList" style="max-height: 300px; overflow-y: auto;">
+                                <!-- User list will be populated dynamically -->
+                            </div>
+                            <div style="padding: 8px; border-top: 1px solid #e5e7eb; display: flex; flex-direction: column; gap: 5px;">
+                                <button id="addNewUserBtn" class="btn btn-primary btn-small" style="width: 100%;">+ Add New User</button>
+                                <button id="resetUserDataBtn" class="btn btn-danger btn-small" style="width: 100%; background: #ef4444;">Reset Current User Data</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="user-stats">
                     <div class="stat">
@@ -232,6 +250,35 @@
                         placeholder="Type your answer here..."
                         autocomplete="off"
                     >
+
+                    <!-- Accent Helper Toolbar -->
+                    <div id="accentHelper" class="accent-helper" style="margin: 10px 0; padding: 10px; background: #f9fafb; border-radius: 8px; display: flex; flex-wrap: wrap; gap: 5px; justify-content: center;">
+                        <span style="font-weight: bold; width: 100%; text-align: center; font-size: 0.9em; color: #6b7280; margin-bottom: 5px;">Accent Helper (click to insert):</span>
+                        <button class="accent-btn" data-char="à" style="padding: 8px 12px; border: 1px solid #d1d5db; background: white; border-radius: 4px; cursor: pointer; font-size: 1.1em;">à</button>
+                        <button class="accent-btn" data-char="á" style="padding: 8px 12px; border: 1px solid #d1d5db; background: white; border-radius: 4px; cursor: pointer; font-size: 1.1em;">á</button>
+                        <button class="accent-btn" data-char="â" style="padding: 8px 12px; border: 1px solid #d1d5db; background: white; border-radius: 4px; cursor: pointer; font-size: 1.1em;">â</button>
+                        <button class="accent-btn" data-char="ä" style="padding: 8px 12px; border: 1px solid #d1d5db; background: white; border-radius: 4px; cursor: pointer; font-size: 1.1em;">ä</button>
+                        <button class="accent-btn" data-char="è" style="padding: 8px 12px; border: 1px solid #d1d5db; background: white; border-radius: 4px; cursor: pointer; font-size: 1.1em;">è</button>
+                        <button class="accent-btn" data-char="é" style="padding: 8px 12px; border: 1px solid #d1d5db; background: white; border-radius: 4px; cursor: pointer; font-size: 1.1em;">é</button>
+                        <button class="accent-btn" data-char="ê" style="padding: 8px 12px; border: 1px solid #d1d5db; background: white; border-radius: 4px; cursor: pointer; font-size: 1.1em;">ê</button>
+                        <button class="accent-btn" data-char="ë" style="padding: 8px 12px; border: 1px solid #d1d5db; background: white; border-radius: 4px; cursor: pointer; font-size: 1.1em;">ë</button>
+                        <button class="accent-btn" data-char="ì" style="padding: 8px 12px; border: 1px solid #d1d5db; background: white; border-radius: 4px; cursor: pointer; font-size: 1.1em;">ì</button>
+                        <button class="accent-btn" data-char="í" style="padding: 8px 12px; border: 1px solid #d1d5db; background: white; border-radius: 4px; cursor: pointer; font-size: 1.1em;">í</button>
+                        <button class="accent-btn" data-char="î" style="padding: 8px 12px; border: 1px solid #d1d5db; background: white; border-radius: 4px; cursor: pointer; font-size: 1.1em;">î</button>
+                        <button class="accent-btn" data-char="ï" style="padding: 8px 12px; border: 1px solid #d1d5db; background: white; border-radius: 4px; cursor: pointer; font-size: 1.1em;">ï</button>
+                        <button class="accent-btn" data-char="ò" style="padding: 8px 12px; border: 1px solid #d1d5db; background: white; border-radius: 4px; cursor: pointer; font-size: 1.1em;">ò</button>
+                        <button class="accent-btn" data-char="ó" style="padding: 8px 12px; border: 1px solid #d1d5db; background: white; border-radius: 4px; cursor: pointer; font-size: 1.1em;">ó</button>
+                        <button class="accent-btn" data-char="ô" style="padding: 8px 12px; border: 1px solid #d1d5db; background: white; border-radius: 4px; cursor: pointer; font-size: 1.1em;">ô</button>
+                        <button class="accent-btn" data-char="ö" style="padding: 8px 12px; border: 1px solid #d1d5db; background: white; border-radius: 4px; cursor: pointer; font-size: 1.1em;">ö</button>
+                        <button class="accent-btn" data-char="ù" style="padding: 8px 12px; border: 1px solid #d1d5db; background: white; border-radius: 4px; cursor: pointer; font-size: 1.1em;">ù</button>
+                        <button class="accent-btn" data-char="ú" style="padding: 8px 12px; border: 1px solid #d1d5db; background: white; border-radius: 4px; cursor: pointer; font-size: 1.1em;">ú</button>
+                        <button class="accent-btn" data-char="û" style="padding: 8px 12px; border: 1px solid #d1d5db; background: white; border-radius: 4px; cursor: pointer; font-size: 1.1em;">û</button>
+                        <button class="accent-btn" data-char="ü" style="padding: 8px 12px; border: 1px solid #d1d5db; background: white; border-radius: 4px; cursor: pointer; font-size: 1.1em;">ü</button>
+                        <button class="accent-btn" data-char="ç" style="padding: 8px 12px; border: 1px solid #d1d5db; background: white; border-radius: 4px; cursor: pointer; font-size: 1.1em;">ç</button>
+                        <button class="accent-btn" data-char="œ" style="padding: 8px 12px; border: 1px solid #d1d5db; background: white; border-radius: 4px; cursor: pointer; font-size: 1.1em;">œ</button>
+                        <button class="accent-btn" data-char="æ" style="padding: 8px 12px; border: 1px solid #d1d5db; background: white; border-radius: 4px; cursor: pointer; font-size: 1.1em;">æ</button>
+                    </div>
+
                     <button id="submitBtn" class="btn btn-primary btn-large">Check Answer</button>
                 </div>
 

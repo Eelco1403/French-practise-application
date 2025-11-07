@@ -11,13 +11,19 @@ let currentUser = {
     masteryData: {},
     sessionStats: {
         correct: 0,
-        total: 0
+        total: 0,
+        mistakes: 0 // Track total mistakes across all attempts
     }
 };
 
 let currentQuestion = null;
 let currentExerciseType = 'vocabulary'; // 'vocabulary', 'grammar', 'conjugation', or 'all'
 let currentReport = null; // Stores generated report for export
+
+// Retry Logic Configuration
+const MAX_ATTEMPTS = 3; // Maximum attempts before showing answer and moving on
+let currentAttempts = 0; // Track attempts for current question
+let questionAnsweredCorrectly = false; // Track if current question was answered correctly
 
 /**
  * Get source word in appropriate language based on UI language
@@ -168,6 +174,12 @@ function init() {
         placementTestBtn.addEventListener('click', startPlacementTest);
     }
 
+    // Accent Helper event listeners
+    initializeAccentHelper();
+
+    // User Management event listeners
+    initializeUserManagement();
+
     // Try to load existing user from localStorage
     const savedUserId = localStorage.getItem('currentUserId');
     if (savedUserId) {
@@ -224,8 +236,18 @@ function startPractice() {
         window.ReportingSystem.saveUserLevel(userId, currentUser.cefrLevel);
     }
 
+    // Save user name and level for user dropdown
+    localStorage.setItem(`userName_${userId}`, name);
+    localStorage.setItem(`userLevel_${userId}`, currentUser.cefrLevel);
+    localStorage.setItem(`lastSession_${userId}`, new Date().toISOString());
+
     // Update UI
     displayName.textContent = name;
+    const displayLevel = document.getElementById('displayLevel');
+    if (displayLevel) {
+        displayLevel.textContent = `(${currentUser.cefrLevel})`;
+    }
+
     const currentLevelValue = document.getElementById('currentLevelValue');
     if (currentLevelValue) {
         currentLevelValue.textContent = currentUser.cefrLevel;
@@ -347,6 +369,19 @@ function advanceToNext() {
  * Load next question
  */
 function loadNextQuestion() {
+    // Reset retry logic for new question
+    currentAttempts = 0;
+    questionAnsweredCorrectly = false;
+
+    // Hide feedback from previous question
+    feedback.classList.add('hidden');
+
+    // Re-enable input and submit button
+    answerInput.disabled = false;
+    submitBtn.disabled = false;
+    answerInput.value = '';
+    answerInput.focus();
+
     // Get all questions for current exercise type and level
     let availableQuestions = [];
 
@@ -432,15 +467,15 @@ function loadNextQuestion() {
         </div>`;
     }
     // Handle dialogue practice
-    else if (currentQuestion.turns) {
+    else if (currentQuestion.turns && Array.isArray(currentQuestion.turns)) {
         questionLabel.textContent = 'Dialogue Practice:';
         questionTypeDisplay.textContent = '💬 Dialogue';
         questionTypeDisplay.className = 'badge badge-teal';
 
         const dialogueHTML = currentQuestion.turns.map((turn, idx) =>
             `<div style="margin:10px 0;">
-                <strong>Speaker ${turn.speaker}:</strong> ${turn.text}<br>
-                <em style="color:#666;">(${turn.translation})</em>
+                <strong>Speaker ${turn.speaker || 'Unknown'}:</strong> ${turn.text || ''}<br>
+                <em style="color:#666;">(${turn.translation || ''})</em>
             </div>`
         ).join('');
 
@@ -514,13 +549,15 @@ function loadNextQuestion() {
                 submitTableBtn.addEventListener('click', checkConjugationTable);
 
                 // Also allow Enter key on last input to submit
-                const lastInput = document.getElementById(`conj-input-${currentQuestion.forms.length - 1}`);
-                if (lastInput) {
-                    lastInput.addEventListener('keypress', (e) => {
-                        if (e.key === 'Enter') {
-                            checkConjugationTable();
-                        }
-                    });
+                if (currentQuestion.forms && currentQuestion.forms.length > 0) {
+                    const lastInput = document.getElementById(`conj-input-${currentQuestion.forms.length - 1}`);
+                    if (lastInput) {
+                        lastInput.addEventListener('keypress', (e) => {
+                            if (e.key === 'Enter') {
+                                checkConjugationTable();
+                            }
+                        });
+                    }
                 }
             }
         }, 10);
@@ -657,66 +694,145 @@ function checkAnswer() {
         isCorrect = window.UtilityFunctions.validateAnswer(userAnswer, correctAnswer);
     }
 
-    // Record attempt in mastery system
-    currentUser.masteryData = window.AssessmentSystem.recordAttempt(
-        currentUser.masteryData,
-        currentQuestion.id,
-        isCorrect
-    );
+    // Increment attempt counter
+    currentAttempts++;
 
-    // Update spaced repetition metadata
-    if (!currentUser.masteryData[currentQuestion.id].spacedRepetition) {
-        currentUser.masteryData[currentQuestion.id].spacedRepetition =
-            window.SpacedRepetitionEngine.initializeSpacedRepetition(currentQuestion.id);
-    }
+    // Handle correct answer
+    if (isCorrect) {
+        questionAnsweredCorrectly = true;
 
-    // Calculate response time (if available)
-    const responseTime = currentUser.questionStartTime ?
-        Date.now() - currentUser.questionStartTime : null;
-
-    // Update SR data based on performance
-    currentUser.masteryData[currentQuestion.id].spacedRepetition =
-        window.SpacedRepetitionEngine.updateSpacedRepetition(
-            currentUser.masteryData[currentQuestion.id].spacedRepetition,
-            isCorrect,
-            responseTime
+        // Record attempt in mastery system (only record once when correct)
+        currentUser.masteryData = window.AssessmentSystem.recordAttempt(
+            currentUser.masteryData,
+            currentQuestion.id,
+            true
         );
 
-    // Save progress (including SR data)
-    window.AssessmentSystem.saveProgress(currentUser.userId, currentUser.masteryData);
-    window.SpacedRepetitionEngine.saveSpacedRepetitionData(currentUser.userId, currentUser.masteryData);
+        // Update spaced repetition metadata
+        if (!currentUser.masteryData[currentQuestion.id].spacedRepetition) {
+            currentUser.masteryData[currentQuestion.id].spacedRepetition =
+                window.SpacedRepetitionEngine.initializeSpacedRepetition(currentQuestion.id);
+        }
 
-    // Update session stats
-    currentUser.sessionStats.total++;
-    if (isCorrect) {
+        // Calculate response time (if available)
+        const responseTime = currentUser.questionStartTime ?
+            Date.now() - currentUser.questionStartTime : null;
+
+        // Update SR data based on performance
+        currentUser.masteryData[currentQuestion.id].spacedRepetition =
+            window.SpacedRepetitionEngine.updateSpacedRepetition(
+                currentUser.masteryData[currentQuestion.id].spacedRepetition,
+                true,
+                responseTime
+            );
+
+        // Save progress (including SR data)
+        window.AssessmentSystem.saveProgress(currentUser.userId, currentUser.masteryData);
+        window.SpacedRepetitionEngine.saveSpacedRepetitionData(currentUser.userId, currentUser.masteryData);
+
+        // Update session stats (only count as 1 total regardless of attempts)
+        if (currentAttempts === 1) {
+            currentUser.sessionStats.total++;
+        }
         currentUser.sessionStats.correct++;
+
+        // Update stats display
+        updateStatsDisplay();
+
+        // Show feedback
+        showFeedback(isCorrect, correctAnswer, currentAttempts, MAX_ATTEMPTS);
+
+        // Disable input and submit button
+        answerInput.disabled = true;
+        submitBtn.disabled = true;
+
+        // Update progress display
+        updateProgressDisplay();
     }
+    // Handle incorrect answer
+    else {
+        // Track mistake
+        currentUser.sessionStats.mistakes++;
 
-    // Update stats display
-    updateStatsDisplay();
+        // Check if max attempts reached
+        if (currentAttempts >= MAX_ATTEMPTS) {
+            // Max attempts reached - record as incorrect and move on
+            currentUser.masteryData = window.AssessmentSystem.recordAttempt(
+                currentUser.masteryData,
+                currentQuestion.id,
+                false
+            );
 
-    // Show feedback
-    showFeedback(isCorrect, correctAnswer);
+            // Update spaced repetition metadata
+            if (!currentUser.masteryData[currentQuestion.id].spacedRepetition) {
+                currentUser.masteryData[currentQuestion.id].spacedRepetition =
+                    window.SpacedRepetitionEngine.initializeSpacedRepetition(currentQuestion.id);
+            }
 
-    // Disable input and submit button
-    answerInput.disabled = true;
-    submitBtn.disabled = true;
+            // Calculate response time (if available)
+            const responseTime = currentUser.questionStartTime ?
+                Date.now() - currentUser.questionStartTime : null;
 
-    // Update progress display
-    updateProgressDisplay();
+            // Update SR data based on performance
+            currentUser.masteryData[currentQuestion.id].spacedRepetition =
+                window.SpacedRepetitionEngine.updateSpacedRepetition(
+                    currentUser.masteryData[currentQuestion.id].spacedRepetition,
+                    false,
+                    responseTime
+                );
+
+            // Save progress
+            window.AssessmentSystem.saveProgress(currentUser.userId, currentUser.masteryData);
+            window.SpacedRepetitionEngine.saveSpacedRepetitionData(currentUser.userId, currentUser.masteryData);
+
+            // Update session stats (count as total only on first attempt)
+            if (currentAttempts === MAX_ATTEMPTS) {
+                currentUser.sessionStats.total++;
+            }
+
+            // Update stats display
+            updateStatsDisplay();
+
+            // Show final feedback with correct answer
+            showFeedback(isCorrect, correctAnswer, currentAttempts, MAX_ATTEMPTS, true);
+
+            // Disable input and submit button
+            answerInput.disabled = true;
+            submitBtn.disabled = true;
+
+            // Update progress display
+            updateProgressDisplay();
+        } else {
+            // Still have attempts left - allow retry
+            showFeedback(isCorrect, correctAnswer, currentAttempts, MAX_ATTEMPTS, false);
+
+            // Clear input to encourage fresh attempt
+            answerInput.value = '';
+            answerInput.focus();
+
+            // Don't disable input - allow retry
+            // Don't show next button yet
+        }
+    }
 }
 
 /**
- * Show feedback to user
+ * Show feedback to user with retry attempt tracking
  */
-function showFeedback(isCorrect, answerText) {
+function showFeedback(isCorrect, answerText, attempts = 1, maxAttempts = 3, isFinalAttempt = false) {
     feedback.classList.remove('hidden');
 
     if (isCorrect) {
         feedback.classList.add('correct');
         feedback.classList.remove('incorrect');
         feedbackIcon.textContent = '✓';
-        feedbackMessage.textContent = 'Correct! Well done!';
+
+        // Show attempt info if it took multiple tries
+        if (attempts > 1) {
+            feedbackMessage.textContent = `Correct! (Attempt ${attempts}/${maxAttempts})`;
+        } else {
+            feedbackMessage.textContent = 'Correct! Well done!';
+        }
 
         // Show explanation for grammar exercises
         if (currentQuestion.explanation) {
@@ -741,15 +857,24 @@ function showFeedback(isCorrect, answerText) {
         feedback.classList.add('incorrect');
         feedback.classList.remove('correct');
         feedbackIcon.textContent = '✗';
-        feedbackMessage.textContent = 'Not quite right.';
 
-        // Show correct answer and explanation
-        let feedbackText = `The correct answer is: ${answerText}`;
-        if (currentQuestion.explanation) {
-            feedbackText += `\n${currentQuestion.explanation}`;
+        // Check if more attempts available
+        if (isFinalAttempt) {
+            feedbackMessage.textContent = `Maximum attempts reached (${attempts}/${maxAttempts})`;
+
+            // Show correct answer and explanation
+            let feedbackText = `The correct answer is: ${answerText}`;
+            if (currentQuestion.explanation) {
+                feedbackText += `\n${currentQuestion.explanation}`;
+            }
+            correctAnswer.textContent = feedbackText;
+            correctAnswer.style.color = '#ef4444';
+        } else {
+            const remainingAttempts = maxAttempts - attempts;
+            feedbackMessage.textContent = `Not quite right. (Attempt ${attempts}/${maxAttempts} - ${remainingAttempts} ${remainingAttempts === 1 ? 'try' : 'tries'} remaining)`;
+            correctAnswer.textContent = 'Try again!';
+            correctAnswer.style.color = '#f59e0b'; // Orange color for retry
         }
-        correctAnswer.textContent = feedbackText;
-        correctAnswer.style.color = '#ef4444';
     }
 }
 
@@ -832,12 +957,12 @@ function checkConjugationTable() {
 
                     // Track mastery for the verb/tense
                     if (currentUser.userId && window.AssessmentSystem) {
-                        window.AssessmentSystem.updateMastery(
-                            currentUser.userId,
+                        currentUser.masteryData = window.AssessmentSystem.recordAttempt(
+                            currentUser.masteryData,
                             currentQuestion.id,
-                            allCorrect,
-                            currentUser.masteryData
+                            allCorrect
                         );
+                        window.AssessmentSystem.saveProgress(currentUser.userId, currentUser.masteryData);
                         updateProgressDisplay();
                     }
 
@@ -2282,6 +2407,336 @@ function setupVerbPracticeEventListeners() {
         startVerbPracticeBtn.removeEventListener('click', startVerbPractice);
         startVerbPracticeBtn.addEventListener('click', startVerbPractice);
     }
+}
+
+/**
+ * Initialize User Management functionality
+ * Handles user dropdown, switching, and reset functionality
+ */
+function initializeUserManagement() {
+    const userDropdownBtn = document.getElementById('userDropdownBtn');
+    const userDropdownMenu = document.getElementById('userDropdownMenu');
+    const addNewUserBtn = document.getElementById('addNewUserBtn');
+    const resetUserDataBtn = document.getElementById('resetUserDataBtn');
+
+    if (!userDropdownBtn || !userDropdownMenu) return;
+
+    // Toggle dropdown on button click
+    userDropdownBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = userDropdownMenu.style.display === 'block';
+        userDropdownMenu.style.display = isOpen ? 'none' : 'block';
+
+        if (!isOpen) {
+            populateUserList();
+        }
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!userDropdownMenu.contains(e.target) && !userDropdownBtn.contains(e.target)) {
+            userDropdownMenu.style.display = 'none';
+        }
+    });
+
+    // Add new user button
+    if (addNewUserBtn) {
+        addNewUserBtn.addEventListener('click', () => {
+            userDropdownMenu.style.display = 'none';
+
+            // Switch back to user setup screen
+            practiceScreen.classList.remove('active');
+            userSetupScreen.classList.add('active');
+            userNameInput.value = '';
+            userNameInput.focus();
+        });
+    }
+
+    // Reset user data button
+    if (resetUserDataBtn) {
+        resetUserDataBtn.addEventListener('click', () => {
+            const confirmed = confirm(
+                `Are you sure you want to reset all progress for ${currentUser.name}?\n\n` +
+                `This will:\n` +
+                `- Clear all exercise history\n` +
+                `- Reset all mastery levels to 0%\n` +
+                `- Delete all statistics\n\n` +
+                `This action cannot be undone!`
+            );
+
+            if (confirmed) {
+                resetCurrentUserData();
+                userDropdownMenu.style.display = 'none';
+                alert(`All progress for ${currentUser.name} has been reset.`);
+            }
+        });
+    }
+}
+
+/**
+ * Populate user list in dropdown
+ */
+function populateUserList() {
+    const userList = document.getElementById('userList');
+    if (!userList) return;
+
+    // Get all users from localStorage
+    const allUsers = getAllUsers();
+
+    if (allUsers.length === 0) {
+        userList.innerHTML = '<div style="padding: 16px; text-align: center; color: #9ca3af;">No users found</div>';
+        return;
+    }
+
+    // Build user list HTML
+    let html = '';
+    allUsers.forEach(user => {
+        const isActive = user.userId === currentUser.userId;
+        const activeClass = isActive ? 'background: #eff6ff; border-left: 3px solid #3b82f6;' : '';
+
+        html += `
+            <div class="user-list-item" data-user-id="${user.userId}" style="padding: 12px 16px; cursor: pointer; border-bottom: 1px solid #f3f4f6; ${activeClass}" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='${isActive ? '#eff6ff' : 'white'}'">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-weight: 600; color: #111827;">
+                            ${user.name} ${isActive ? '✓' : ''}
+                        </div>
+                        <div style="font-size: 0.85em; color: #6b7280;">
+                            Level: ${user.level} | Exercises: ${user.totalExercises}
+                        </div>
+                        ${user.lastSession ? `<div style="font-size: 0.8em; color: #9ca3af;">Last: ${user.lastSession}</div>` : ''}
+                    </div>
+                    ${!isActive ? `<button class="switch-user-btn" data-user-id="${user.userId}" style="padding: 4px 12px; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85em;">Switch</button>` : ''}
+                </div>
+            </div>
+        `;
+    });
+
+    userList.innerHTML = html;
+
+    // Add click event listeners to switch buttons
+    const switchBtns = userList.querySelectorAll('.switch-user-btn');
+    switchBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const userId = btn.getAttribute('data-user-id');
+            switchToUser(userId);
+        });
+    });
+}
+
+/**
+ * Get all users from localStorage
+ */
+function getAllUsers() {
+    const users = [];
+    const keys = Object.keys(localStorage);
+
+    keys.forEach(key => {
+        if (key.startsWith('progress_')) {
+            const userId = key.replace('progress_', '');
+            const userName = localStorage.getItem(`userName_${userId}`);
+            const userLevel = localStorage.getItem(`userLevel_${userId}`) || 'A1';
+
+            if (userName) {
+                const masteryData = window.AssessmentSystem.loadProgress(userId);
+                const totalExercises = Object.keys(masteryData).length;
+                const lastSession = localStorage.getItem(`lastSession_${userId}`);
+
+                users.push({
+                    userId,
+                    name: userName,
+                    level: userLevel,
+                    totalExercises,
+                    lastSession: lastSession ? new Date(lastSession).toLocaleDateString() : null
+                });
+            }
+        }
+    });
+
+    // Sort by last session (most recent first)
+    users.sort((a, b) => {
+        if (!a.lastSession) return 1;
+        if (!b.lastSession) return -1;
+        return new Date(b.lastSession) - new Date(a.lastSession);
+    });
+
+    return users;
+}
+
+/**
+ * Switch to a different user
+ */
+function switchToUser(userId) {
+    const userName = localStorage.getItem(`userName_${userId}`);
+    const userLevel = localStorage.getItem(`userLevel_${userId}`) || 'A1';
+
+    if (!userName) {
+        alert('User not found!');
+        return;
+    }
+
+    // Save current session
+    if (currentUser.userId) {
+        window.AssessmentSystem.saveSession(currentUser.userId, {
+            exerciseType: currentExerciseType,
+            cefrLevel: currentUser.cefrLevel,
+            sessionStats: currentUser.sessionStats
+        });
+    }
+
+    // Load new user data
+    currentUser.userId = userId;
+    currentUser.name = userName;
+    currentUser.cefrLevel = userLevel;
+    currentUser.masteryData = window.AssessmentSystem.loadProgress(userId);
+    currentUser.sessionStats = {
+        correct: 0,
+        total: 0,
+        mistakes: 0
+    };
+
+    // Update localStorage
+    localStorage.setItem('currentUserId', userId);
+    localStorage.setItem('currentUserName', userName);
+    localStorage.setItem(`lastSession_${userId}`, new Date().toISOString());
+
+    // Update UI
+    document.getElementById('displayName').textContent = userName;
+    document.getElementById('displayLevel').textContent = `(${userLevel})`;
+
+    const currentLevelValue = document.getElementById('currentLevelValue');
+    if (currentLevelValue) {
+        currentLevelValue.textContent = userLevel;
+    }
+
+    // Update stats display
+    updateStatsDisplay();
+    updateProgressDisplay();
+
+    // Load next question
+    loadNextQuestion();
+
+    // Close dropdown
+    document.getElementById('userDropdownMenu').style.display = 'none';
+
+    // Show success message
+    console.log(`Switched to user: ${userName} (${userLevel})`);
+}
+
+/**
+ * Reset current user's data
+ */
+function resetCurrentUserData() {
+    if (!currentUser.userId) return;
+
+    // Clear all mastery data
+    currentUser.masteryData = {};
+    window.AssessmentSystem.saveProgress(currentUser.userId, {});
+
+    // Clear spaced repetition data
+    localStorage.removeItem(`spacedRepetition_${currentUser.userId}`);
+
+    // Clear session data
+    window.AssessmentSystem.clearSession(currentUser.userId);
+
+    // Reset session stats
+    currentUser.sessionStats = {
+        correct: 0,
+        total: 0,
+        mistakes: 0
+    };
+
+    // Update UI
+    updateStatsDisplay();
+    updateProgressDisplay();
+
+    // Load next question
+    loadNextQuestion();
+}
+
+/**
+ * Initialize Accent Helper functionality
+ * Adds click handlers to accent buttons to insert characters into answer input
+ */
+function initializeAccentHelper() {
+    const accentButtons = document.querySelectorAll('.accent-btn');
+    const answerInput = document.getElementById('answerInput');
+
+    accentButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent form submission
+            const char = btn.getAttribute('data-char');
+
+            if (answerInput && char) {
+                // Insert character at cursor position
+                const start = answerInput.selectionStart;
+                const end = answerInput.selectionEnd;
+                const text = answerInput.value;
+
+                answerInput.value = text.substring(0, start) + char + text.substring(end);
+
+                // Move cursor after inserted character
+                answerInput.selectionStart = answerInput.selectionEnd = start + 1;
+
+                // Focus back on input
+                answerInput.focus();
+            }
+        });
+
+        // Add hover effect
+        btn.addEventListener('mouseenter', () => {
+            btn.style.background = '#e5e7eb';
+        });
+
+        btn.addEventListener('mouseleave', () => {
+            btn.style.background = 'white';
+        });
+    });
+}
+
+/**
+ * Check if accents are required based on user's CEFR level
+ * A1-A2: Accents optional (lenient mode)
+ * B1+: Accents required (strict mode)
+ */
+function areAccentsRequired() {
+    const level = currentUser.cefrLevel;
+    const strictLevels = ['B1', 'B2', 'C1', 'C2'];
+    return strictLevels.includes(level);
+}
+
+/**
+ * Enhanced answer validation with accent checking
+ * Returns: { correct: boolean, message: string }
+ */
+function validateAnswerWithAccents(userAnswer, correctAnswer) {
+    // First check if answer is correct with accents
+    const isExactMatch = window.UtilityFunctions.validateAnswer(userAnswer, correctAnswer);
+
+    if (isExactMatch) {
+        return { correct: true, message: '' };
+    }
+
+    // If accents are required (B1+), answer must match exactly
+    if (areAccentsRequired()) {
+        // Check if answer would be correct without accents
+        const normalizedUser = window.UtilityFunctions.normalizeText(userAnswer);
+        const normalizedCorrect = window.UtilityFunctions.normalizeText(correctAnswer);
+
+        if (normalizedUser === normalizedCorrect) {
+            return {
+                correct: false,
+                message: `Close! At level ${currentUser.cefrLevel}, accent marks are required. Correct answer: ${correctAnswer}`
+            };
+        }
+
+        return { correct: false, message: '' };
+    }
+
+    // A1-A2 levels: Check if answer is correct when ignoring accents
+    const isCorrectWithoutAccents = window.UtilityFunctions.validateAnswer(userAnswer, correctAnswer);
+    return { correct: isCorrectWithoutAccents, message: '' };
 }
 
 // Initialize app when DOM is ready
