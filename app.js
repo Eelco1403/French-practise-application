@@ -387,6 +387,10 @@ function loadNextQuestion() {
     answerInput.value = '';
     answerInput.focus();
 
+    // Hide Next button from previous question
+    nextBtn.style.display = 'none';
+    console.log('[loadNextQuestion] Next button hidden for new question');
+
     // Get all questions for current exercise type and level
     let availableQuestions = [];
 
@@ -2194,6 +2198,13 @@ function loadNextTopicQuestion() {
     if (submitBtn) {
         submitBtn.disabled = false;
         submitBtn.style.display = 'block';
+    }
+
+    // Hide Next button from previous question
+    const nextBtn = document.getElementById('nextBtn');
+    if (nextBtn) {
+        nextBtn.style.display = 'none';
+        console.log('[loadNextTopicQuestion] Next button hidden for new grammar question');
     }
 }
 
