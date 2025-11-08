@@ -1470,23 +1470,41 @@ function updateUILanguage() {
     const resumeSessionBtn = document.getElementById('resumeSessionBtn');
     if (resumeSessionBtn) resumeSessionBtn.textContent = t('welcome.resumeButton');
 
-    // Practice screen labels
-    document.getElementById('vocabLabel').textContent = t('practice.vocabulary');
-    document.getElementById('grammarLabel').textContent = t('practice.grammar');
-    document.getElementById('conjugationLabel').textContent = t('practice.conjugation');
-    document.getElementById('allTypesLabel').textContent = t('practice.allTypes');
-    document.getElementById('saveProgressLabel').textContent = t('practice.saveProgress');
-    document.getElementById('viewReportLabel').textContent = t('practice.viewReport');
-    document.getElementById('changeLevelLabel').textContent = t('practice.changeLevel');
+    // Practice screen labels (with null checks to prevent crashes)
+    const vocabLabel = document.getElementById('vocabLabel');
+    const grammarLabel = document.getElementById('grammarLabel');
+    const conjugationLabel = document.getElementById('conjugationLabel');
+    const readingLabel = document.getElementById('readingLabel');
+    const dialogueLabel = document.getElementById('dialogueLabel');
+    const allTypesLabel = document.getElementById('allTypesLabel');
+    const saveProgressLabel = document.getElementById('saveProgressLabel');
+    const viewReportLabel = document.getElementById('viewReportLabel');
+    const changeLevelLabel = document.getElementById('changeLevelLabel');
 
-    // Progress labels
-    document.getElementById('levelProgressTitle').textContent = t('progress.levelGoal');
+    if (vocabLabel) vocabLabel.textContent = t('practice.vocabulary');
+    if (grammarLabel) grammarLabel.textContent = t('practice.grammar');
+    if (conjugationLabel) conjugationLabel.textContent = t('practice.conjugation');
+    if (readingLabel) readingLabel.textContent = t('practice.reading');
+    if (dialogueLabel) dialogueLabel.textContent = t('practice.dialogue');
+    if (allTypesLabel) allTypesLabel.textContent = t('practice.allTypes');
+    if (saveProgressLabel) saveProgressLabel.textContent = t('practice.saveProgress');
+    if (viewReportLabel) viewReportLabel.textContent = t('practice.viewReport');
+    if (changeLevelLabel) changeLevelLabel.textContent = t('practice.changeLevel');
 
-    // Report modal
-    document.getElementById('reportTitle').textContent = t('report.title');
-    document.getElementById('exportJSONLabel').textContent = t('report.downloadPDF');
-    document.getElementById('exportCSVLabel').textContent = t('report.downloadCSV');
-    document.getElementById('printLabel').textContent = t('report.printReport');
+    // Progress labels (with null check)
+    const levelProgressTitle = document.getElementById('levelProgressTitle');
+    if (levelProgressTitle) levelProgressTitle.textContent = t('progress.levelGoal');
+
+    // Report modal (with null checks)
+    const reportTitle = document.getElementById('reportTitle');
+    const exportJSONLabel = document.getElementById('exportJSONLabel');
+    const exportCSVLabel = document.getElementById('exportCSVLabel');
+    const printLabel = document.getElementById('printLabel');
+
+    if (reportTitle) reportTitle.textContent = t('report.title');
+    if (exportJSONLabel) exportJSONLabel.textContent = t('report.downloadPDF');
+    if (exportCSVLabel) exportCSVLabel.textContent = t('report.downloadCSV');
+    if (printLabel) printLabel.textContent = t('report.printReport');
 
     // Accent Helper
     const accentHelperLabel = document.getElementById('accentHelperLabel');
