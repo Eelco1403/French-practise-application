@@ -378,6 +378,12 @@ function loadNextQuestion() {
     currentAttempts = 0;
     questionAnsweredCorrectly = false;
 
+    // Reset attempt display
+    const attemptDisplay = document.getElementById('attemptDisplay');
+    if (attemptDisplay) {
+        attemptDisplay.textContent = '0';
+    }
+
     // Hide feedback from previous question
     feedback.classList.add('hidden');
 
@@ -751,6 +757,12 @@ function checkAnswer() {
     // Increment attempt counter
     currentAttempts++;
     console.log('[checkAnswer] Attempt', currentAttempts, 'of', MAX_ATTEMPTS, '- Result:', isCorrect ? 'CORRECT' : 'INCORRECT');
+
+    // Update attempt display
+    const attemptDisplay = document.getElementById('attemptDisplay');
+    if (attemptDisplay) {
+        attemptDisplay.textContent = currentAttempts;
+    }
 
     // Handle correct answer
     if (isCorrect) {
@@ -2702,18 +2714,27 @@ function setupVerbPracticeEventListeners() {
  * Handles user dropdown, switching, and reset functionality
  */
 function initializeUserManagement() {
+    console.log('[initializeUserManagement] Setting up user dropdown functionality');
+
     const userDropdownBtn = document.getElementById('userDropdownBtn');
     const userDropdownMenu = document.getElementById('userDropdownMenu');
     const addNewUserBtn = document.getElementById('addNewUserBtn');
     const resetUserDataBtn = document.getElementById('resetUserDataBtn');
 
-    if (!userDropdownBtn || !userDropdownMenu) return;
+    if (!userDropdownBtn || !userDropdownMenu) {
+        console.error('[initializeUserManagement] User dropdown elements not found!');
+        return;
+    }
+
+    console.log('[initializeUserManagement] Attaching dropdown button click handler');
 
     // Toggle dropdown on button click
     userDropdownBtn.addEventListener('click', (e) => {
+        console.log('[userDropdownBtn] Click detected');
         e.stopPropagation();
         const isOpen = userDropdownMenu.style.display === 'block';
         userDropdownMenu.style.display = isOpen ? 'none' : 'block';
+        console.log('[userDropdownBtn] Dropdown now', isOpen ? 'closed' : 'open');
 
         if (!isOpen) {
             populateUserList();
@@ -2856,16 +2877,20 @@ function getAllUsers() {
  * Switch to a different user
  */
 function switchToUser(userId) {
+    console.log('[switchToUser] Switching to user:', userId);
+
     const userName = localStorage.getItem(`userName_${userId}`);
     const userLevel = localStorage.getItem(`userLevel_${userId}`) || 'A1';
 
     if (!userName) {
+        console.error('[switchToUser] User not found!');
         alert('User not found!');
         return;
     }
 
-    // Save current session
+    // Save current session before switching
     if (currentUser.userId) {
+        console.log('[switchToUser] Saving session for current user:', currentUser.userId);
         window.AssessmentSystem.saveSession(currentUser.userId, {
             exerciseType: currentExerciseType,
             cefrLevel: currentUser.cefrLevel,
@@ -2889,7 +2914,9 @@ function switchToUser(userId) {
     localStorage.setItem('currentUserName', userName);
     localStorage.setItem(`lastSession_${userId}`, new Date().toISOString());
 
-    // Update UI
+    console.log('[switchToUser] Updating all UI elements for', userName);
+
+    // Update user display
     document.getElementById('displayName').textContent = userName;
     document.getElementById('displayLevel').textContent = `(${userLevel})`;
 
@@ -2898,24 +2925,45 @@ function switchToUser(userId) {
         currentLevelValue.textContent = userLevel;
     }
 
-    // Update stats display
+    // Reset question state for new user
+    currentAttempts = 0;
+    questionAnsweredCorrectly = false;
+
+    // Reset attempt display
+    const attemptDisplay = document.getElementById('attemptDisplay');
+    if (attemptDisplay) {
+        attemptDisplay.textContent = '0';
+    }
+
+    // Update all stats and progress displays
     updateStatsDisplay();
     updateProgressDisplay();
 
-    // Load next question
+    // Refresh skills grid if it's visible
+    const skillsGrid = document.getElementById('skillsGrid');
+    if (skillsGrid && skillsGrid.style.display !== 'none') {
+        populateSkillsGrid();
+    }
+
+    // Load question for new user's level
     loadNextQuestion();
 
     // Close dropdown
-    document.getElementById('userDropdownMenu').style.display = 'none';
+    const dropdownMenu = document.getElementById('userDropdownMenu');
+    if (dropdownMenu) {
+        dropdownMenu.style.display = 'none';
+    }
 
     // Show success message
-    console.log(`Switched to user: ${userName} (${userLevel})`);
+    console.log('[switchToUser] Successfully switched to', userName, 'at level', userLevel);
 }
 
 /**
  * Reset current user's data
  */
 function resetCurrentUserData() {
+    console.log('[resetCurrentUserData] Resetting all data for user:', currentUser.userId);
+
     if (!currentUser.userId) return;
 
     // Clear all mastery data
@@ -2935,12 +2983,39 @@ function resetCurrentUserData() {
         mistakes: 0
     };
 
-    // Update UI
+    // Reset question state
+    currentAttempts = 0;
+    questionAnsweredCorrectly = false;
+
+    // Reset attempt display
+    const attemptDisplay = document.getElementById('attemptDisplay');
+    if (attemptDisplay) {
+        attemptDisplay.textContent = '0';
+    }
+
+    console.log('[resetCurrentUserData] Refreshing all UI displays');
+
+    // Update all stats and progress displays
     updateStatsDisplay();
     updateProgressDisplay();
 
+    // Force refresh skills grid if visible
+    const skillsGrid = document.getElementById('skillsGrid');
+    if (skillsGrid && skillsGrid.style.display !== 'none') {
+        console.log('[resetCurrentUserData] Refreshing skills grid');
+        populateSkillsGrid();
+    }
+
+    // Refresh summary view by updating progress display again
+    // (this ensures the summary cards show 0)
+    setTimeout(() => {
+        updateProgressDisplay();
+    }, 100);
+
     // Load next question
     loadNextQuestion();
+
+    console.log('[resetCurrentUserData] Reset complete - all views refreshed');
 }
 
 /**

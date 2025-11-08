@@ -72,16 +72,26 @@
         <!-- Main Practice Screen -->
         <div id="practiceScreen" class="screen">
             <!-- User Info Bar -->
-            <div class="user-info">
-                <div class="user-name">
-                    <span class="label">Student:</span>
-                    <div class="user-dropdown" style="position: relative; display: inline-block;">
-                        <button id="userDropdownBtn" class="user-dropdown-btn" style="background: none; border: 1px solid #d1d5db; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 1em; display: flex; align-items: center; gap: 8px;">
-                            <span id="displayName">-</span>
-                            <span id="displayLevel" style="font-size: 0.85em; color: #6b7280;">(A1)</span>
-                            <span style="font-size: 0.8em;">▼</span>
+            <!-- Enhanced User Display Section -->
+            <div class="user-info" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px; margin: 20px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                    <!-- User Info Display -->
+                    <div>
+                        <div style="font-size: 0.9em; opacity: 0.9; margin-bottom: 5px;">📚 Currently Using</div>
+                        <div style="font-size: 1.5em; font-weight: bold; margin-bottom: 5px;">
+                            👤 <span id="displayName">-</span>
+                        </div>
+                        <div style="font-size: 1.1em;">
+                            Level: <span id="displayLevel" style="font-weight: bold; background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 4px;">(A1)</span>
+                        </div>
+                    </div>
+
+                    <!-- User Switcher -->
+                    <div style="position: relative;">
+                        <button id="userDropdownBtn" class="btn btn-primary" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 10px 20px; font-weight: bold;">
+                            🔄 Switch User
                         </button>
-                        <div id="userDropdownMenu" class="user-dropdown-menu" style="display: none; position: absolute; top: 100%; left: 0; background: white; border: 1px solid #d1d5db; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); min-width: 250px; z-index: 1000; margin-top: 5px;">
+                        <div id="userDropdownMenu" class="user-dropdown-menu" style="display: none; position: absolute; top: 100%; right: 0; background: white; border: 1px solid #d1d5db; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); min-width: 280px; z-index: 1000; margin-top: 5px;">
                             <div id="userDropdownHeader" style="padding: 12px 16px; border-bottom: 1px solid #e5e7eb; font-weight: bold; color: #374151;">
                                 Switch User
                             </div>
@@ -95,18 +105,24 @@
                         </div>
                     </div>
                 </div>
-                <div class="user-stats">
-                    <div class="stat">
-                        <span class="label">Correct:</span>
-                        <span id="correctCount" class="stat-value">0</span>
+
+                <!-- Stats Display Below -->
+                <div style="margin-top: 15px; display: flex; gap: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2); flex-wrap: wrap;">
+                    <div>
+                        <div style="font-size: 0.9em; opacity: 0.9;">✓ Correct</div>
+                        <div style="font-size: 1.5em; font-weight: bold;" id="correctCount">0</div>
                     </div>
-                    <div class="stat">
-                        <span class="label">Total:</span>
-                        <span id="totalCount" class="stat-value">0</span>
+                    <div>
+                        <div style="font-size: 0.9em; opacity: 0.9;">📊 Total</div>
+                        <div style="font-size: 1.5em; font-weight: bold;" id="totalCount">0</div>
                     </div>
-                    <div class="stat">
-                        <span class="label">Accuracy:</span>
-                        <span id="accuracy" class="stat-value">0%</span>
+                    <div>
+                        <div style="font-size: 0.9em; opacity: 0.9;">🎯 Accuracy</div>
+                        <div style="font-size: 1.5em; font-weight: bold;" id="accuracy">0%</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.9em; opacity: 0.9;">⏱️ Current Attempt</div>
+                        <div style="font-size: 1.5em; font-weight: bold;"><span id="attemptDisplay">-</span>/<span>3</span></div>
                     </div>
                 </div>
             </div>
