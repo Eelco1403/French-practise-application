@@ -89,12 +89,29 @@ function init() {
     });
 
     // Exercise type selector event listeners
+    console.log('[INIT] Setting up exercise button listeners');
     const exerciseTypeBtns = document.querySelectorAll('.exercise-type-btn');
+    console.log('[INIT] Found exercise buttons:', exerciseTypeBtns.length);
+
     exerciseTypeBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            switchExerciseType(btn.dataset.type);
+        btn.addEventListener('click', function() {
+            const exerciseType = this.dataset.type;
+            console.log('[exerciseTypeBtn] Clicked:', exerciseType);
+
+            // Remove active class from all buttons
+            document.querySelectorAll('.exercise-type-btn').forEach(b => {
+                b.classList.remove('active');
+            });
+
+            // Add active class to clicked button
+            this.classList.add('active');
+
+            // Navigate to exercise page and start exercise
+            switchExerciseType(exerciseType);
         });
     });
+
+    console.log('[INIT] Exercise button listeners attached');
 
     // Session control event listeners
     const saveSessionBtn = document.getElementById('saveSessionBtn');
@@ -184,12 +201,16 @@ function init() {
     initializeSkillsGrid();
 
     // Page Navigation event listeners
+    console.log('[INIT] Setting up back button listener');
     const backToHomeBtn = document.getElementById('backToHomeBtn');
     if (backToHomeBtn) {
         backToHomeBtn.addEventListener('click', () => {
-            console.log('[backToHomeBtn] Returning to home page');
+            console.log('[backToHomeBtn] Clicked - Returning to home page');
             showHomePage();
         });
+        console.log('[INIT] Back button listener attached');
+    } else {
+        console.warn('[INIT] Back to Home button not found in DOM');
     }
 
     // Top bar user management buttons
@@ -3394,14 +3415,39 @@ function validateAnswerWithAccents(userAnswer, correctAnswer) {
  */
 function showHomePage() {
     console.log('[showHomePage] Navigating to home page');
-    const homePage = document.getElementById('homePage');
-    const exercisePage = document.getElementById('exercisePage');
 
-    if (homePage) homePage.style.display = 'block';
-    if (exercisePage) exercisePage.style.display = 'none';
+    try {
+        const homePage = document.getElementById('homePage');
+        const exercisePage = document.getElementById('exercisePage');
 
-    // Update the other users list when returning home
-    populateOtherUsersList();
+        if (!homePage) {
+            console.error('[showHomePage] ERROR: homePage element not found!');
+            return;
+        }
+        if (!exercisePage) {
+            console.error('[showHomePage] ERROR: exercisePage element not found!');
+            return;
+        }
+
+        // Hide exercise page
+        exercisePage.style.display = 'none';
+        console.log('[showHomePage] Exercise page hidden');
+
+        // Show home page
+        homePage.style.display = 'block';
+        console.log('[showHomePage] Home page shown');
+
+        // Update the other users list when returning home
+        populateOtherUsersList();
+
+        // Scroll to top
+        window.scrollTo(0, 0);
+        console.log('[showHomePage] Scrolled to top');
+
+        console.log('[showHomePage] Navigation complete');
+    } catch (error) {
+        console.error('[showHomePage] Error during navigation:', error);
+    }
 }
 
 /**
@@ -3410,14 +3456,46 @@ function showHomePage() {
  */
 function showExercisePage(exerciseType) {
     console.log('[showExercisePage] Navigating to exercise page for type:', exerciseType);
-    const homePage = document.getElementById('homePage');
-    const exercisePage = document.getElementById('exercisePage');
 
-    if (homePage) homePage.style.display = 'none';
-    if (exercisePage) exercisePage.style.display = 'block';
+    try {
+        // Validate exercise type
+        const validTypes = ['vocabulary', 'grammar', 'conjugation', 'reading', 'dialogue', 'all'];
+        if (!validTypes.includes(exerciseType)) {
+            console.error('[showExercisePage] ERROR: Invalid exercise type:', exerciseType);
+            return;
+        }
 
-    // Update the exercise page header
-    updateExercisePageHeader(exerciseType);
+        const homePage = document.getElementById('homePage');
+        const exercisePage = document.getElementById('exercisePage');
+
+        if (!homePage) {
+            console.error('[showExercisePage] ERROR: homePage element not found!');
+            return;
+        }
+        if (!exercisePage) {
+            console.error('[showExercisePage] ERROR: exercisePage element not found!');
+            return;
+        }
+
+        // Hide home page
+        homePage.style.display = 'none';
+        console.log('[showExercisePage] Home page hidden');
+
+        // Show exercise page
+        exercisePage.style.display = 'block';
+        console.log('[showExercisePage] Exercise page shown');
+
+        // Update the exercise page header
+        updateExercisePageHeader(exerciseType);
+
+        // Scroll to top
+        window.scrollTo(0, 0);
+        console.log('[showExercisePage] Scrolled to top');
+
+        console.log('[showExercisePage] Navigation complete');
+    } catch (error) {
+        console.error('[showExercisePage] Error during navigation:', error);
+    }
 }
 
 /**
@@ -3427,33 +3505,50 @@ function showExercisePage(exerciseType) {
 function updateExercisePageHeader(exerciseType) {
     console.log('[updateExercisePageHeader] Updating header for exercise type:', exerciseType);
 
-    // Update user info
-    const exercisePageUserName = document.getElementById('exercisePageUserName');
-    const exercisePageUserLevel = document.getElementById('exercisePageUserLevel');
-    const exercisePageExerciseType = document.getElementById('exercisePageExerciseType');
+    try {
+        // Update user info
+        const exercisePageUserName = document.getElementById('exercisePageUserName');
+        const exercisePageUserLevel = document.getElementById('exercisePageUserLevel');
+        const exercisePageExerciseType = document.getElementById('exercisePageExerciseType');
 
-    if (exercisePageUserName && currentUser.name) {
-        exercisePageUserName.textContent = currentUser.name;
-    }
-    if (exercisePageUserLevel && currentUser.cefrLevel) {
-        exercisePageUserLevel.textContent = currentUser.cefrLevel;
-    }
+        if (exercisePageUserName) {
+            exercisePageUserName.textContent = currentUser.name || 'User';
+            console.log('[updateExercisePageHeader] Updated user name:', currentUser.name);
+        } else {
+            console.warn('[updateExercisePageHeader] exercisePageUserName element not found');
+        }
 
-    // Update exercise type display
-    if (exercisePageExerciseType) {
-        const typeNames = {
-            'vocabulary': 'Vocabulary',
-            'grammar': 'Grammar',
-            'conjugation': 'Conjugation',
-            'reading': 'Reading',
-            'dialogue': 'Dialogue',
-            'all': 'Mixed'
-        };
-        exercisePageExerciseType.textContent = typeNames[exerciseType] || exerciseType;
-    }
+        if (exercisePageUserLevel) {
+            exercisePageUserLevel.textContent = currentUser.cefrLevel || 'A1';
+            console.log('[updateExercisePageHeader] Updated user level:', currentUser.cefrLevel);
+        } else {
+            console.warn('[updateExercisePageHeader] exercisePageUserLevel element not found');
+        }
 
-    // Update stats
-    updateExercisePageStats();
+        // Update exercise type display
+        if (exercisePageExerciseType) {
+            const typeNames = {
+                'vocabulary': 'Vocabulary',
+                'grammar': 'Grammar',
+                'conjugation': 'Conjugation',
+                'reading': 'Reading',
+                'dialogue': 'Dialogue',
+                'all': 'Mixed'
+            };
+            const displayName = typeNames[exerciseType] || exerciseType;
+            exercisePageExerciseType.textContent = displayName;
+            console.log('[updateExercisePageHeader] Updated exercise type:', displayName);
+        } else {
+            console.warn('[updateExercisePageHeader] exercisePageExerciseType element not found');
+        }
+
+        // Update stats
+        updateExercisePageStats();
+
+        console.log('[updateExercisePageHeader] Header update complete');
+    } catch (error) {
+        console.error('[updateExercisePageHeader] Error updating header:', error);
+    }
 }
 
 /**
