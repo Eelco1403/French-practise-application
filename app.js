@@ -221,7 +221,7 @@ function init() {
     if (addNewUserBtnTop) {
         addNewUserBtnTop.addEventListener('click', () => {
             console.log('[addNewUserBtnTop] Adding new user from top bar');
-            addNewUser();
+            showAddNewUserDialog();
         });
     }
 
@@ -262,6 +262,47 @@ function init() {
             resumeSessionBtn.style.display = 'inline-block';
             resumeSessionBtn.addEventListener('click', () => resumeSession(savedUserId));
         }
+    }
+}
+
+/**
+ * Show the Add New User dialog
+ * Returns to user setup screen so new user can be created
+ */
+function showAddNewUserDialog() {
+    console.log('[showAddNewUserDialog] Opening add new user dialog');
+
+    try {
+        // Hide practice screen
+        if (practiceScreen) {
+            practiceScreen.classList.remove('active');
+            console.log('[showAddNewUserDialog] Practice screen hidden');
+        }
+
+        // Show user setup screen
+        if (userSetupScreen) {
+            userSetupScreen.classList.add('active');
+            console.log('[showAddNewUserDialog] User setup screen shown');
+        }
+
+        // Clear input field and focus
+        if (userNameInput) {
+            userNameInput.value = '';
+            userNameInput.focus();
+            console.log('[showAddNewUserDialog] Name input cleared and focused');
+        }
+
+        // Reset level selector to default (A1)
+        const cefrLevelSelect = document.getElementById('cefrLevel');
+        if (cefrLevelSelect) {
+            cefrLevelSelect.value = 'A1';
+            console.log('[showAddNewUserDialog] Level reset to A1');
+        }
+
+        console.log('[showAddNewUserDialog] Add new user dialog ready');
+    } catch (error) {
+        console.error('[showAddNewUserDialog] Error:', error);
+        alert('Error opening add new user dialog. Please refresh and try again.');
     }
 }
 
