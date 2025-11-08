@@ -183,6 +183,43 @@ function init() {
     // Skills Grid event listeners
     initializeSkillsGrid();
 
+    // Page Navigation event listeners
+    const backToHomeBtn = document.getElementById('backToHomeBtn');
+    if (backToHomeBtn) {
+        backToHomeBtn.addEventListener('click', () => {
+            console.log('[backToHomeBtn] Returning to home page');
+            showHomePage();
+        });
+    }
+
+    // Top bar user management buttons
+    const addNewUserBtnTop = document.getElementById('addNewUserBtnTop');
+    const resetUserDataBtnTop = document.getElementById('resetUserDataBtnTop');
+    const changeLevelBtnTop = document.getElementById('changeLevelBtnTop');
+
+    if (addNewUserBtnTop) {
+        addNewUserBtnTop.addEventListener('click', () => {
+            console.log('[addNewUserBtnTop] Adding new user from top bar');
+            addNewUser();
+        });
+    }
+
+    if (resetUserDataBtnTop) {
+        resetUserDataBtnTop.addEventListener('click', () => {
+            console.log('[resetUserDataBtnTop] Resetting user data from top bar');
+            if (confirm(window.I18n.t('messages.confirmReset') || 'Are you sure you want to reset all progress data for this user? This cannot be undone.')) {
+                resetCurrentUserData();
+            }
+        });
+    }
+
+    if (changeLevelBtnTop) {
+        changeLevelBtnTop.addEventListener('click', () => {
+            console.log('[changeLevelBtnTop] Changing level from top bar');
+            showLevelChangeDialog();
+        });
+    }
+
     // Try to load existing user from localStorage
     const savedUserId = localStorage.getItem('currentUserId');
     if (savedUserId) {
@@ -259,6 +296,9 @@ function startPractice() {
     // Switch screens
     userSetupScreen.classList.remove('active');
     practiceScreen.classList.add('active');
+
+    // Populate the other users list
+    populateOtherUsersList();
 
     // Load first question
     loadNextQuestion();
@@ -1135,6 +1175,10 @@ function updateStatsDisplay() {
         : 0;
 
     accuracy.textContent = `${accuracyPercent}%`;
+
+    // Also update the top progress bar and exercise page stats
+    updateTopProgressBar();
+    updateExercisePageStats();
 }
 
 /**
@@ -1205,6 +1249,9 @@ function updateLevelProgress() {
  */
 function switchExerciseType(type) {
     console.log('[switchExerciseType] Switching to type:', type);
+
+    // Navigate to exercise page
+    showExercisePage(type);
 
     // Store original type before transformation
     const originalType = type;
@@ -2948,6 +2995,9 @@ function switchToUser(userId) {
     // Load question for new user's level
     loadNextQuestion();
 
+    // Update the other users list
+    populateOtherUsersList();
+
     // Close dropdown
     const dropdownMenu = document.getElementById('userDropdownMenu');
     if (dropdownMenu) {
@@ -3333,6 +3383,185 @@ function validateAnswerWithAccents(userAnswer, correctAnswer) {
     // A1-A2 levels: Check if answer is correct when ignoring accents
     const isCorrectWithoutAccents = window.UtilityFunctions.validateAnswer(userAnswer, correctAnswer);
     return { correct: isCorrectWithoutAccents, message: '' };
+}
+
+// ============================================================================
+// PAGE NAVIGATION FUNCTIONS
+// ============================================================================
+
+/**
+ * Show the home page and hide the exercise page
+ */
+function showHomePage() {
+    console.log('[showHomePage] Navigating to home page');
+    const homePage = document.getElementById('homePage');
+    const exercisePage = document.getElementById('exercisePage');
+
+    if (homePage) homePage.style.display = 'block';
+    if (exercisePage) exercisePage.style.display = 'none';
+
+    // Update the other users list when returning home
+    populateOtherUsersList();
+}
+
+/**
+ * Show the exercise page and hide the home page
+ * @param {string} exerciseType - The type of exercise (vocabulary, grammar, etc.)
+ */
+function showExercisePage(exerciseType) {
+    console.log('[showExercisePage] Navigating to exercise page for type:', exerciseType);
+    const homePage = document.getElementById('homePage');
+    const exercisePage = document.getElementById('exercisePage');
+
+    if (homePage) homePage.style.display = 'none';
+    if (exercisePage) exercisePage.style.display = 'block';
+
+    // Update the exercise page header
+    updateExercisePageHeader(exerciseType);
+}
+
+/**
+ * Update the exercise page header with current user info and stats
+ * @param {string} exerciseType - The type of exercise
+ */
+function updateExercisePageHeader(exerciseType) {
+    console.log('[updateExercisePageHeader] Updating header for exercise type:', exerciseType);
+
+    // Update user info
+    const exercisePageUserName = document.getElementById('exercisePageUserName');
+    const exercisePageUserLevel = document.getElementById('exercisePageUserLevel');
+    const exercisePageExerciseType = document.getElementById('exercisePageExerciseType');
+
+    if (exercisePageUserName && currentUser.name) {
+        exercisePageUserName.textContent = currentUser.name;
+    }
+    if (exercisePageUserLevel && currentUser.cefrLevel) {
+        exercisePageUserLevel.textContent = currentUser.cefrLevel;
+    }
+
+    // Update exercise type display
+    if (exercisePageExerciseType) {
+        const typeNames = {
+            'vocabulary': 'Vocabulary',
+            'grammar': 'Grammar',
+            'conjugation': 'Conjugation',
+            'reading': 'Reading',
+            'dialogue': 'Dialogue',
+            'all': 'Mixed'
+        };
+        exercisePageExerciseType.textContent = typeNames[exerciseType] || exerciseType;
+    }
+
+    // Update stats
+    updateExercisePageStats();
+}
+
+/**
+ * Update the stats display on the exercise page header
+ */
+function updateExercisePageStats() {
+    const exercisePageAccuracy = document.getElementById('exercisePageAccuracy');
+    const exercisePageStats = document.getElementById('exercisePageStats');
+
+    if (!currentUser.sessionStats) return;
+
+    const correct = currentUser.sessionStats.correct || 0;
+    const total = currentUser.sessionStats.total || 0;
+    const accuracy = total > 0 ? Math.round((correct / total) * 100) : 0;
+
+    if (exercisePageAccuracy) {
+        exercisePageAccuracy.textContent = `${accuracy}%`;
+    }
+    if (exercisePageStats) {
+        exercisePageStats.textContent = `${correct}/${total} correct`;
+    }
+}
+
+/**
+ * Populate the "Other Users" list in the home page
+ */
+function populateOtherUsersList() {
+    console.log('[populateOtherUsersList] Populating other users list');
+
+    const otherUsersList = document.getElementById('otherUsersList');
+    if (!otherUsersList) {
+        console.error('[populateOtherUsersList] otherUsersList element not found');
+        return;
+    }
+
+    // Get all users from localStorage
+    const allUsers = JSON.parse(localStorage.getItem('frenchAppUsers') || '[]');
+    console.log('[populateOtherUsersList] Found', allUsers.length, 'total users');
+
+    // Filter out current user
+    const otherUsers = allUsers.filter(user => user.userId !== currentUser.userId);
+    console.log('[populateOtherUsersList] Found', otherUsers.length, 'other users');
+
+    // Clear existing list
+    otherUsersList.innerHTML = '';
+
+    // Add each other user as a button
+    if (otherUsers.length === 0) {
+        otherUsersList.innerHTML = '<div style="text-align: center; padding: 20px; color: #9ca3af; font-size: 0.9em;">No other users yet.<br>Click "Add New User" to create one!</div>';
+    } else {
+        otherUsers.forEach(user => {
+            const userButton = document.createElement('button');
+            userButton.className = 'btn';
+            userButton.style.cssText = 'background: white; border: 2px solid #e5e7eb; color: #374151; padding: 12px 16px; text-align: left; border-radius: 8px; transition: all 0.2s; width: 100%;';
+            userButton.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-weight: bold; font-size: 1em;">${user.name}</div>
+                        <div style="font-size: 0.85em; color: #6b7280; margin-top: 2px;">Level: ${user.cefrLevel}</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; font-weight: bold;">
+                        Switch
+                    </div>
+                </div>
+            `;
+
+            // Add hover effect
+            userButton.addEventListener('mouseenter', () => {
+                userButton.style.borderColor = '#667eea';
+                userButton.style.boxShadow = '0 2px 8px rgba(102,126,234,0.2)';
+            });
+            userButton.addEventListener('mouseleave', () => {
+                userButton.style.borderColor = '#e5e7eb';
+                userButton.style.boxShadow = 'none';
+            });
+
+            // Add click handler to switch user
+            userButton.addEventListener('click', () => {
+                console.log('[populateOtherUsersList] Switching to user:', user.userId);
+                switchToUser(user.userId);
+            });
+
+            otherUsersList.appendChild(userButton);
+        });
+    }
+}
+
+/**
+ * Update the top progress bar and text
+ */
+function updateTopProgressBar() {
+    const topProgressBar = document.getElementById('topProgressBar');
+    const topProgressText = document.getElementById('topProgressText');
+    const progressBar = document.getElementById('progressBar');
+
+    if (!topProgressBar || !topProgressText || !currentUser.sessionStats) return;
+
+    const total = currentUser.sessionStats.total || 0;
+    const targetAttempts = 20; // Match the target from Level Progress
+    const percentage = Math.min((total / targetAttempts) * 100, 100);
+
+    topProgressBar.style.width = `${percentage}%`;
+    topProgressText.textContent = `${Math.round(percentage)}% Complete`;
+
+    // Also update the main progress bar if it exists
+    if (progressBar) {
+        progressBar.style.width = `${percentage}%`;
+    }
 }
 
 // Initialize app when DOM is ready
