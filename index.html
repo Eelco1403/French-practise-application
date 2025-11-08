@@ -71,83 +71,183 @@
 
         <!-- Main Practice Screen -->
         <div id="practiceScreen" class="screen">
-            <!-- User Info Bar -->
-            <!-- Enhanced User Display Section -->
-            <div class="user-info" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px; margin: 20px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
-                    <!-- User Info Display -->
-                    <div>
-                        <div style="font-size: 0.9em; opacity: 0.9; margin-bottom: 5px;">📚 Currently Using</div>
-                        <div style="font-size: 1.5em; font-weight: bold; margin-bottom: 5px;">
-                            👤 <span id="displayName">-</span>
+            <!-- HOME PAGE -->
+            <div id="homePage" style="display: block;">
+                <!-- All Users Section -->
+                <div class="all-users-section" style="display: flex; gap: 20px; margin: 20px 0; flex-wrap: wrap;">
+                    <!-- Current User Card (Left) -->
+                    <div class="current-user-card" style="flex: 1 1 400px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <div style="font-size: 0.9em; opacity: 0.9; margin-bottom: 8px;">👤 CURRENT USER</div>
+                        <div style="font-size: 1.8em; font-weight: bold; margin-bottom: 8px;">
+                            <span id="displayName">-</span>
                         </div>
-                        <div style="font-size: 1.1em;">
-                            Level: <span id="displayLevel" style="font-weight: bold; background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 4px;">(A1)</span>
+                        <div style="font-size: 1.1em; margin-bottom: 15px;">
+                            Level: <span id="displayLevel" style="font-weight: bold; background: rgba(255,255,255,0.3); padding: 4px 12px; border-radius: 6px;">(A1)</span>
+                            <button id="changeLevelBtnTop" class="btn btn-small" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: white; padding: 4px 12px; margin-left: 10px; font-size: 0.9em;">⬆️</button>
+                        </div>
+
+                        <!-- Your Progress (Integrated) -->
+                        <div style="border-top: 1px solid rgba(255,255,255,0.3); padding-top: 15px; margin-top: 10px;">
+                            <div style="font-weight: bold; font-size: 1.1em; margin-bottom: 12px;">📊 YOUR PROGRESS</div>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+                                <div>
+                                    <div style="font-size: 0.85em; opacity: 0.9;">✓ Correct</div>
+                                    <div style="font-size: 1.4em; font-weight: bold;" id="correctCount">0</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.85em; opacity: 0.9;">📊 Total</div>
+                                    <div style="font-size: 1.4em; font-weight: bold;" id="totalCount">0</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.85em; opacity: 0.9;">🎯 Accuracy</div>
+                                    <div style="font-size: 1.4em; font-weight: bold;" id="accuracy">0%</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.85em; opacity: 0.9;">⏱️ Attempt</div>
+                                    <div style="font-size: 1.4em; font-weight: bold;"><span id="attemptDisplay">-</span>/3</div>
+                                </div>
+                            </div>
+                            <!-- Progress Bar -->
+                            <div style="margin-top: 12px;">
+                                <div style="font-size: 0.85em; opacity: 0.9; margin-bottom: 5px;">Overall Progress</div>
+                                <div style="background: rgba(255,255,255,0.2); border-radius: 10px; height: 20px; overflow: hidden;">
+                                    <div id="topProgressBar" style="background: rgba(255,255,255,0.8); height: 100%; width: 0%; transition: width 0.3s ease; border-radius: 10px;"></div>
+                                </div>
+                                <div style="font-size: 0.8em; opacity: 0.9; margin-top: 3px;" id="topProgressText">0% Complete</div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- User Switcher -->
-                    <div style="position: relative;">
-                        <button id="userDropdownBtn" class="btn btn-primary" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 10px 20px; font-weight: bold;">
-                            🔄 Switch User
+                    <!-- Other Users (Right) -->
+                    <div class="other-users-container" style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 12px;">
+                        <div style="font-weight: bold; font-size: 1.1em; color: #374151; margin-bottom: 5px;">👥 OTHER USERS</div>
+                        <div id="otherUsersList" style="display: flex; flex-direction: column; gap: 10px;">
+                            <!-- Other users will be populated here -->
+                        </div>
+                        <button id="addNewUserBtnTop" class="btn btn-primary" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; padding: 12px; font-weight: bold; border-radius: 8px;">
+                            ➕ Add New User
                         </button>
-                        <div id="userDropdownMenu" class="user-dropdown-menu" style="display: none; position: absolute; top: 100%; right: 0; background: white; border: 1px solid #d1d5db; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); min-width: 280px; z-index: 1000; margin-top: 5px;">
-                            <div id="userDropdownHeader" style="padding: 12px 16px; border-bottom: 1px solid #e5e7eb; font-weight: bold; color: #374151;">
-                                Switch User
+                        <button id="resetUserDataBtnTop" class="btn btn-danger btn-small" style="background: #ef4444; border: none; padding: 10px; font-size: 0.9em; border-radius: 8px;">
+                            🗑️ Reset Current User Data
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Exercise Type Selector -->
+                <div class="exercise-type-selector">
+                    <h3 id="exerciseTypeTitle">Choose Exercise Type</h3>
+                    <div class="exercise-type-buttons">
+                        <button class="exercise-type-btn active" data-type="vocabulary">📚 <span id="vocabLabel">Vocabulary</span></button>
+                        <button class="exercise-type-btn" data-type="grammar">📝 <span id="grammarLabel">Grammar</span></button>
+                        <button class="exercise-type-btn" data-type="conjugation">🔄 <span id="conjugationLabel">Conjugation</span></button>
+                        <button class="exercise-type-btn" data-type="reading">📖 <span id="readingLabel">Reading</span></button>
+                        <button class="exercise-type-btn" data-type="dialogue">💬 <span id="dialogueLabel">Dialogue</span></button>
+                        <button class="exercise-type-btn" data-type="all">🎯 <span id="allTypesLabel">All Types</span></button>
+                    </div>
+                    <div class="action-buttons">
+                        <button id="placementTestBtn" class="btn btn-success btn-small">🎓 <span id="placementTestLabel">Take Placement Test</span></button>
+                        <button id="viewAnalyticsBtn" class="btn btn-info btn-small">📊 Analytics</button>
+                        <button id="saveSessionBtn" class="btn btn-secondary btn-small">💾 <span id="saveProgressLabel">Save Progress</span></button>
+                        <button id="viewReportBtn" class="btn btn-secondary btn-small">📄 <span id="viewReportLabel">Report</span></button>
+                    </div>
+                </div>
+
+                <!-- Progress Overview (Summary) -->
+                <div class="progress-section">
+                    <h3>Overall Progress Summary</h3>
+
+                    <!-- Toggle between summary and detailed view -->
+                    <div style="margin-bottom: 15px; display: flex; gap: 10px;">
+                        <button id="showSummaryBtn" class="btn btn-secondary btn-small active">Summary View</button>
+                        <button id="showDetailedBtn" class="btn btn-secondary btn-small">Detailed Skills Grid</button>
+                    </div>
+
+                    <!-- Summary View (existing progress cards) -->
+                    <div id="progressSummary" class="progress-grid">
+                        <div class="progress-card">
+                            <div class="progress-icon learning">📚</div>
+                            <div class="progress-info">
+                                <span class="progress-label">Learning</span>
+                                <span id="learningCount" class="progress-number">0</span>
                             </div>
-                            <div id="userList" style="max-height: 300px; overflow-y: auto;">
-                                <!-- User list will be populated dynamically -->
+                        </div>
+                        <div class="progress-card">
+                            <div class="progress-icon developing">📈</div>
+                            <div class="progress-info">
+                                <span class="progress-label">Developing</span>
+                                <span id="developingCount" class="progress-number">0</span>
                             </div>
-                            <div style="padding: 8px; border-top: 1px solid #e5e7eb; display: flex; flex-direction: column; gap: 5px;">
-                                <button id="addNewUserBtn" class="btn btn-primary btn-small" style="width: 100%;"><span id="addNewUserLabel">+ Add New User</span></button>
-                                <button id="resetUserDataBtn" class="btn btn-danger btn-small" style="width: 100%; background: #ef4444;"><span id="resetUserDataLabel">Reset Current User Data</span></button>
+                        </div>
+                        <div class="progress-card">
+                            <div class="progress-icon mastered">✓</div>
+                            <div class="progress-info">
+                                <span class="progress-label">Mastered</span>
+                                <span id="masteredCount" class="progress-number">0</span>
                             </div>
+                        </div>
+                        <div class="progress-card">
+                            <div class="progress-icon solid">⭐</div>
+                            <div class="progress-info">
+                                <span class="progress-label">Solid</span>
+                                <span id="solidCount" class="progress-number">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Skills Grid View (initially hidden) -->
+                    <div id="skillsGrid" style="display: none;">
+                        <!-- Filter controls -->
+                        <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                            <label style="font-weight: 600;">Filter by mastery:</label>
+                            <button class="filter-btn active" data-filter="all">All</button>
+                            <button class="filter-btn" data-filter="learning">Learning</button>
+                            <button class="filter-btn" data-filter="developing">Developing</button>
+                            <button class="filter-btn" data-filter="mastered">Mastered</button>
+                            <button class="filter-btn" data-filter="solid">Solid</button>
+                        </div>
+
+                        <!-- Skills cards container -->
+                        <div id="skillsCardsContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px;">
+                            <!-- Skills will be dynamically populated here -->
+                        </div>
+
+                        <div id="noSkillsMessage" style="display: none; text-align: center; padding: 40px; color: #9ca3af;">
+                            <p>No skills match the selected filter.</p>
+                            <p style="font-size: 0.9em;">Start practicing to see your progress!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END HOME PAGE -->
+
+            <!-- EXERCISE PAGE -->
+            <div id="exercisePage" style="display: none;">
+                <!-- Exercise Page Header -->
+                <div class="exercise-page-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 20px; border-radius: 12px; margin: 20px 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    <button id="backToHomeBtn" class="btn" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: white; font-weight: bold; padding: 10px 20px;">
+                        ⬅️ Back to Home
+                    </button>
+                    <div style="flex: 1; text-align: center;">
+                        <div style="font-size: 1.3em; font-weight: bold;">
+                            👤 <span id="exercisePageUserName">-</span>
+                            <span style="opacity: 0.9; font-size: 0.85em;">(<span id="exercisePageUserLevel">A1</span>)</span>
+                        </div>
+                        <div style="font-size: 0.9em; margin-top: 5px;">
+                            <span id="exercisePageExerciseType">Vocabulary</span> Practice
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 0.85em; opacity: 0.9;">Progress</div>
+                        <div style="font-size: 1.2em; font-weight: bold;">
+                            <span id="exercisePageAccuracy">0%</span>
+                        </div>
+                        <div style="font-size: 0.8em; opacity: 0.9;">
+                            <span id="exercisePageStats">0/0 correct</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Stats Display Below -->
-                <div style="margin-top: 15px; display: flex; gap: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2); flex-wrap: wrap;">
-                    <div>
-                        <div style="font-size: 0.9em; opacity: 0.9;">✓ Correct</div>
-                        <div style="font-size: 1.5em; font-weight: bold;" id="correctCount">0</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 0.9em; opacity: 0.9;">📊 Total</div>
-                        <div style="font-size: 1.5em; font-weight: bold;" id="totalCount">0</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 0.9em; opacity: 0.9;">🎯 Accuracy</div>
-                        <div style="font-size: 1.5em; font-weight: bold;" id="accuracy">0%</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 0.9em; opacity: 0.9;">⏱️ Current Attempt</div>
-                        <div style="font-size: 1.5em; font-weight: bold;"><span id="attemptDisplay">-</span>/<span>3</span></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Exercise Type Selector -->
-            <div class="exercise-type-selector">
-                <h3 id="exerciseTypeTitle">Choose Exercise Type</h3>
-                <div class="exercise-type-buttons">
-                    <button class="exercise-type-btn active" data-type="vocabulary">📚 <span id="vocabLabel">Vocabulary</span></button>
-                    <button class="exercise-type-btn" data-type="grammar">📝 <span id="grammarLabel">Grammar</span></button>
-                    <button class="exercise-type-btn" data-type="conjugation">🔄 <span id="conjugationLabel">Conjugation</span></button>
-                    <button class="exercise-type-btn" data-type="reading">📖 <span id="readingLabel">Reading</span></button>
-                    <button class="exercise-type-btn" data-type="dialogue">💬 <span id="dialogueLabel">Dialogue</span></button>
-                    <button class="exercise-type-btn" data-type="all">🎯 <span id="allTypesLabel">All Types</span></button>
-                </div>
-                <div class="action-buttons">
-                    <button id="placementTestBtn" class="btn btn-success btn-small">🎓 <span id="placementTestLabel">Take Placement Test</span></button>
-                    <button id="viewAnalyticsBtn" class="btn btn-info btn-small">📊 Analytics</button>
-                    <button id="saveSessionBtn" class="btn btn-secondary btn-small">💾 <span id="saveProgressLabel">Save Progress</span></button>
-                    <button id="viewReportBtn" class="btn btn-secondary btn-small">📄 <span id="viewReportLabel">Report</span></button>
-                    <button id="changeLevelBtn" class="btn btn-tertiary btn-small">🎯 <span id="changeLevelLabel">Change Level</span></button>
-                </div>
-            </div>
-
-            <!-- Category Filter (for vocabulary) -->
+                <!-- Category Filter (for vocabulary) -->
             <div id="categoryFilter" class="category-filter" style="display:none; margin: 20px 0; padding: 15px; background: #f9fafb; border-radius: 8px;">
                 <h4 style="margin-bottom: 10px;">Filter by Topic:</h4>
                 <div class="category-checkboxes" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px;">
@@ -323,85 +423,8 @@
                     <button id="nextBtn" class="btn btn-secondary">Next Question</button>
                 </div>
             </div>
-
-            <!-- Progress Overview -->
-            <div class="progress-section">
-                <h3>Your Progress</h3>
-
-                <!-- Toggle between summary and detailed view -->
-                <div style="margin-bottom: 15px; display: flex; gap: 10px;">
-                    <button id="showSummaryBtn" class="btn btn-secondary btn-small active">Summary View</button>
-                    <button id="showDetailedBtn" class="btn btn-secondary btn-small">Detailed Skills Grid</button>
-                </div>
-
-                <!-- Summary View (existing progress cards) -->
-                <div id="progressSummary" class="progress-grid">
-                    <div class="progress-card">
-                        <div class="progress-icon learning">📚</div>
-                        <div class="progress-info">
-                            <span class="progress-label">Learning</span>
-                            <span id="learningCount" class="progress-number">0</span>
-                        </div>
-                    </div>
-                    <div class="progress-card">
-                        <div class="progress-icon developing">📈</div>
-                        <div class="progress-info">
-                            <span class="progress-label">Developing</span>
-                            <span id="developingCount" class="progress-number">0</span>
-                        </div>
-                    </div>
-                    <div class="progress-card">
-                        <div class="progress-icon mastered">✓</div>
-                        <div class="progress-info">
-                            <span class="progress-label">Mastered</span>
-                            <span id="masteredCount" class="progress-number">0</span>
-                        </div>
-                    </div>
-                    <div class="progress-card">
-                        <div class="progress-icon solid">⭐</div>
-                        <div class="progress-info">
-                            <span class="progress-label">Solid</span>
-                            <span id="solidCount" class="progress-number">0</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Detailed Skills Grid View (initially hidden) -->
-                <div id="skillsGrid" style="display: none;">
-                    <!-- Filter controls -->
-                    <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
-                        <label style="font-weight: 600;">Filter by mastery:</label>
-                        <button class="filter-btn active" data-filter="all">All</button>
-                        <button class="filter-btn" data-filter="learning">Learning</button>
-                        <button class="filter-btn" data-filter="developing">Developing</button>
-                        <button class="filter-btn" data-filter="mastered">Mastered</button>
-                        <button class="filter-btn" data-filter="solid">Solid</button>
-                    </div>
-
-                    <!-- Skills cards container -->
-                    <div id="skillsCardsContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px;">
-                        <!-- Skills will be dynamically populated here -->
-                    </div>
-
-                    <div id="noSkillsMessage" style="display: none; text-align: center; padding: 40px; color: #9ca3af;">
-                        <p>No skills match the selected filter.</p>
-                        <p style="font-size: 0.9em;">Start practicing to see your progress!</p>
-                    </div>
-                </div>
             </div>
-
-            <!-- Level Progress -->
-            <div class="level-progress">
-                <h3 id="levelProgressTitle">Level Progress</h3>
-                <div id="levelStatus" class="level-status">
-                    <p id="currentLevelText">Current Level: <strong id="currentLevelValue">A1</strong></p>
-                    <p id="levelProgressDesc">Complete more exercises to advance to the next level!</p>
-                    <div class="progress-bar">
-                        <div id="progressBar" class="progress-bar-fill" style="width: 0%"></div>
-                    </div>
-                    <p id="progressText" class="progress-text">0/20 items attempted</p>
-                </div>
-            </div>
+            <!-- END EXERCISE PAGE -->
         </div>
 
         <!-- Teacher Report Modal -->
