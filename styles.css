@@ -1310,6 +1310,17 @@ body {
     border-bottom: 2px solid #e5e7eb;
 }
 
+/* Level Change Button Hover Effects */
+#changeLevelBtnTop:hover {
+    background: rgba(255,255,255,0.35) !important;
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(255,255,255,0.2);
+}
+
+#changeLevelBtnTop:active {
+    transform: scale(0.95);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .verbs-grid {

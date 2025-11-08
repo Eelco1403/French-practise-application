@@ -343,6 +343,36 @@ function startPractice() {
     localStorage.setItem(`userLevel_${userId}`, currentUser.cefrLevel);
     localStorage.setItem(`lastSession_${userId}`, new Date().toISOString());
 
+    // Save user to the frenchAppUsers array for the user list
+    let frenchAppUsers = JSON.parse(localStorage.getItem('frenchAppUsers') || '[]');
+
+    // Check if user already exists in array
+    const userExists = frenchAppUsers.some(u => u.userId === userId);
+
+    if (!userExists) {
+        // Add new user to array
+        frenchAppUsers.push({
+            userId: userId,
+            name: name,
+            cefrLevel: currentUser.cefrLevel,
+            createdDate: new Date().toISOString(),
+            lastSession: new Date().toISOString()
+        });
+        console.log('[startPractice] Added new user to frenchAppUsers array');
+    } else {
+        // Update existing user's level and lastSession
+        const userIndex = frenchAppUsers.findIndex(u => u.userId === userId);
+        if (userIndex !== -1) {
+            frenchAppUsers[userIndex].cefrLevel = currentUser.cefrLevel;
+            frenchAppUsers[userIndex].lastSession = new Date().toISOString();
+            console.log('[startPractice] Updated existing user in frenchAppUsers array');
+        }
+    }
+
+    // Save updated array back to localStorage
+    localStorage.setItem('frenchAppUsers', JSON.stringify(frenchAppUsers));
+    console.log('[startPractice] Saved frenchAppUsers array:', frenchAppUsers);
+
     // Update UI
     displayName.textContent = name;
     const displayLevel = document.getElementById('displayLevel');
