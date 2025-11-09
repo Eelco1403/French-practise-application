@@ -358,6 +358,53 @@ function init() {
         });
     }
 
+    // Language selector modal handlers
+    const closeLangModalBtn = document.getElementById('closeLangModalBtn');
+    const langModal = document.getElementById('languageSelectorModal');
+
+    if (closeLangModalBtn) {
+        closeLangModalBtn.addEventListener('click', () => {
+            console.log('[closeLangModalBtn] Closing language selector');
+            if (langModal) langModal.style.display = 'none';
+        });
+    }
+
+    // Language option buttons
+    document.querySelectorAll('.lang-option-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const lang = e.target.dataset.lang || e.currentTarget.dataset.lang;
+            console.log('[lang-option-btn] Changing language to:', lang);
+
+            // Change language
+            if (window.I18n) {
+                window.I18n.setLanguage(lang);
+                updateUILanguage();
+            }
+
+            // Update interface language selector
+            const interfaceLanguageSelect = document.getElementById('interfaceLanguage');
+            if (interfaceLanguageSelect) {
+                interfaceLanguageSelect.value = lang;
+            }
+
+            // Close modal
+            if (langModal) langModal.style.display = 'none';
+
+            // Show confirmation
+            const langNames = { 'en': 'English', 'nl': 'Nederlands', 'fr': 'Français', 'de': 'Deutsch' };
+            alert(`Language changed to ${langNames[lang]}!`);
+        });
+    });
+
+    // Close language modal when clicking outside
+    if (langModal) {
+        langModal.addEventListener('click', (e) => {
+            if (e.target === langModal) {
+                langModal.style.display = 'none';
+            }
+        });
+    }
+
     // Try to load existing user from localStorage
     const savedUserId = localStorage.getItem('currentUserId');
     if (savedUserId) {
@@ -4041,12 +4088,17 @@ function switchToUserFromManagement(userId) {
     // Use existing switchToUser function
     switchToUser(userId);
 
-    // Close user management page
-    const userManagementPage = document.getElementById('userManagementPage');
-    const practiceScreen = document.getElementById('practiceScreen');
+    // CRITICAL: Refresh the User Management page so it shows the new current user
+    populateUserManagementPage();
 
-    if (userManagementPage) userManagementPage.style.display = 'none';
-    if (practiceScreen) practiceScreen.classList.add('active');
+    // Small delay to let the user see the update, then close
+    setTimeout(() => {
+        const userManagementPage = document.getElementById('userManagementPage');
+        const practiceScreen = document.getElementById('practiceScreen');
+
+        if (userManagementPage) userManagementPage.style.display = 'none';
+        if (practiceScreen) practiceScreen.classList.add('active');
+    }, 300); // 300ms delay - user sees card update before closing
 }
 
 /**
