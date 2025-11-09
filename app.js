@@ -214,31 +214,147 @@ function init() {
         console.warn('[INIT] Back to Home button not found in DOM');
     }
 
-    // Top bar user management buttons
-    const addNewUserBtnTop = document.getElementById('addNewUserBtnTop');
-    const resetUserDataBtnTop = document.getElementById('resetUserDataBtnTop');
-    const changeLevelBtnTop = document.getElementById('changeLevelBtnTop');
+    // Settings button - open settings modal
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsModal = document.getElementById('settingsModal');
+    const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+    const backToPracticeBtn = document.getElementById('backToPracticeBtn');
 
-    if (addNewUserBtnTop) {
-        addNewUserBtnTop.addEventListener('click', () => {
-            console.log('[addNewUserBtnTop] Adding new user from top bar');
-            showAddNewUserDialog();
+    if (settingsBtn) {
+        settingsBtn.addEventListener('click', () => {
+            console.log('[settingsBtn] Opening settings modal');
+            settingsModal.style.display = 'flex';
         });
     }
 
-    if (resetUserDataBtnTop) {
-        resetUserDataBtnTop.addEventListener('click', () => {
-            console.log('[resetUserDataBtnTop] Resetting user data from top bar');
+    if (closeSettingsBtn) {
+        closeSettingsBtn.addEventListener('click', () => {
+            console.log('[closeSettingsBtn] Closing settings modal');
+            settingsModal.style.display = 'none';
+        });
+    }
+
+    if (backToPracticeBtn) {
+        backToPracticeBtn.addEventListener('click', () => {
+            console.log('[backToPracticeBtn] Closing settings modal');
+            settingsModal.style.display = 'none';
+        });
+    }
+
+    // Close modal when clicking outside
+    if (settingsModal) {
+        settingsModal.addEventListener('click', (e) => {
+            if (e.target === settingsModal) {
+                settingsModal.style.display = 'none';
+            }
+        });
+    }
+
+    // Settings menu items
+    const manageUsersBtn = document.getElementById('manageUsersBtn');
+    const viewAnalyticsBtnSettings = document.getElementById('viewAnalyticsBtnSettings');
+    const changeLevelBtnSettings = document.getElementById('changeLevelBtnSettings');
+    const resetDataBtnSettings = document.getElementById('resetDataBtnSettings');
+    const languageSettingsBtn = document.getElementById('languageSettingsBtn');
+
+    if (manageUsersBtn) {
+        manageUsersBtn.addEventListener('click', () => {
+            console.log('[manageUsersBtn] Opening user management page');
+            showUserManagementPage();
+        });
+    }
+
+    if (viewAnalyticsBtnSettings) {
+        viewAnalyticsBtnSettings.addEventListener('click', () => {
+            console.log('[viewAnalyticsBtnSettings] Opening analytics from settings');
+            settingsModal.style.display = 'none';
+            showAnalyticsDashboard();
+        });
+    }
+
+    if (changeLevelBtnSettings) {
+        changeLevelBtnSettings.addEventListener('click', () => {
+            console.log('[changeLevelBtnSettings] Opening level change dialog');
+            settingsModal.style.display = 'none';
+            showLevelChangeDialog();
+        });
+    }
+
+    if (resetDataBtnSettings) {
+        resetDataBtnSettings.addEventListener('click', () => {
+            console.log('[resetDataBtnSettings] Opening reset confirmation');
+            settingsModal.style.display = 'none';
             if (confirm(window.I18n.t('messages.confirmReset') || 'Are you sure you want to reset all progress data for this user? This cannot be undone.')) {
                 resetCurrentUserData();
             }
         });
     }
 
-    if (changeLevelBtnTop) {
-        changeLevelBtnTop.addEventListener('click', () => {
-            console.log('[changeLevelBtnTop] Changing level from top bar');
-            showLevelChangeDialog();
+    if (languageSettingsBtn) {
+        languageSettingsBtn.addEventListener('click', () => {
+            console.log('[languageSettingsBtn] Opening language selector');
+            // This can trigger the existing language selector modal
+            const langModal = document.getElementById('languageSelectorModal');
+            if (langModal) {
+                settingsModal.style.display = 'none';
+                langModal.style.display = 'flex';
+            }
+        });
+    }
+
+    // User Management Page event listeners
+    const backFromUserMgmtBtn = document.getElementById('backFromUserMgmtBtn');
+    const addNewUserBtnUserMgmt = document.getElementById('addNewUserBtnUserMgmt');
+    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+    if (backFromUserMgmtBtn) {
+        backFromUserMgmtBtn.addEventListener('click', () => {
+            console.log('[backFromUserMgmtBtn] Going back to practice');
+            const userManagementPage = document.getElementById('userManagementPage');
+            const practiceScreen = document.getElementById('practiceScreen');
+
+            if (userManagementPage) userManagementPage.style.display = 'none';
+            if (practiceScreen) practiceScreen.classList.add('active');
+        });
+    }
+
+    if (addNewUserBtnUserMgmt) {
+        addNewUserBtnUserMgmt.addEventListener('click', () => {
+            console.log('[addNewUserBtnUserMgmt] Adding new user from management page');
+            const userManagementPage = document.getElementById('userManagementPage');
+            if (userManagementPage) userManagementPage.style.display = 'none';
+            showAddNewUserDialog();
+        });
+    }
+
+    if (cancelDeleteBtn) {
+        cancelDeleteBtn.addEventListener('click', () => {
+            console.log('[cancelDeleteBtn] Canceling delete');
+            const deleteModal = document.getElementById('deleteUserModal');
+            if (deleteModal) deleteModal.style.display = 'none';
+            userToDelete = null;
+        });
+    }
+
+    if (confirmDeleteBtn) {
+        confirmDeleteBtn.addEventListener('click', () => {
+            console.log('[confirmDeleteBtn] Confirming delete');
+            if (userToDelete) {
+                deleteUser(userToDelete);
+                userToDelete = null;
+            }
+        });
+    }
+
+    // Close delete modal when clicking outside
+    const deleteModal = document.getElementById('deleteUserModal');
+    if (deleteModal) {
+        deleteModal.addEventListener('click', (e) => {
+            if (e.target === deleteModal) {
+                deleteModal.style.display = 'none';
+                userToDelete = null;
+            }
         });
     }
 
@@ -299,6 +415,13 @@ function showAddNewUserDialog() {
         if (cefrLevelSelect) {
             cefrLevelSelect.value = 'A1';
             console.log('[showAddNewUserDialog] Level reset to A1');
+        }
+
+        // Make sure to close user management page if it's open
+        const userManagementPage = document.getElementById('userManagementPage');
+        if (userManagementPage) {
+            userManagementPage.style.display = 'none';
+            console.log('[showAddNewUserDialog] User management page closed');
         }
 
         console.log('[showAddNewUserDialog] Add new user dialog ready');
@@ -3742,26 +3865,252 @@ function populateOtherUsersList() {
 }
 
 /**
- * Update the top progress bar and text
+ * Update the session progress bar and text
  */
 function updateTopProgressBar() {
-    const topProgressBar = document.getElementById('topProgressBar');
-    const topProgressText = document.getElementById('topProgressText');
     const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
 
-    if (!topProgressBar || !topProgressText || !currentUser.sessionStats) return;
+    if (!progressBar || !progressText || !currentUser.sessionStats) return;
 
     const total = currentUser.sessionStats.total || 0;
     const targetAttempts = 20; // Match the target from Level Progress
     const percentage = Math.min((total / targetAttempts) * 100, 100);
 
-    topProgressBar.style.width = `${percentage}%`;
-    topProgressText.textContent = `${Math.round(percentage)}% Complete`;
+    progressBar.style.width = `${percentage}%`;
+    progressText.textContent = `${total}/${targetAttempts} questions`;
+}
 
-    // Also update the main progress bar if it exists
-    if (progressBar) {
-        progressBar.style.width = `${percentage}%`;
+/**
+ * USER MANAGEMENT FUNCTIONS
+ */
+
+// Track user to delete
+let userToDelete = null;
+
+/**
+ * Show User Management Page
+ */
+function showUserManagementPage() {
+    console.log('[showUserManagementPage] Opening user management page');
+
+    const userManagementPage = document.getElementById('userManagementPage');
+    const practiceScreen = document.getElementById('practiceScreen');
+    const settingsModal = document.getElementById('settingsModal');
+
+    // Hide practice screen and settings modal
+    if (practiceScreen) practiceScreen.classList.remove('active');
+    if (settingsModal) settingsModal.style.display = 'none';
+
+    // Show user management page
+    if (userManagementPage) {
+        userManagementPage.style.display = 'block';
+        populateUserManagementPage();
     }
+}
+
+/**
+ * Populate User Management Page with current and other users
+ */
+function populateUserManagementPage() {
+    console.log('[populateUserManagementPage] Populating user management page');
+
+    // Get all users
+    const allUsers = JSON.parse(localStorage.getItem('frenchAppUsers') || '[]');
+    const otherUsers = allUsers.filter(user => user.userId !== currentUser.userId);
+
+    // Populate Current User Card
+    const currentUserCard = document.getElementById('currentUserCard');
+    if (currentUserCard) {
+        const lastSession = localStorage.getItem(`lastSession_${currentUser.userId}`);
+        const lastSessionText = lastSession ? 'Now' : 'Unknown';
+
+        currentUserCard.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <div>
+                    <div style="font-size: 1.5em; font-weight: bold;">✅ ${currentUser.name}</div>
+                    <div style="font-size: 1em; opacity: 0.9;">Level: ${currentUser.cefrLevel}</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 8px; font-size: 0.9em;">
+                    CURRENT
+                </div>
+            </div>
+            <div style="display: flex; gap: 20px; font-size: 0.9em; opacity: 0.9;">
+                <div>Last session: ${lastSessionText}</div>
+            </div>
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.8); font-size: 0.9em;">
+                ℹ️ You cannot delete the current user. Switch to another user first to delete this one.
+            </div>
+        `;
+    }
+
+    // Populate Other Users Cards
+    const otherUsersCards = document.getElementById('otherUsersCards');
+    const otherUsersCount = document.getElementById('otherUsersCount');
+
+    if (otherUsersCount) {
+        otherUsersCount.textContent = `(${otherUsers.length})`;
+    }
+
+    if (otherUsersCards) {
+        if (otherUsers.length === 0) {
+            otherUsersCards.innerHTML = `
+                <div style="text-align: center; padding: 40px; background: #f9fafb; border-radius: 12px; color: #6b7280;">
+                    <div style="font-size: 3em; margin-bottom: 10px;">👤</div>
+                    <div style="font-size: 1.1em;">No other users yet</div>
+                    <div style="font-size: 0.9em; margin-top: 5px;">Click "Add New User" below to create one</div>
+                </div>
+            `;
+        } else {
+            otherUsersCards.innerHTML = '';
+            otherUsers.forEach(user => {
+                const lastSession = localStorage.getItem(`lastSession_${user.userId}`);
+                const lastSessionDate = lastSession ? new Date(lastSession) : null;
+                const lastSessionText = lastSessionDate ? getTimeAgo(lastSessionDate) : 'Never';
+
+                const userCard = document.createElement('div');
+                userCard.style.cssText = 'background: white; border: 2px solid #e5e7eb; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.3s;';
+
+                userCard.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+                        <div style="flex: 1;">
+                            <div style="font-size: 1.3em; font-weight: bold; color: #374151; margin-bottom: 5px;">${user.name}</div>
+                            <div style="color: #6b7280; font-size: 0.95em;">Level: ${user.cefrLevel}</div>
+                            <div style="color: #9ca3af; font-size: 0.85em; margin-top: 5px;">Last activity: ${lastSessionText}</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="switch-user-btn" data-userid="${user.userId}" style="flex: 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                            Switch to ${user.name}
+                        </button>
+                        <button class="delete-user-btn" data-userid="${user.userId}" data-username="${user.name}" style="background: #ef4444; color: white; border: none; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                            🗑️
+                        </button>
+                    </div>
+                `;
+
+                otherUsersCards.appendChild(userCard);
+            });
+
+            // Add event listeners for switch buttons
+            document.querySelectorAll('.switch-user-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const userId = e.target.dataset.userid;
+                    console.log('[switch-user-btn] Switching to user:', userId);
+                    switchToUserFromManagement(userId);
+                });
+            });
+
+            // Add event listeners for delete buttons
+            document.querySelectorAll('.delete-user-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const userId = e.target.dataset.userid;
+                    const userName = e.target.dataset.username;
+                    console.log('[delete-user-btn] Requesting delete for user:', userId);
+                    showDeleteUserConfirmation(userId, userName);
+                });
+            });
+        }
+    }
+}
+
+/**
+ * Helper function to get "time ago" text
+ */
+function getTimeAgo(date) {
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return `${diffMins} min${diffMins > 1 ? 's' : ''} ago`;
+    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+    if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+    if (diffDays < 30) return `${Math.floor(diffDays / 7)} week${Math.floor(diffDays / 7) > 1 ? 's' : ''} ago`;
+    return `${Math.floor(diffDays / 30)} month${Math.floor(diffDays / 30) > 1 ? 's' : ''} ago`;
+}
+
+/**
+ * Switch to user from management page
+ */
+function switchToUserFromManagement(userId) {
+    console.log('[switchToUserFromManagement] Switching to user:', userId);
+
+    // Use existing switchToUser function
+    switchToUser(userId);
+
+    // Close user management page
+    const userManagementPage = document.getElementById('userManagementPage');
+    const practiceScreen = document.getElementById('practiceScreen');
+
+    if (userManagementPage) userManagementPage.style.display = 'none';
+    if (practiceScreen) practiceScreen.classList.add('active');
+}
+
+/**
+ * Show delete user confirmation dialog
+ */
+function showDeleteUserConfirmation(userId, userName) {
+    console.log('[showDeleteUserConfirmation] Showing confirmation for:', userId, userName);
+
+    userToDelete = userId;
+
+    const deleteModal = document.getElementById('deleteUserModal');
+    const deleteUserNameSpan = document.getElementById('deleteUserName');
+
+    if (deleteUserNameSpan) {
+        deleteUserNameSpan.textContent = userName;
+    }
+
+    if (deleteModal) {
+        deleteModal.style.display = 'flex';
+    }
+}
+
+/**
+ * Delete user permanently
+ */
+function deleteUser(userId) {
+    console.log('[deleteUser] Deleting user:', userId);
+
+    // Cannot delete current user
+    if (userId === currentUser.userId) {
+        alert('Cannot delete the current user! Please switch to another user first.');
+        return;
+    }
+
+    // Get all users
+    let allUsers = JSON.parse(localStorage.getItem('frenchAppUsers') || '[]');
+
+    // Remove user from array
+    allUsers = allUsers.filter(user => user.userId !== userId);
+
+    // Save updated array
+    localStorage.setItem('frenchAppUsers', JSON.stringify(allUsers));
+
+    // Remove user-specific data from localStorage
+    localStorage.removeItem(`userName_${userId}`);
+    localStorage.removeItem(`userLevel_${userId}`);
+    localStorage.removeItem(`lastSession_${userId}`);
+    localStorage.removeItem(`progress_${userId}`);
+    localStorage.removeItem(`masteryData_${userId}`);
+    localStorage.removeItem(`session_${userId}`);
+
+    console.log('[deleteUser] User deleted successfully');
+
+    // Close delete modal
+    const deleteModal = document.getElementById('deleteUserModal');
+    if (deleteModal) {
+        deleteModal.style.display = 'none';
+    }
+
+    // Refresh user management page
+    populateUserManagementPage();
+
+    // Show success message
+    alert('User deleted successfully!');
 }
 
 // Initialize app when DOM is ready

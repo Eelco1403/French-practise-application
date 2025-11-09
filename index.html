@@ -73,63 +73,57 @@
         <div id="practiceScreen" class="screen">
             <!-- HOME PAGE -->
             <div id="homePage" style="display: block;">
-                <!-- All Users Section -->
-                <div class="all-users-section" style="display: flex; gap: 20px; margin: 20px 0; flex-wrap: wrap;">
-                    <!-- Current User Card (Left) -->
-                    <div class="current-user-card" style="flex: 1 1 400px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                        <div style="font-size: 0.9em; opacity: 0.9; margin-bottom: 8px;">👤 CURRENT USER</div>
-                        <div style="font-size: 1.8em; font-weight: bold; margin-bottom: 8px;">
-                            <span id="displayName">-</span>
-                        </div>
-                        <div style="font-size: 1.1em; margin-bottom: 15px;">
-                            Level: <span id="displayLevel" style="font-weight: bold; background: rgba(255,255,255,0.3); padding: 4px 12px; border-radius: 6px;">(A1)</span>
-                            <button id="changeLevelBtnTop" class="btn btn-small" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: white; padding: 6px 12px; margin-left: 10px; font-size: 0.85em; font-weight: 600; cursor: pointer; transition: all 0.2s;" title="Click to change your proficiency level">📊 Change Level</button>
-                        </div>
+                <!-- User Info Section (Clean) -->
+                <div class="user-info-section" style="display: flex; justify-content: space-between; align-items: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; color: white; margin-bottom: 20px;">
 
-                        <!-- Your Progress (Integrated) -->
-                        <div style="border-top: 1px solid rgba(255,255,255,0.3); padding-top: 15px; margin-top: 10px;">
-                            <div style="font-weight: bold; font-size: 1.1em; margin-bottom: 12px;">📊 YOUR PROGRESS</div>
-                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
-                                <div>
-                                    <div style="font-size: 0.85em; opacity: 0.9;">✓ Correct</div>
-                                    <div style="font-size: 1.4em; font-weight: bold;" id="correctCount">0</div>
-                                </div>
-                                <div>
-                                    <div style="font-size: 0.85em; opacity: 0.9;">📊 Total</div>
-                                    <div style="font-size: 1.4em; font-weight: bold;" id="totalCount">0</div>
-                                </div>
-                                <div>
-                                    <div style="font-size: 0.85em; opacity: 0.9;">🎯 Accuracy</div>
-                                    <div style="font-size: 1.4em; font-weight: bold;" id="accuracy">0%</div>
-                                </div>
-                                <div>
-                                    <div style="font-size: 0.85em; opacity: 0.9;">⏱️ Attempt</div>
-                                    <div style="font-size: 1.4em; font-weight: bold;"><span id="attemptDisplay">-</span>/3</div>
-                                </div>
-                            </div>
-                            <!-- Progress Bar -->
-                            <div style="margin-top: 12px;">
-                                <div style="font-size: 0.85em; opacity: 0.9; margin-bottom: 5px;">Overall Progress</div>
-                                <div style="background: rgba(255,255,255,0.2); border-radius: 10px; height: 20px; overflow: hidden;">
-                                    <div id="topProgressBar" style="background: rgba(255,255,255,0.8); height: 100%; width: 0%; transition: width 0.3s ease; border-radius: 10px;"></div>
-                                </div>
-                                <div style="font-size: 0.8em; opacity: 0.9; margin-top: 3px;" id="topProgressText">0% Complete</div>
-                            </div>
+                    <!-- Left: Current User Info -->
+                    <div style="flex: 1;">
+                        <div style="font-size: 1.2em; font-weight: bold;">
+                            👤 <span id="displayName">User</span>
+                            <span id="displayLevel" style="font-size: 0.9em; opacity: 0.9;">(A1)</span>
+                        </div>
+                        <div style="font-size: 0.9em; opacity: 0.9; margin-top: 5px;">
+                            Learning French - Level <span id="currentLevelValue">A1</span>
                         </div>
                     </div>
 
-                    <!-- Other Users (Right) -->
-                    <div class="other-users-container" style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 12px;">
-                        <div style="font-weight: bold; font-size: 1.1em; color: #374151; margin-bottom: 5px;">👥 OTHER USERS</div>
-                        <div id="otherUsersList" style="display: flex; flex-direction: column; gap: 10px;">
-                            <!-- Other users will be populated here -->
+                    <!-- Right: Settings Button -->
+                    <div>
+                        <button id="settingsBtn" style="background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.5); color: white; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 1.2em;">⚙️</span>
+                            <span>Settings</span>
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Session Progress -->
+                <div class="progress-section" style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <h3 style="margin-bottom: 15px; color: #374151;">📊 TODAY'S PRACTICE SESSION</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 15px;">
+                        <div>
+                            <div style="font-size: 0.85em; opacity: 0.7;">✓ Correct</div>
+                            <div style="font-size: 1.4em; font-weight: bold;" id="correctCount">0</div>
                         </div>
-                        <button id="addNewUserBtnTop" class="btn btn-primary" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; padding: 12px; font-weight: bold; border-radius: 8px;">
-                            ➕ Add New User
-                        </button>
-                        <button id="resetUserDataBtnTop" class="btn btn-danger btn-small" style="background: #ef4444; border: none; padding: 10px; font-size: 0.9em; border-radius: 8px;">
-                            🗑️ Reset Current User Data
-                        </button>
+                        <div>
+                            <div style="font-size: 0.85em; opacity: 0.7;">📊 Total</div>
+                            <div style="font-size: 1.4em; font-weight: bold;" id="totalCount">0</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.85em; opacity: 0.7;">🎯 Accuracy</div>
+                            <div style="font-size: 1.4em; font-weight: bold;" id="accuracy">0%</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.85em; opacity: 0.7;">⏱️ Attempt</div>
+                            <div style="font-size: 1.4em; font-weight: bold;"><span id="attemptDisplay">-</span>/3</div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.9em; opacity: 0.7; margin-bottom: 5px;">Session Progress</div>
+                        <div style="background: #e5e7eb; border-radius: 10px; height: 20px; overflow: hidden;">
+                            <div id="progressBar" style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); height: 100%; width: 0%; transition: width 0.3s ease; border-radius: 10px;"></div>
+                        </div>
+                        <div style="font-size: 0.85em; opacity: 0.7; margin-top: 3px;" id="progressText">0/20 questions</div>
                     </div>
                 </div>
 
@@ -466,6 +460,161 @@
             <div id="feedbackModalMessage" style="font-size: 18px; text-align: center; margin-bottom: 15px; color: #374151;"></div>
             <div id="feedbackModalAnswer" style="font-size: 14px; text-align: center; margin-bottom: 25px; padding: 15px; background: #f9fafb; border-radius: 8px; white-space: pre-wrap;"></div>
             <button id="feedbackModalClose" class="btn btn-primary btn-large" style="width: 100%;">Continue</button>
+        </div>
+    </div>
+
+    <!-- Settings Menu Modal -->
+    <div id="settingsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background: white; border-radius: 16px; padding: 0; max-width: 500px; width: 90%; max-height: 80vh; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+
+            <!-- Header -->
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
+                <h2 style="margin: 0; font-size: 1.5em;">⚙️ Settings & Admin</h2>
+                <button id="closeSettingsBtn" style="background: rgba(255,255,255,0.2); border: none; color: white; font-size: 1.5em; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;">×</button>
+            </div>
+
+            <!-- Menu Items -->
+            <div style="padding: 20px;">
+
+                <button id="manageUsersBtn" class="settings-menu-item" style="width: 100%; background: white; border: 2px solid #e5e7eb; padding: 15px 20px; border-radius: 10px; margin-bottom: 12px; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 12px; transition: all 0.3s;">
+                    <span style="font-size: 1.5em;">👥</span>
+                    <div style="flex: 1;">
+                        <div style="font-weight: bold; font-size: 1.1em; color: #374151;">Manage Users</div>
+                        <div style="font-size: 0.85em; color: #6b7280;">Add, switch, or delete users</div>
+                    </div>
+                    <span style="color: #9ca3af;">→</span>
+                </button>
+
+                <button id="viewAnalyticsBtnSettings" class="settings-menu-item" style="width: 100%; background: white; border: 2px solid #e5e7eb; padding: 15px 20px; border-radius: 10px; margin-bottom: 12px; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 12px; transition: all 0.3s;">
+                    <span style="font-size: 1.5em;">📊</span>
+                    <div style="flex: 1;">
+                        <div style="font-weight: bold; font-size: 1.1em; color: #374151;">View Analytics</div>
+                        <div style="font-size: 0.85em; color: #6b7280;">See your progress and stats</div>
+                    </div>
+                    <span style="color: #9ca3af;">→</span>
+                </button>
+
+                <button id="changeLevelBtnSettings" class="settings-menu-item" style="width: 100%; background: white; border: 2px solid #e5e7eb; padding: 15px 20px; border-radius: 10px; margin-bottom: 12px; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 12px; transition: all 0.3s;">
+                    <span style="font-size: 1.5em;">🔄</span>
+                    <div style="flex: 1;">
+                        <div style="font-weight: bold; font-size: 1.1em; color: #374151;">Change My Level</div>
+                        <div style="font-size: 0.85em; color: #6b7280;">Switch to A1, A2, B1, etc.</div>
+                    </div>
+                    <span style="color: #9ca3af;">→</span>
+                </button>
+
+                <button id="resetDataBtnSettings" class="settings-menu-item" style="width: 100%; background: white; border: 2px solid #e5e7eb; padding: 15px 20px; border-radius: 10px; margin-bottom: 12px; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 12px; transition: all 0.3s;">
+                    <span style="font-size: 1.5em;">🗑️</span>
+                    <div style="flex: 1;">
+                        <div style="font-weight: bold; font-size: 1.1em; color: #374151;">Reset My Progress</div>
+                        <div style="font-size: 0.85em; color: #6b7280;">Clear all learning data</div>
+                    </div>
+                    <span style="color: #9ca3af;">→</span>
+                </button>
+
+                <button id="languageSettingsBtn" class="settings-menu-item" style="width: 100%; background: white; border: 2px solid #e5e7eb; padding: 15px 20px; border-radius: 10px; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 12px; transition: all 0.3s;">
+                    <span style="font-size: 1.5em;">🌍</span>
+                    <div style="flex: 1;">
+                        <div style="font-weight: bold; font-size: 1.1em; color: #374151;">Language Settings</div>
+                        <div style="font-size: 0.85em; color: #6b7280;">Change interface language</div>
+                    </div>
+                    <span style="color: #9ca3af;">→</span>
+                </button>
+
+            </div>
+
+            <!-- Footer -->
+            <div style="background: #f9fafb; padding: 15px 20px; border-top: 1px solid #e5e7eb;">
+                <button id="backToPracticeBtn" style="width: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                    ← Back to Practice
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <style>
+    .settings-menu-item:hover {
+        border-color: #667eea !important;
+        box-shadow: 0 2px 8px rgba(102,126,234,0.2) !important;
+        transform: translateX(5px);
+    }
+    </style>
+
+    <!-- User Management Page -->
+    <div id="userManagementPage" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 2000; overflow-y: auto;">
+
+        <!-- Header -->
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; position: sticky; top: 0; z-index: 10; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <div style="max-width: 900px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+                <h1 style="margin: 0; font-size: 1.8em;">👥 User Management</h1>
+                <button id="backFromUserMgmtBtn" style="background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.5); color: white; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                    ← Back
+                </button>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div style="max-width: 900px; margin: 0 auto; padding: 30px 20px;">
+
+            <!-- Current User Section -->
+            <div style="margin-bottom: 40px;">
+                <h2 style="color: #374151; margin-bottom: 15px;">CURRENT USER</h2>
+                <div id="currentUserCard" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(16,185,129,0.2);">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Other Users Section -->
+            <div style="margin-bottom: 40px;">
+                <h2 style="color: #374151; margin-bottom: 15px;">OTHER USERS <span id="otherUsersCount" style="font-size: 0.8em; opacity: 0.7;">(0)</span></h2>
+                <div id="otherUsersCards" style="display: flex; flex-direction: column; gap: 15px;">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Add New User Button -->
+            <button id="addNewUserBtnUserMgmt" style="width: 100%; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; padding: 18px; border-radius: 12px; font-size: 1.1em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(16,185,129,0.2); transition: all 0.3s;">
+                ➕ Add New User
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteUserModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center;">
+        <div style="background: white; border-radius: 16px; padding: 0; max-width: 450px; width: 90%; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+
+            <!-- Header -->
+            <div style="background: #ef4444; color: white; padding: 20px; border-radius: 16px 16px 0 0;">
+                <h2 style="margin: 0; font-size: 1.4em;">⚠️ Delete User?</h2>
+            </div>
+
+            <!-- Content -->
+            <div style="padding: 30px 20px;">
+                <p style="font-size: 1.1em; margin-bottom: 20px; color: #374151;">
+                    Are you sure you want to delete <strong><span id="deleteUserName">User</span></strong>?
+                </p>
+                <p style="color: #6b7280; margin-bottom: 10px;">This will permanently delete:</p>
+                <ul style="color: #6b7280; margin-left: 20px; margin-bottom: 20px;">
+                    <li>All progress data</li>
+                    <li>Session history</li>
+                    <li>Mastery data</li>
+                </ul>
+                <p style="color: #ef4444; font-weight: bold;">⚠️ This cannot be undone!</p>
+            </div>
+
+            <!-- Actions -->
+            <div style="padding: 0 20px 20px; display: flex; gap: 10px;">
+                <button id="cancelDeleteBtn" style="flex: 1; background: #e5e7eb; color: #374151; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                    Cancel
+                </button>
+                <button id="confirmDeleteBtn" style="flex: 1; background: #ef4444; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                    🗑️ Delete User
+                </button>
+            </div>
+
         </div>
     </div>
 
