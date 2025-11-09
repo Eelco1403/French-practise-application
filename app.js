@@ -19,6 +19,7 @@ let currentUser = {
 let currentQuestion = null;
 let currentExerciseType = 'vocabulary'; // 'vocabulary', 'grammar', 'conjugation', or 'all'
 let currentReport = null; // Stores generated report for export
+let isCreatingNewUser = false; // Flag to track if we're creating a new user vs returning user
 
 // Retry Logic Configuration
 const MAX_ATTEMPTS = 3; // Maximum attempts before showing answer and moving on
@@ -271,6 +272,7 @@ function init() {
  */
 function showAddNewUserDialog() {
     console.log('[showAddNewUserDialog] Opening add new user dialog');
+    isCreatingNewUser = true; // Set flag to indicate we're creating a new user
 
     try {
         // Hide practice screen
@@ -318,11 +320,25 @@ function startPractice() {
     }
 
     // Check if user exists, otherwise create new
-    let userId = localStorage.getItem('currentUserId');
-    if (!userId) {
+    let userId;
+
+    if (isCreatingNewUser) {
+        // Creating a new user - always generate a fresh UUID
+        console.log('[startPractice] Creating NEW user - generating fresh UUID');
         userId = window.AssessmentSystem.generateUUID();
-        localStorage.setItem('currentUserId', userId);
+        isCreatingNewUser = false; // Reset flag
+    } else {
+        // Returning user or first-time user - check localStorage
+        userId = localStorage.getItem('currentUserId');
+        if (!userId) {
+            console.log('[startPractice] No existing user - generating UUID for first user');
+            userId = window.AssessmentSystem.generateUUID();
+        } else {
+            console.log('[startPractice] Returning user - using existing userId:', userId);
+        }
     }
+
+    localStorage.setItem('currentUserId', userId);
 
     localStorage.setItem('currentUserName', name);
 
