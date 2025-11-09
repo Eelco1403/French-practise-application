@@ -4093,6 +4093,45 @@ function populateUserManagementPage() {
             });
         }
     }
+
+    // Update scroll indicator
+    const scrollIndicator = document.getElementById('scrollIndicator');
+    const hiddenUsersCountSpan = document.getElementById('hiddenUsersCount');
+
+    if (otherUsersCards && scrollIndicator && otherUsers.length > 2) {
+        // Check if content is scrollable
+        const isScrollable = otherUsersCards.scrollHeight > otherUsersCards.clientHeight;
+
+        if (isScrollable) {
+            // Calculate how many users are hidden below scroll
+            const cardHeight = 95; // Approximate height of each user card (padding + content)
+            const visibleCards = Math.floor(otherUsersCards.clientHeight / cardHeight);
+            const hiddenCards = Math.max(0, otherUsers.length - visibleCards);
+
+            if (hiddenCards > 0 && hiddenUsersCountSpan) {
+                scrollIndicator.style.display = 'block';
+                hiddenUsersCountSpan.textContent = hiddenCards;
+
+                // Hide indicator when scrolled to bottom
+                otherUsersCards.addEventListener('scroll', () => {
+                    const scrolledToBottom =
+                        otherUsersCards.scrollHeight - otherUsersCards.scrollTop <= otherUsersCards.clientHeight + 10;
+
+                    if (scrolledToBottom) {
+                        scrollIndicator.style.display = 'none';
+                    } else if (hiddenCards > 0) {
+                        scrollIndicator.style.display = 'block';
+                    }
+                });
+            } else {
+                scrollIndicator.style.display = 'none';
+            }
+        } else {
+            scrollIndicator.style.display = 'none';
+        }
+    } else if (scrollIndicator) {
+        scrollIndicator.style.display = 'none';
+    }
 }
 
 /**

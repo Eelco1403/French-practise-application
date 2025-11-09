@@ -568,8 +568,13 @@
             <!-- Other Users Section -->
             <div style="margin-bottom: 40px;">
                 <h2 style="color: #374151; margin-bottom: 15px;">OTHER USERS <span id="otherUsersCount" style="font-size: 0.8em; opacity: 0.7;">(0)</span></h2>
-                <div id="otherUsersCards" style="display: flex; flex-direction: column; gap: 15px; max-height: 400px; overflow-y: auto; padding-right: 5px;">
+                <div id="otherUsersCards" style="display: flex; flex-direction: column; gap: 15px; max-height: 250px; overflow-y: auto; padding-right: 5px; position: relative;">
                     <!-- Will be populated by JavaScript -->
+                </div>
+
+                <!-- Scroll Indicator -->
+                <div id="scrollIndicator" style="display: none; text-align: center; padding: 10px; color: #6b7280; font-size: 0.9em; background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.95)); margin-top: -30px; position: relative; pointer-events: none;">
+                    ⬇️ Scroll for <span id="hiddenUsersCount">0</span> more users
                 </div>
             </div>
 
@@ -657,6 +662,39 @@
     .lang-option-btn:hover {
         border-color: #667eea;
         box-shadow: 0 2px 8px rgba(102,126,234,0.2);
+    }
+    </style>
+
+    <style>
+    /* Better scrollbar for user list */
+    #otherUsersCards::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    #otherUsersCards::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    #otherUsersCards::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 10px;
+    }
+
+    #otherUsersCards::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%);
+    }
+
+    /* Fade effect at bottom of list - subtle hint of more content */
+    #otherUsersCards::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 8px;
+        height: 40px;
+        background: linear-gradient(to bottom, transparent, white);
+        pointer-events: none;
     }
     </style>
 
