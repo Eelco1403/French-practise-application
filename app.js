@@ -144,16 +144,22 @@ function init() {
         viewReportBtn.addEventListener('click', showProgressReport);
     }
 
-    // Analytics Dashboard
+    // Progress Dashboard
     const viewAnalyticsBtn = document.getElementById('viewAnalyticsBtn');
-    const closeAnalyticsBtn = document.getElementById('closeAnalyticsBtn');
+    const backFromProgressBtn = document.getElementById('backFromProgressBtn');
 
     if (viewAnalyticsBtn) {
-        viewAnalyticsBtn.addEventListener('click', showAnalyticsDashboard);
+        viewAnalyticsBtn.addEventListener('click', showProgressDashboard);
     }
 
-    if (closeAnalyticsBtn) {
-        closeAnalyticsBtn.addEventListener('click', closeAnalyticsDashboard);
+    if (backFromProgressBtn) {
+        backFromProgressBtn.addEventListener('click', () => {
+            const progressDashboardPage = document.getElementById('progressDashboardPage');
+            const homePage = document.getElementById('homePage');
+
+            if (progressDashboardPage) progressDashboardPage.style.display = 'none';
+            if (homePage) homePage.style.display = 'block';
+        });
     }
 
     if (changeLevelBtn) {
@@ -4236,6 +4242,305 @@ function deleteUser(userId) {
 
     // Show success message
     alert('User deleted successfully!');
+}
+
+/**
+ * PROGRESS DASHBOARD FUNCTIONS
+ */
+
+/**
+ * Show Progress Dashboard
+ */
+function showProgressDashboard() {
+    console.log('[showProgressDashboard] Opening progress dashboard');
+
+    // Hide home page and exercise page
+    const homePage = document.getElementById('homePage');
+    const exercisePage = document.getElementById('exercisePage');
+    const progressDashboardPage = document.getElementById('progressDashboardPage');
+
+    if (homePage) homePage.style.display = 'none';
+    if (exercisePage) exercisePage.style.display = 'none';
+    if (progressDashboardPage) progressDashboardPage.style.display = 'block';
+
+    // Populate dashboard with current user data
+    populateProgressDashboard();
+}
+
+/**
+ * Populate Progress Dashboard with all data
+ */
+function populateProgressDashboard() {
+    console.log('[populateProgressDashboard] Populating dashboard with user data');
+
+    // Update header
+    const dashboardUserName = document.getElementById('dashboardUserName');
+    const dashboardLevel = document.getElementById('dashboardLevel');
+    const dashboardLevelName = document.getElementById('dashboardLevelName');
+    const dashboardLevelName2 = document.getElementById('dashboardLevelName2');
+
+    if (dashboardUserName) dashboardUserName.textContent = currentUser.name;
+    if (dashboardLevel) dashboardLevel.textContent = currentUser.cefrLevel;
+    if (dashboardLevelName) dashboardLevelName.textContent = currentUser.cefrLevel;
+    if (dashboardLevelName2) dashboardLevelName2.textContent = currentUser.cefrLevel;
+
+    // Calculate progress for all exercise types
+    const progress = calculateDetailedProgress();
+
+    // Populate all sections
+    populateOverallMastery(progress);
+    populateVocabularyMastery(progress);
+    populateGrammarMastery(progress);
+    populateConjugationMastery(progress);
+    populateSessionHistory();
+    populateLevelEstimates(progress);
+}
+
+/**
+ * Calculate detailed progress for all exercise types
+ */
+function calculateDetailedProgress() {
+    const masteryData = currentUser.masteryData || {};
+    const level = currentUser.cefrLevel;
+
+    // Level totals
+    const levelTotals = {
+        'A1': { vocabulary: 500, grammar: 40, conjugation: 30 },
+        'A2': { vocabulary: 600, grammar: 45, conjugation: 30 },
+        'B1': { vocabulary: 800, grammar: 40, conjugation: 20 },
+        'B2': { vocabulary: 600, grammar: 25, conjugation: 12 },
+        'C1': { vocabulary: 300, grammar: 8, conjugation: 3 },
+        'C2': { vocabulary: 200, grammar: 2, conjugation: 1 }
+    };
+
+    const totals = levelTotals[level] || levelTotals['A1'];
+
+    // Count mastered items by type
+    const vocab = { mastered: 0, solid: 0, developing: 0, learning: 0, total: totals.vocabulary };
+    const grammar = { mastered: 0, solid: 0, developing: 0, learning: 0, total: totals.grammar };
+    const conjugation = { mastered: 0, solid: 0, developing: 0, learning: 0, total: totals.conjugation };
+
+    // Process mastery data
+    Object.values(masteryData).forEach(item => {
+        const stage = item.stage || 'learning';
+
+        // Vocabulary items (from content.js vocabulary array)
+        if (item.word || item.french) {
+            if (stage === 'solid' || stage === 'mastered') {
+                vocab.mastered++;
+                if (stage === 'solid') vocab.solid++;
+            } else if (stage === 'developing') {
+                vocab.developing++;
+            } else if (stage === 'learning') {
+                vocab.learning++;
+            }
+        }
+        // Grammar items (from grammarTopics array)
+        else if (item.topic && item.type !== 'verb') {
+            if (stage === 'solid' || stage === 'mastered') {
+                grammar.mastered++;
+                if (stage === 'solid') grammar.solid++;
+            } else if (stage === 'developing') {
+                grammar.developing++;
+            } else if (stage === 'learning') {
+                grammar.learning++;
+            }
+        }
+        // Conjugation items (verb-related)
+        else if (item.type === 'verb' || item.infinitive) {
+            if (stage === 'solid' || stage === 'mastered') {
+                conjugation.mastered++;
+                if (stage === 'solid') conjugation.solid++;
+            } else if (stage === 'developing') {
+                conjugation.developing++;
+            } else if (stage === 'learning') {
+                conjugation.learning++;
+            }
+        }
+    });
+
+    // Calculate percentages
+    vocab.percentage = vocab.total > 0 ? Math.round((vocab.mastered / vocab.total) * 100) : 0;
+    grammar.percentage = grammar.total > 0 ? Math.round((grammar.mastered / grammar.total) * 100) : 0;
+    conjugation.percentage = conjugation.total > 0 ? Math.round((conjugation.mastered / conjugation.total) * 100) : 0;
+
+    // Calculate overall
+    const overallMastered = vocab.mastered + grammar.mastered + conjugation.mastered;
+    const overallTotal = vocab.total + grammar.total + conjugation.total;
+    const overallPercentage = overallTotal > 0 ? Math.round((overallMastered / overallTotal) * 100) : 0;
+
+    return {
+        overall: { mastered: overallMastered, total: overallTotal, percentage: overallPercentage },
+        vocabulary: vocab,
+        grammar: grammar,
+        conjugation: conjugation
+    };
+}
+
+/**
+ * Populate overall mastery section
+ */
+function populateOverallMastery(progress) {
+    const overallPercentageDisplay = document.getElementById('overallPercentageDisplay');
+    const overallMasteryBar = document.getElementById('overallMasteryBar');
+    const overallMasteredText = document.getElementById('overallMasteredText');
+
+    if (overallPercentageDisplay) overallPercentageDisplay.textContent = `${progress.overall.percentage}%`;
+    if (overallMasteryBar) overallMasteryBar.style.width = `${progress.overall.percentage}%`;
+    if (overallMasteredText) overallMasteredText.textContent = `${progress.overall.percentage}%`;
+}
+
+/**
+ * Populate vocabulary mastery section
+ */
+function populateVocabularyMastery(progress) {
+    const vocabMasteredCount = document.getElementById('vocabMasteredCount');
+    const vocabTotalCount = document.getElementById('vocabTotalCount');
+    const vocabPercentageDisplay = document.getElementById('vocabPercentageDisplay');
+    const vocabMasteryBar = document.getElementById('vocabMasteryBar');
+    const vocabBreakdown = document.getElementById('vocabBreakdown');
+
+    if (vocabMasteredCount) vocabMasteredCount.textContent = progress.vocabulary.mastered;
+    if (vocabTotalCount) vocabTotalCount.textContent = progress.vocabulary.total;
+    if (vocabPercentageDisplay) vocabPercentageDisplay.textContent = `${progress.vocabulary.percentage}%`;
+    if (vocabMasteryBar) vocabMasteryBar.style.width = `${progress.vocabulary.percentage}%`;
+
+    if (vocabBreakdown) {
+        vocabBreakdown.innerHTML = `
+            <div>• Mastered: <strong>${progress.vocabulary.mastered}</strong> words</div>
+            <div>• Developing: <strong>${progress.vocabulary.developing}</strong> words</div>
+            <div>• Learning: <strong>${progress.vocabulary.learning}</strong> words</div>
+            <div>• Not started: <strong>${progress.vocabulary.total - progress.vocabulary.mastered - progress.vocabulary.developing - progress.vocabulary.learning}</strong> words</div>
+        `;
+    }
+}
+
+/**
+ * Populate grammar mastery section
+ */
+function populateGrammarMastery(progress) {
+    const grammarMasteredCount = document.getElementById('grammarMasteredCount');
+    const grammarTotalCount = document.getElementById('grammarTotalCount');
+    const grammarPercentageDisplay = document.getElementById('grammarPercentageDisplay');
+    const grammarMasteryBar = document.getElementById('grammarMasteryBar');
+    const grammarBreakdown = document.getElementById('grammarBreakdown');
+
+    if (grammarMasteredCount) grammarMasteredCount.textContent = progress.grammar.mastered;
+    if (grammarTotalCount) grammarTotalCount.textContent = progress.grammar.total;
+    if (grammarPercentageDisplay) grammarPercentageDisplay.textContent = `${progress.grammar.percentage}%`;
+    if (grammarMasteryBar) grammarMasteryBar.style.width = `${progress.grammar.percentage}%`;
+
+    if (grammarBreakdown) {
+        grammarBreakdown.innerHTML = `
+            <div>• Mastered: <strong>${progress.grammar.mastered}</strong> topics</div>
+            <div>• Developing: <strong>${progress.grammar.developing}</strong> topics</div>
+            <div>• Learning: <strong>${progress.grammar.learning}</strong> topics</div>
+            <div>• Not started: <strong>${progress.grammar.total - progress.grammar.mastered - progress.grammar.developing - progress.grammar.learning}</strong> topics</div>
+        `;
+    }
+}
+
+/**
+ * Populate conjugation mastery section
+ */
+function populateConjugationMastery(progress) {
+    const conjugationMasteredCount = document.getElementById('conjugationMasteredCount');
+    const conjugationTotalCount = document.getElementById('conjugationTotalCount');
+    const conjugationPercentageDisplay = document.getElementById('conjugationPercentageDisplay');
+    const conjugationMasteryBar = document.getElementById('conjugationMasteryBar');
+    const conjugationBreakdown = document.getElementById('conjugationBreakdown');
+
+    if (conjugationMasteredCount) conjugationMasteredCount.textContent = progress.conjugation.mastered;
+    if (conjugationTotalCount) conjugationTotalCount.textContent = progress.conjugation.total;
+    if (conjugationPercentageDisplay) conjugationPercentageDisplay.textContent = `${progress.conjugation.percentage}%`;
+    if (conjugationMasteryBar) conjugationMasteryBar.style.width = `${progress.conjugation.percentage}%`;
+
+    if (conjugationBreakdown) {
+        conjugationBreakdown.innerHTML = `
+            <div>• Mastered: <strong>${progress.conjugation.mastered}</strong> verb forms</div>
+            <div>• Developing: <strong>${progress.conjugation.developing}</strong> verb forms</div>
+            <div>• Learning: <strong>${progress.conjugation.learning}</strong> verb forms</div>
+            <div>• Not started: <strong>${progress.conjugation.total - progress.conjugation.mastered - progress.conjugation.developing - progress.conjugation.learning}</strong> verb forms</div>
+        `;
+    }
+}
+
+/**
+ * Populate session history
+ */
+function populateSessionHistory() {
+    const sessionHistoryContent = document.getElementById('sessionHistoryContent');
+
+    if (!sessionHistoryContent) return;
+
+    // Display current session stats
+    const correct = currentUser.sessionStats?.correct || 0;
+    const total = currentUser.sessionStats?.total || 0;
+    const accuracy = total > 0 ? Math.round((correct / total) * 100) : 0;
+
+    const today = new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+
+    sessionHistoryContent.innerHTML = `
+        <div style="padding: 15px; background: #f9fafb; border-radius: 8px; margin-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <div style="font-weight: bold; color: #374151;">${today} (Today)</div>
+                <div style="color: #667eea; font-weight: bold;">${accuracy}% accuracy</div>
+            </div>
+            <div style="color: #6b7280; margin-bottom: 8px;">${total} questions answered • ${correct} correct</div>
+            <div style="background: #e5e7eb; border-radius: 10px; height: 12px; overflow: hidden;">
+                <div style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); height: 100%; width: ${accuracy}%; border-radius: 10px;"></div>
+            </div>
+        </div>
+        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 0.9em;">
+            💡 <strong>Tip:</strong> Regular practice leads to better retention. Try to practice at least 15 minutes daily!
+        </div>
+    `;
+}
+
+/**
+ * Populate level estimates
+ */
+function populateLevelEstimates(progress) {
+    const levelProgressContent = document.getElementById('levelProgressContent');
+
+    if (!levelProgressContent) return;
+
+    const percentage = progress.overall.percentage;
+
+    // Estimate based on current progress
+    let estimate = '';
+    let suggestion = '';
+
+    if (percentage < 25) {
+        estimate = 'Just getting started! Keep practicing regularly.';
+        suggestion = 'Focus on vocabulary first - it\'s the foundation of language learning.';
+    } else if (percentage < 50) {
+        estimate = 'Making good progress! You\'re about 25-30% through this level.';
+        suggestion = 'Try mixing vocabulary with grammar exercises for balanced learning.';
+    } else if (percentage < 75) {
+        estimate = 'Excellent progress! You\'re over halfway through this level.';
+        suggestion = 'Add conjugation practice to strengthen your verb skills.';
+    } else if (percentage < 90) {
+        estimate = 'Almost there! You\'re in the final stretch of this level.';
+        suggestion = 'Review your weaker areas and practice all types of exercises.';
+    } else {
+        estimate = 'Outstanding! You\'re ready to advance to the next level.';
+        suggestion = 'Consider taking the placement test or manually changing your level.';
+    }
+
+    levelProgressContent.innerHTML = `
+        <div style="margin-bottom: 15px;">
+            <div style="font-size: 1.2em; margin-bottom: 5px;">📈 <strong>${percentage}%</strong> of ${currentUser.cefrLevel} level completed</div>
+            <div style="opacity: 0.95;">${estimate}</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.2); border-radius: 10px; height: 16px; overflow: hidden; margin-bottom: 15px;">
+            <div style="background: rgba(255,255,255,0.8); height: 100%; width: ${percentage}%; border-radius: 10px;"></div>
+        </div>
+        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
+            <div style="font-weight: bold; margin-bottom: 5px;">💡 Recommendation:</div>
+            <div>${suggestion}</div>
+        </div>
+    `;
 }
 
 // Initialize app when DOM is ready

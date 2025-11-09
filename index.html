@@ -214,6 +214,124 @@
             </div>
             <!-- END HOME PAGE -->
 
+            <!-- PROGRESS DASHBOARD PAGE -->
+            <div id="progressDashboardPage" style="display: none;">
+                <div style="padding: 20px; max-width: 1000px; margin: 0 auto;">
+
+                    <!-- Header with back button -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <div>
+                            <h2 style="margin: 0; color: #374151;">📊 Your Detailed Progress</h2>
+                            <p style="margin: 5px 0 0 0; color: #6b7280; font-size: 0.95em;">
+                                <span id="dashboardUserName">User</span> • Level <span id="dashboardLevel">A1</span>
+                            </p>
+                        </div>
+                        <button id="backFromProgressBtn" class="btn btn-secondary">← Back to Practice</button>
+                    </div>
+
+                    <!-- OVERALL MASTERY -->
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(102,126,234,0.2);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <h3 style="margin: 0;">📚 Overall <span id="dashboardLevelName">A1</span> Mastery</h3>
+                            <div style="font-size: 2em; font-weight: bold;" id="overallPercentageDisplay">0%</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); border-radius: 10px; height: 20px; overflow: hidden; margin-bottom: 10px;">
+                            <div id="overallMasteryBar" style="background: rgba(255,255,255,0.8); height: 100%; width: 0%; transition: width 0.3s ease; border-radius: 10px;"></div>
+                        </div>
+                        <div style="opacity: 0.95; font-size: 0.95em;">
+                            You've mastered <span id="overallMasteredText">0%</span> of all <span id="dashboardLevelName2">A1</span> content across all exercise types
+                        </div>
+                    </div>
+
+                    <!-- VOCABULARY MASTERY -->
+                    <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <h3 style="margin-top: 0; color: #374151;">📖 Vocabulary Mastery</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <div>
+                                <div style="font-size: 2em; font-weight: bold; color: #667eea;">
+                                    <span id="vocabMasteredCount">0</span>/<span id="vocabTotalCount">500</span>
+                                </div>
+                                <div style="color: #6b7280; font-size: 0.9em;">Words Mastered</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 2em; font-weight: bold; color: #667eea;" id="vocabPercentageDisplay">0%</div>
+                                <div style="color: #6b7280; font-size: 0.9em;">Mastery Level</div>
+                            </div>
+                        </div>
+                        <div style="background: #e5e7eb; border-radius: 10px; height: 20px; overflow: hidden; margin-bottom: 15px;">
+                            <div id="vocabMasteryBar" style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); height: 100%; width: 0%; transition: width 0.3s ease; border-radius: 10px;"></div>
+                        </div>
+                        <div id="vocabBreakdown" style="color: #6b7280; font-size: 0.9em; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                            <!-- Breakdown will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- GRAMMAR MASTERY -->
+                    <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <h3 style="margin-top: 0; color: #374151;">📝 Grammar Mastery</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <div>
+                                <div style="font-size: 2em; font-weight: bold; color: #667eea;">
+                                    <span id="grammarMasteredCount">0</span>/<span id="grammarTotalCount">40</span>
+                                </div>
+                                <div style="color: #6b7280; font-size: 0.9em;">Topics Mastered</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 2em; font-weight: bold; color: #667eea;" id="grammarPercentageDisplay">0%</div>
+                                <div style="color: #6b7280; font-size: 0.9em;">Mastery Level</div>
+                            </div>
+                        </div>
+                        <div style="background: #e5e7eb; border-radius: 10px; height: 20px; overflow: hidden; margin-bottom: 15px;">
+                            <div id="grammarMasteryBar" style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); height: 100%; width: 0%; transition: width 0.3s ease; border-radius: 10px;"></div>
+                        </div>
+                        <div id="grammarBreakdown" style="color: #6b7280; font-size: 0.9em; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                            <!-- Breakdown will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- CONJUGATION MASTERY -->
+                    <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <h3 style="margin-top: 0; color: #374151;">🔄 Conjugation Mastery</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <div>
+                                <div style="font-size: 2em; font-weight: bold; color: #667eea;">
+                                    <span id="conjugationMasteredCount">0</span>/<span id="conjugationTotalCount">30</span>
+                                </div>
+                                <div style="color: #6b7280; font-size: 0.9em;">Verb Forms Mastered</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 2em; font-weight: bold; color: #667eea;" id="conjugationPercentageDisplay">0%</div>
+                                <div style="color: #6b7280; font-size: 0.9em;">Mastery Level</div>
+                            </div>
+                        </div>
+                        <div style="background: #e5e7eb; border-radius: 10px; height: 20px; overflow: hidden; margin-bottom: 15px;">
+                            <div id="conjugationMasteryBar" style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); height: 100%; width: 0%; transition: width 0.3s ease; border-radius: 10px;"></div>
+                        </div>
+                        <div id="conjugationBreakdown" style="color: #6b7280; font-size: 0.9em; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                            <!-- Breakdown will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- SESSION HISTORY -->
+                    <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <h3 style="margin-top: 0; color: #374151;">📅 Recent Practice Sessions</h3>
+                        <div id="sessionHistoryContent" style="color: #6b7280; font-size: 0.95em;">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- LEVEL PROGRESS & ESTIMATES -->
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(102,126,234,0.2);">
+                        <h3 style="margin-top: 0;">🎯 Level Progress & Estimates</h3>
+                        <div id="levelProgressContent" style="color: white;">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- END PROGRESS DASHBOARD PAGE -->
+
             <!-- EXERCISE PAGE -->
             <div id="exercisePage" style="display: none;">
                 <!-- Exercise Page Header -->
