@@ -1445,14 +1445,22 @@ function checkConjugationTable() {
  * Update session statistics display
  */
 function updateStatsDisplay() {
-    correctCount.textContent = currentUser.sessionStats.correct;
-    totalCount.textContent = currentUser.sessionStats.total;
+    console.log('[updateStatsDisplay] Updating stats display');
+
+    // Get elements - defensive approach
+    const correctCountEl = document.getElementById('correctCount');
+    const totalCountEl = document.getElementById('totalCount');
+    const accuracyEl = document.getElementById('accuracy');
+
+    // Defensive checks
+    if (correctCountEl) correctCountEl.textContent = currentUser.sessionStats.correct;
+    if (totalCountEl) totalCountEl.textContent = currentUser.sessionStats.total;
 
     const accuracyPercent = currentUser.sessionStats.total > 0
         ? Math.round((currentUser.sessionStats.correct / currentUser.sessionStats.total) * 100)
         : 0;
 
-    accuracy.textContent = `${accuracyPercent}%`;
+    if (accuracyEl) accuracyEl.textContent = `${accuracyPercent}%`;
 
     // Also update the top progress bar and exercise page stats
     updateTopProgressBar();
@@ -1463,6 +1471,8 @@ function updateStatsDisplay() {
  * Update progress display (mastery stages)
  */
 function updateProgressDisplay() {
+    console.log('[updateProgressDisplay] Updating progress display');
+
     // Count items by stage
     const stages = {
         learning: 0,
@@ -1477,13 +1487,18 @@ function updateProgressDisplay() {
         }
     });
 
-    // Update counts
-    learningCount.textContent = stages.learning;
-    developingCount.textContent = stages.developing;
-    masteredCount.textContent = stages.mastered;
-    solidCount.textContent = stages.solid;
+    // Update counts - with defensive checks
+    const learningCountEl = document.getElementById('learningCount');
+    const developingCountEl = document.getElementById('developingCount');
+    const masteredCountEl = document.getElementById('masteredCount');
+    const solidCountEl = document.getElementById('solidCount');
 
-    // Update level progress
+    if (learningCountEl) learningCountEl.textContent = stages.learning;
+    if (developingCountEl) developingCountEl.textContent = stages.developing;
+    if (masteredCountEl) masteredCountEl.textContent = stages.mastered;
+    if (solidCountEl) solidCountEl.textContent = stages.solid;
+
+    // Update level progress (defensive function)
     updateLevelProgress();
 }
 
@@ -1491,6 +1506,19 @@ function updateProgressDisplay() {
  * Update level progress bar
  */
 function updateLevelProgress() {
+    console.log('[updateLevelProgress] Updating level progress');
+
+    // Get elements - defensive approach
+    const progressBarEl = document.getElementById('progressBar');
+    const progressTextEl = document.getElementById('progressText');
+    const levelProgressDesc = document.getElementById('levelProgressDesc');
+
+    // Check if critical elements exist
+    if (!progressBarEl || !progressTextEl) {
+        console.log('[updateLevelProgress] Progress bar elements not found, skipping update');
+        return;
+    }
+
     // Calculate progress for current CEFR level
     const levelMastery = window.ReportingSystem.calculateLevelMastery(
         currentUser.masteryData,
@@ -1505,20 +1533,20 @@ function updateLevelProgress() {
     const accuracyProgress = levelMastery.averageAccuracy * 100;
     const overallProgress = (itemProgress + accuracyProgress) / 2;
 
-    progressBar.style.width = `${overallProgress}%`;
-    progressText.textContent = `${levelMastery.attemptedItems}/${minItems} items attempted | ${Math.round(levelMastery.averageAccuracy * 100)}% accuracy`;
+    progressBarEl.style.width = `${overallProgress}%`;
+    progressTextEl.textContent = `${levelMastery.attemptedItems}/${minItems} items attempted | ${Math.round(levelMastery.averageAccuracy * 100)}% accuracy`;
 
-    // Show readiness status
-    const levelProgressDesc = document.getElementById('levelProgressDesc');
-
-    if (levelMastery.ready) {
-        levelProgressDesc.textContent = `🎉 ${window.I18n.t('messages.levelUp')}`;
-        levelProgressDesc.style.color = '#10b981';
-        levelProgressDesc.style.fontWeight = 'bold';
-    } else {
-        levelProgressDesc.textContent = window.I18n.t('messages.keepPracticing');
-        levelProgressDesc.style.color = '#6b7280';
-        levelProgressDesc.style.fontWeight = 'normal';
+    // Show readiness status - only if element exists
+    if (levelProgressDesc) {
+        if (levelMastery.ready) {
+            levelProgressDesc.textContent = `🎉 ${window.I18n.t('messages.levelUp')}`;
+            levelProgressDesc.style.color = '#10b981';
+            levelProgressDesc.style.fontWeight = 'bold';
+        } else {
+            levelProgressDesc.textContent = window.I18n.t('messages.keepPracticing');
+            levelProgressDesc.style.color = '#6b7280';
+            levelProgressDesc.style.fontWeight = 'normal';
+        }
     }
 }
 
@@ -3278,18 +3306,24 @@ function switchToUser(userId) {
         attemptDisplay.textContent = '0';
     }
 
-    // Update all stats and progress displays
-    updateStatsDisplay();
-    updateProgressDisplay();
+    // Update all stats and progress displays - but only if on practice screen
+    const practiceScreen = document.getElementById('practiceScreen');
+    if (practiceScreen && practiceScreen.classList.contains('active')) {
+        console.log('[switchToUser] On practice screen, updating UI');
+        updateStatsDisplay();
+        updateProgressDisplay();
 
-    // Refresh skills grid if it's visible
-    const skillsGrid = document.getElementById('skillsGrid');
-    if (skillsGrid && skillsGrid.style.display !== 'none') {
-        populateSkillsGrid();
+        // Refresh skills grid if it's visible
+        const skillsGrid = document.getElementById('skillsGrid');
+        if (skillsGrid && skillsGrid.style.display !== 'none') {
+            populateSkillsGrid();
+        }
+
+        // Load question for new user's level
+        loadNextQuestion();
+    } else {
+        console.log('[switchToUser] Not on practice screen, skipping UI updates');
     }
-
-    // Load question for new user's level
-    loadNextQuestion();
 
     // Update the other users list
     populateOtherUsersList();
