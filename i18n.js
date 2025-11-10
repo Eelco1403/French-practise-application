@@ -143,7 +143,8 @@ const TRANSLATIONS = {
             incorrectAnswer: 'Not quite right.',
             correctAnswerIs: 'The correct answer is: {answer}',
             remainingQuestions: 'Great! {count} more question(s) about this passage.',
-            completedPassage: 'Perfect! You\'ve completed all questions for this passage.'
+            completedPassage: 'Perfect! You\'ve completed all questions for this passage.',
+            pleaseEnterAnswer: 'Please provide an answer before submitting'
         },
 
         // Exercise Type Badges
@@ -294,7 +295,8 @@ const TRANSLATIONS = {
             incorrectAnswer: 'Niet helemaal juist.',
             correctAnswerIs: 'Het juiste antwoord is: {answer}',
             remainingQuestions: 'Geweldig! Nog {count} vraag/vragen over deze passage.',
-            completedPassage: 'Perfect! Je hebt alle vragen voor deze passage voltooid.'
+            completedPassage: 'Perfect! Je hebt alle vragen voor deze passage voltooid.',
+            pleaseEnterAnswer: 'Geef een antwoord voordat je indient'
         },
 
         // Oefentype Badges
@@ -445,7 +447,8 @@ const TRANSLATIONS = {
             incorrectAnswer: 'Pas tout à fait correct.',
             correctAnswerIs: 'La réponse correcte est: {answer}',
             remainingQuestions: 'Super! {count} question(s) de plus sur ce passage.',
-            completedPassage: 'Parfait! Vous avez terminé toutes les questions pour ce passage.'
+            completedPassage: 'Parfait! Vous avez terminé toutes les questions pour ce passage.',
+            pleaseEnterAnswer: 'Veuillez fournir une réponse avant de soumettre'
         },
 
         // Badges de type d'exercice
@@ -596,7 +599,8 @@ const TRANSLATIONS = {
             incorrectAnswer: 'Nicht ganz richtig.',
             correctAnswerIs: 'Die richtige Antwort ist: {answer}',
             remainingQuestions: 'Großartig! {count} weitere Frage(n) zu diesem Text.',
-            completedPassage: 'Perfekt! Du hast alle Fragen zu diesem Text beantwortet.'
+            completedPassage: 'Perfekt! Du hast alle Fragen zu diesem Text beantwortet.',
+            pleaseEnterAnswer: 'Bitte geben Sie eine Antwort ein, bevor Sie abgeben'
         },
 
         // Übungstyp-Abzeichen

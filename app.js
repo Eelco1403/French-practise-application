@@ -1069,8 +1069,9 @@ function checkAnswer() {
 
     const userAnswer = answerInput.value.trim();
 
+    // BUG FIX #1: Validate empty answer (main handler)
     if (!userAnswer) {
-        showFeedbackModal('⚠️', 'Please enter an answer', '');
+        showFeedbackModal('⚠️', window.I18n.t('messages.pleaseEnterAnswer') || 'Please provide an answer before submitting', '');
         return;
     }
 
