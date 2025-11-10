@@ -6703,6 +6703,101 @@ function getRandomQuestionByLevel(exerciseType = 'all', cefrLevel = null, maxLev
     return items[randomIndex];
 }
 
+/**
+ * BUG FIX #3: Build grammar topics from existing grammar exercises
+ */
+function buildGrammarTopics() {
+    const grammarExercises = FRENCH_CONTENT.grammar || [];
+    const topicMap = {};
+
+    // Topic metadata (title, description, emoji)
+    const topicInfo = {
+        'articles': {
+            title: 'Articles',
+            description: 'Learn definite and indefinite articles (le, la, les, un, une, des)',
+            emoji: '📰'
+        },
+        'agreement': {
+            title: 'Gender & Agreement',
+            description: 'Practice noun-adjective agreement and gender rules',
+            emoji: '🔗'
+        },
+        'pluralization': {
+            title: 'Pluralization',
+            description: 'Master plural forms and irregular plurals',
+            emoji: '➕'
+        },
+        'prepositions': {
+            title: 'Prepositions',
+            description: 'Learn common prepositions (à, de, en, dans, sur, etc.)',
+            emoji: '🗺️'
+        },
+        'negation': {
+            title: 'Negation',
+            description: 'Practice negative sentences (ne...pas, ne...jamais, etc.)',
+            emoji: '🚫'
+        },
+        'possessive': {
+            title: 'Possessives',
+            description: 'Learn possessive adjectives and pronouns (mon, ma, mes, etc.)',
+            emoji: '🤝'
+        },
+        'pronouns': {
+            title: 'Pronouns',
+            description: 'Master subject, object, and reflexive pronouns',
+            emoji: '👤'
+        },
+        'question': {
+            title: 'Questions',
+            description: 'Form questions using est-ce que, inversion, and question words',
+            emoji: '❓'
+        }
+    };
+
+    // Group exercises by category
+    grammarExercises.forEach(exercise => {
+        const category = exercise.category || 'general';
+        if (!topicMap[category]) {
+            topicMap[category] = [];
+        }
+        topicMap[category].push(exercise.id);
+    });
+
+    // Build topic objects
+    const topics = [];
+    Object.entries(topicMap).forEach(([category, exerciseIds]) => {
+        const info = topicInfo[category] || {
+            title: category.charAt(0).toUpperCase() + category.slice(1),
+            description: `Practice ${category} exercises`,
+            emoji: '📝'
+        };
+
+        // Determine CEFR level based on exercises
+        const exercises = grammarExercises.filter(ex => ex.category === category);
+        const levels = exercises.map(ex => ex.cefrLevel);
+        const minLevel = levels.includes('A1') ? 'A1' : (levels.includes('A2') ? 'A2' : 'B1');
+
+        topics.push({
+            id: `grammar-topic-${category}`,
+            title: `${info.emoji} ${info.title}`,
+            description: info.description,
+            category: category,
+            cefrLevel: minLevel,
+            exerciseIds: exerciseIds,
+            difficulty: exercises[0]?.difficulty || 1
+        });
+    });
+
+    return topics;
+}
+
+/**
+ * Get grammar topics array
+ */
+function getGrammarTopics() {
+    return buildGrammarTopics();
+}
+
 // Export for browser
 if (typeof window !== 'undefined') {
     window.FrenchContent = {
@@ -6716,7 +6811,9 @@ if (typeof window !== 'undefined') {
         getItemsByCefrLevel,
         getItemsUpToCefrLevel,
         getCefrLevelStats,
-        getRandomQuestionByLevel
+        getRandomQuestionByLevel,
+        grammarTopics: buildGrammarTopics(),  // BUG FIX #3: Add grammar topics
+        getGrammarTopics
     };
 }
 

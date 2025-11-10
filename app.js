@@ -1684,8 +1684,9 @@ function switchExerciseType(type) {
         if (practiceView) practiceView.style.display = 'none';
         if (backToTopicsBtn) backToTopicsBtn.style.display = 'none';
 
-        if (questionCard) questionCard.style.display = 'block';
-        if (progressSection) progressSection.style.display = 'block';
+        // BUG FIX #2: Hide question card until topic is selected
+        if (questionCard) questionCard.style.display = 'none';
+        if (progressSection) progressSection.style.display = 'none';
 
     } else if (originalType === 'conjugation' && verbPracticeSelector) {
         // Show verb practice selector for conjugation
@@ -1703,8 +1704,9 @@ function switchExerciseType(type) {
         if (verbPracticeView) verbPracticeView.style.display = 'none';
         if (backToVerbsBtn) backToVerbsBtn.style.display = 'none';
 
-        if (questionCard) questionCard.style.display = 'block';
-        if (progressSection) progressSection.style.display = 'block';
+        // BUG FIX #2: Hide question card until verb is selected
+        if (questionCard) questionCard.style.display = 'none';
+        if (progressSection) progressSection.style.display = 'none';
 
     } else {
         // For reading, dialogue, and all types - load question immediately
@@ -2736,6 +2738,12 @@ function handleTopicPracticeSubmit() {
     const answerInput = document.getElementById('answerInput');
     const userAnswer = answerInput.value.trim();
 
+    // BUG FIX #1: Validate empty answer before processing
+    if (!userAnswer) {
+        showFeedbackModal('⚠️', window.I18n.t('messages.pleaseEnterAnswer') || 'Please enter an answer', '');
+        return;
+    }
+
     // Validate answer using existing utility
     const isCorrect = window.Utils.validateAnswer(userAnswer, currentQuestion.answer, currentQuestion.alternatives);
 
@@ -3146,6 +3154,12 @@ function updateVerbPracticeProgress() {
 function handleVerbPracticeSubmit() {
     const answerInput = document.getElementById('answerInput');
     const userAnswer = answerInput.value.trim();
+
+    // BUG FIX #1: Validate empty answer before processing
+    if (!userAnswer) {
+        showFeedbackModal('⚠️', window.I18n.t('messages.pleaseEnterAnswer') || 'Please enter an answer', '');
+        return;
+    }
 
     // Validate answer
     const isCorrect = window.Utils.validateAnswer(userAnswer, currentQuestion.answer, currentQuestion.alternatives);
