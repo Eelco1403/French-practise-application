@@ -1067,10 +1067,18 @@ function checkAnswer() {
         return;
     }
 
+    // BUG FIX #1: Get the answer input element
+    const answerInput = document.getElementById('answerInput');
+    if (!answerInput) {
+        console.error('[checkAnswer] Answer input element not found!');
+        return;
+    }
+
     const userAnswer = answerInput.value.trim();
 
     // BUG FIX #1: Validate empty answer (main handler)
     if (!userAnswer) {
+        console.log('[checkAnswer] Empty answer detected - showing error');
         showFeedbackModal('⚠️', window.I18n.t('messages.pleaseEnterAnswer') || 'Please provide an answer before submitting', '');
         return;
     }
