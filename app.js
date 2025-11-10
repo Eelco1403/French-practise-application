@@ -1079,7 +1079,7 @@ function checkAnswer() {
     // BUG FIX #1: Validate empty answer (main handler)
     if (!userAnswer) {
         console.log('[checkAnswer] Empty answer detected - showing error');
-        showFeedbackModal('⚠️', window.I18n.t('messages.pleaseEnterAnswer') || 'Please provide an answer before submitting', '');
+        showFeedbackModal(false, window.I18n.t('messages.pleaseEnterAnswer') || 'Please provide an answer before submitting', '', 1, false);
         return;
     }
 
@@ -2749,7 +2749,7 @@ function handleTopicPracticeSubmit() {
 
     // BUG FIX #1: Validate empty answer before processing
     if (!userAnswer) {
-        showFeedbackModal('⚠️', window.I18n.t('messages.pleaseEnterAnswer') || 'Please enter an answer', '');
+        showFeedbackModal(false, window.I18n.t('messages.pleaseEnterAnswer') || 'Please enter an answer', '', 1, false);
         return;
     }
 
@@ -3166,7 +3166,7 @@ function handleVerbPracticeSubmit() {
 
     // BUG FIX #1: Validate empty answer before processing
     if (!userAnswer) {
-        showFeedbackModal('⚠️', window.I18n.t('messages.pleaseEnterAnswer') || 'Please enter an answer', '');
+        showFeedbackModal(false, window.I18n.t('messages.pleaseEnterAnswer') || 'Please enter an answer', '', 1, false);
         return;
     }
 
