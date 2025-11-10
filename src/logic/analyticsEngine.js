@@ -29,8 +29,9 @@ class AnalyticsEngine {
      * Overview Statistics
      */
     getOverview() {
-        const totalAttempts = Object.values(this.masteryData).reduce((sum, data) => sum + data.attempts, 0);
-        const totalCorrect = Object.values(this.masteryData).reduce((sum, data) => sum + data.correctCount, 0);
+        // Use actual field names from assessment.js: timesAttempted, timesCorrect
+        const totalAttempts = Object.values(this.masteryData).reduce((sum, data) => sum + (data.timesAttempted || 0), 0);
+        const totalCorrect = Object.values(this.masteryData).reduce((sum, data) => sum + (data.timesCorrect || 0), 0);
         const overallAccuracy = totalAttempts > 0 ? (totalCorrect / totalAttempts) * 100 : 0;
         const totalTimeSpent = this.userData.totalTimeSpent || 0;
         const uniqueItemsPracticed = Object.keys(this.masteryData).length;
@@ -68,7 +69,8 @@ class AnalyticsEngine {
         const categories = {};
 
         Object.entries(this.masteryData).forEach(([id, data]) => {
-            const category = data.category || 'general';
+            // Extract category from item id (e.g., v-family-1 -> family)
+            const category = this.extractCategory(id) || data.stage || 'general';
             if (!categories[category]) {
                 categories[category] = {
                     attempts: 0,
@@ -80,8 +82,8 @@ class AnalyticsEngine {
                 };
             }
 
-            categories[category].attempts += data.attempts;
-            categories[category].correct += data.correctCount;
+            categories[category].attempts += data.timesAttempted || 0;
+            categories[category].correct += data.timesCorrect || 0;
         });
 
         // Calculate derived metrics
@@ -91,6 +93,18 @@ class AnalyticsEngine {
         });
 
         return categories;
+    }
+
+    /**
+     * Extract category from item ID
+     */
+    extractCategory(id) {
+        // v-family-1 -> family, g-present-1 -> present, etc.
+        const parts = id.split('-');
+        if (parts.length >= 2) {
+            return parts[1];
+        }
+        return 'general';
     }
 
     /**
@@ -108,11 +122,13 @@ class AnalyticsEngine {
         };
 
         Object.entries(this.masteryData).forEach(([id, data]) => {
-            const level = data.cefrLevel;
+            // Use current user level or extract from content data
+            const level = this.userData.cefrLevel || 'A1';
             if (level && levels[level]) {
-                levels[level].attempts += data.attempts;
-                levels[level].correct += data.correctCount;
-                if (data.masteryLevel >= 4) {
+                levels[level].attempts += data.timesAttempted || 0;
+                levels[level].correct += data.timesCorrect || 0;
+                // stage: 'mastered' or 'solid' = completed
+                if (data.stage === 'mastered' || data.stage === 'solid') {
                     levels[level].itemsCompleted++;
                 }
             }
@@ -180,18 +196,19 @@ class AnalyticsEngine {
      * Study Habits Analysis
      */
     getStudyHabits() {
-        const sessionData = this.userData.sessions || [];
-        const avgSessionLength = sessionData.length > 0
-            ? sessionData.reduce((sum, s) => sum + s.duration, 0) / sessionData.length
-            : 0;
+        // Calculate study habits from mastery data
+        const totalDays = this.calculateTotalDaysActive();
+        const totalItems = Object.keys(this.masteryData).length;
+        const avgItemsPerDay = totalDays > 0 ? Math.round(totalItems / totalDays) : 0;
 
-        const timeOfDayDistribution = this.calculateTimeOfDayDistribution(sessionData);
-        const mostProductiveTime = this.getMostProductiveTime(sessionData);
+        const timeOfDayDistribution = this.calculateTimeOfDayDistribution();
+        const mostProductiveTime = this.getMostProductiveTime();
         const consistencyScore = this.calculateConsistencyScore();
 
         return {
-            avgSessionLength: Math.round(avgSessionLength / 60), // Convert to minutes
-            totalSessions: sessionData.length,
+            avgSessionLength: 0, // Not tracked yet
+            totalSessions: totalDays, // Use days active as proxy
+            avgItemsPerDay,
             timeOfDayDistribution,
             mostProductiveTime,
             consistencyScore: parseFloat(consistencyScore.toFixed(1))
@@ -206,9 +223,10 @@ class AnalyticsEngine {
         let correct = 0;
 
         Object.entries(this.masteryData).forEach(([id, data]) => {
-            if (data.lastAttempt && data.lastAttempt >= cutoffDate) {
-                attempts += data.attempts;
-                correct += data.correctCount;
+            const lastAttemptDate = data.lastAttemptDate ? new Date(data.lastAttemptDate).getTime() : 0;
+            if (lastAttemptDate >= cutoffDate) {
+                attempts += data.timesAttempted || 0;
+                correct += data.timesCorrect || 0;
             }
         });
 
@@ -220,12 +238,17 @@ class AnalyticsEngine {
     }
 
     calculateTotalDaysActive() {
-        const sessions = this.userData.sessions || [];
-        if (sessions.length === 0) return 0;
+        // Calculate unique days from mastery data instead of sessions
+        const uniqueDays = new Set();
 
-        const uniqueDays = new Set(
-            sessions.map(s => new Date(s.timestamp).toDateString())
-        );
+        Object.values(this.masteryData).forEach(data => {
+            if (data.firstAttemptDate) {
+                uniqueDays.add(new Date(data.firstAttemptDate).toDateString());
+            }
+            if (data.lastAttemptDate) {
+                uniqueDays.add(new Date(data.lastAttemptDate).toDateString());
+            }
+        });
 
         return uniqueDays.size;
     }
@@ -233,16 +256,17 @@ class AnalyticsEngine {
     calculateDailyStats() {
         const dailyStats = {};
 
+        // Since we don't have detailed history, approximate from current data
         Object.entries(this.masteryData).forEach(([id, data]) => {
-            const history = data.history || [];
-            history.forEach(attempt => {
-                const date = new Date(attempt.timestamp).toDateString();
+            if (data.lastAttemptDate) {
+                const date = new Date(data.lastAttemptDate).toDateString();
                 if (!dailyStats[date]) {
                     dailyStats[date] = { attempts: 0, correct: 0 };
                 }
-                dailyStats[date].attempts++;
-                if (attempt.correct) dailyStats[date].correct++;
-            });
+                // Add current item's stats to its last attempt date
+                dailyStats[date].attempts += data.timesAttempted || 0;
+                dailyStats[date].correct += data.timesCorrect || 0;
+            }
         });
 
         // Calculate accuracy for each day
@@ -284,7 +308,7 @@ class AnalyticsEngine {
         return 'stable';
     }
 
-    calculateTimeOfDayDistribution(sessions) {
+    calculateTimeOfDayDistribution() {
         const distribution = {
             morning: 0,   // 6-12
             afternoon: 0, // 12-18
@@ -292,18 +316,21 @@ class AnalyticsEngine {
             night: 0      // 0-6
         };
 
-        sessions.forEach(session => {
-            const hour = new Date(session.timestamp).getHours();
-            if (hour >= 6 && hour < 12) distribution.morning++;
-            else if (hour >= 12 && hour < 18) distribution.afternoon++;
-            else if (hour >= 18 && hour < 24) distribution.evening++;
-            else distribution.night++;
+        // Use last attempt dates from mastery data
+        Object.values(this.masteryData).forEach(data => {
+            if (data.lastAttemptDate) {
+                const hour = new Date(data.lastAttemptDate).getHours();
+                if (hour >= 6 && hour < 12) distribution.morning++;
+                else if (hour >= 12 && hour < 18) distribution.afternoon++;
+                else if (hour >= 18 && hour < 24) distribution.evening++;
+                else distribution.night++;
+            }
         });
 
         return distribution;
     }
 
-    getMostProductiveTime(sessions) {
+    getMostProductiveTime() {
         const timePerformance = {
             morning: { correct: 0, total: 0 },
             afternoon: { correct: 0, total: 0 },
@@ -311,17 +338,18 @@ class AnalyticsEngine {
             night: { correct: 0, total: 0 }
         };
 
-        sessions.forEach(session => {
-            const hour = new Date(session.timestamp).getHours();
-            let period;
-            if (hour >= 6 && hour < 12) period = 'morning';
-            else if (hour >= 12 && hour < 18) period = 'afternoon';
-            else if (hour >= 18 && hour < 24) period = 'evening';
-            else period = 'night';
+        // Use last attempt dates and accuracy from mastery data
+        Object.values(this.masteryData).forEach(data => {
+            if (data.lastAttemptDate) {
+                const hour = new Date(data.lastAttemptDate).getHours();
+                let period;
+                if (hour >= 6 && hour < 12) period = 'morning';
+                else if (hour >= 12 && hour < 18) period = 'afternoon';
+                else if (hour >= 18 && hour < 24) period = 'evening';
+                else period = 'night';
 
-            if (session.correct !== undefined) {
-                timePerformance[period].total++;
-                if (session.correct) timePerformance[period].correct++;
+                timePerformance[period].total += data.timesAttempted || 0;
+                timePerformance[period].correct += data.timesCorrect || 0;
             }
         });
 

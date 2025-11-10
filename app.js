@@ -170,6 +170,66 @@ function init() {
         closeReportBtn.addEventListener('click', closeReportModal);
     }
 
+    // Analytics modal close button
+    const closeAnalyticsBtn = document.getElementById('closeAnalyticsBtn');
+    if (closeAnalyticsBtn) {
+        closeAnalyticsBtn.addEventListener('click', () => {
+            console.log('[closeAnalyticsBtn] Closing analytics modal');
+            const analyticsModal = document.getElementById('analyticsModal');
+            if (analyticsModal) analyticsModal.style.display = 'none';
+        });
+    }
+
+    // Close modals when clicking outside (backdrop)
+    const reportModal = document.getElementById('reportModal');
+    if (reportModal) {
+        reportModal.addEventListener('click', (e) => {
+            if (e.target === reportModal) {
+                console.log('[reportModal] Backdrop clicked - closing');
+                reportModal.style.display = 'none';
+            }
+        });
+    }
+
+    const analyticsModal = document.getElementById('analyticsModal');
+    if (analyticsModal) {
+        analyticsModal.addEventListener('click', (e) => {
+            if (e.target === analyticsModal) {
+                console.log('[analyticsModal] Backdrop clicked - closing');
+                analyticsModal.style.display = 'none';
+            }
+        });
+    }
+
+    // ESC key to close modals
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const modalsToClose = [
+                'analyticsModal',
+                'reportModal',
+                'settingsModal',
+                'deleteUserModal',
+                'languageSelectorModal',
+                'feedbackModal'
+            ];
+
+            modalsToClose.forEach(modalId => {
+                const modal = document.getElementById(modalId);
+                if (modal && modal.style.display !== 'none' && modal.style.display !== '') {
+                    console.log(`[ESC key] Closing ${modalId}`);
+                    modal.style.display = 'none';
+                }
+            });
+
+            // Also close user management page if open
+            const userMgmtPage = document.getElementById('userManagementPage');
+            if (userMgmtPage && userMgmtPage.style.display !== 'none' && userMgmtPage.style.display !== '') {
+                console.log('[ESC key] Closing user management page');
+                userMgmtPage.style.display = 'none';
+            }
+        }
+    });
+
     if (exportJSONBtn) {
         exportJSONBtn.addEventListener('click', () => {
             if (currentReport) {
@@ -1834,13 +1894,61 @@ function showAnalyticsDashboard() {
         return;
     }
 
-    const analyticsEngine = new window.AnalyticsEngine(currentUser, currentUser.masteryData);
-    const dashboardData = analyticsEngine.getDashboardData();
-
     const analyticsContent = document.getElementById('analyticsContent');
     const analyticsModal = document.getElementById('analyticsModal');
 
     if (!analyticsContent || !analyticsModal) return;
+
+    // Show loading state
+    analyticsContent.innerHTML = `
+        <div style="padding: 60px 20px; text-align: center;">
+            <div style="font-size: 48px; margin-bottom: 20px;">📊</div>
+            <div style="font-size: 18px; color: #6b7280;">Calculating your analytics...</div>
+        </div>
+    `;
+    analyticsModal.style.display = 'block';
+
+    // Use setTimeout to allow UI to update before heavy calculation
+    setTimeout(() => {
+        try {
+            const analyticsEngine = new window.AnalyticsEngine(currentUser, currentUser.masteryData);
+            const dashboardData = analyticsEngine.getDashboardData();
+
+            // Check if user has any data
+            if (dashboardData.overview.totalAttempts === 0) {
+                analyticsContent.innerHTML = `
+                    <div style="padding: 60px 20px; text-align: center;">
+                        <div style="font-size: 64px; margin-bottom: 20px;">📚</div>
+                        <h3 style="color: #374151; margin-bottom: 10px;">No Data Yet!</h3>
+                        <p style="color: #6b7280; font-size: 16px; max-width: 400px; margin: 0 auto;">
+                            Start practicing French to see your personalized analytics and track your progress over time.
+                        </p>
+                        <button onclick="document.getElementById('analyticsModal').style.display='none'"
+                                style="margin-top: 30px; padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer;">
+                            Start Practicing
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            renderAnalyticsDashboard(dashboardData, analyticsContent);
+        } catch (error) {
+            console.error('[showAnalyticsDashboard] Error:', error);
+            analyticsContent.innerHTML = `
+                <div style="padding: 60px 20px; text-align: center;">
+                    <div style="font-size: 64px; margin-bottom: 20px;">⚠️</div>
+                    <h3 style="color: #dc2626; margin-bottom: 10px;">Error Loading Analytics</h3>
+                    <p style="color: #6b7280; font-size: 16px;">
+                        ${error.message || 'An unexpected error occurred.'}
+                    </p>
+                </div>
+            `;
+        }
+    }, 10);
+}
+
+function renderAnalyticsDashboard(dashboardData, analyticsContent) {
 
     // Build HTML for analytics dashboard
     let html = `
@@ -1968,7 +2076,6 @@ function showAnalyticsDashboard() {
     `;
 
     analyticsContent.innerHTML = html;
-    analyticsModal.style.display = 'block';
 }
 
 function closeAnalyticsDashboard() {
